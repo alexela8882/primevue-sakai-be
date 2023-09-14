@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "75970fec4715f7ce930f292be6b35936",
+    "content-hash": "91d07cba3c4a9bfbf1240f92436904ab",
     "packages": [
         {
             "name": "brick/math",
@@ -2529,16 +2529,16 @@
         },
         {
             "name": "mongodb/laravel-mongodb",
-            "version": "v4.0.0-ALPHA2",
+            "version": "4.0.0-rc1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mongodb/laravel-mongodb.git",
-                "reference": "ab02a259682407970a0c485971e101600275aa2a"
+                "reference": "c112ef77d180b9c941d9c7905610d1af555da334"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mongodb/laravel-mongodb/zipball/ab02a259682407970a0c485971e101600275aa2a",
-                "reference": "ab02a259682407970a0c485971e101600275aa2a",
+                "url": "https://api.github.com/repos/mongodb/laravel-mongodb/zipball/c112ef77d180b9c941d9c7905610d1af555da334",
+                "reference": "c112ef77d180b9c941d9c7905610d1af555da334",
                 "shasum": ""
             },
             "require": {
@@ -2554,16 +2554,20 @@
                 "jenssegers/mongodb": "self.version"
             },
             "require-dev": {
+                "doctrine/coding-standard": "12.0.x-dev",
                 "mockery/mockery": "^1.4.4",
                 "orchestra/testbench": "^8.0",
-                "phpunit/phpunit": "^9.5.10"
+                "phpunit/phpunit": "^10.3"
             },
             "type": "library",
             "extra": {
+                "branch-alias": {
+                    "dev-master": "4.0.x-dev"
+                },
                 "laravel": {
                     "providers": [
-                        "MongoDB\\Laravel\\MongodbServiceProvider",
-                        "MongoDB\\Laravel\\MongodbQueueServiceProvider"
+                        "MongoDB\\Laravel\\MongoDBServiceProvider",
+                        "MongoDB\\Laravel\\MongoDBQueueServiceProvider"
                     ]
                 }
             },
@@ -2611,9 +2615,9 @@
             "support": {
                 "issues": "https://www.mongodb.com/support",
                 "security": "https://www.mongodb.com/security",
-                "source": "https://github.com/mongodb/laravel-mongodb/tree/v4.0.0-ALPHA2"
+                "source": "https://github.com/mongodb/laravel-mongodb/tree/4.0.0-rc1"
             },
-            "time": "2023-08-31T10:00:33+00:00"
+            "time": "2023-09-13T08:43:07+00:00"
         },
         {
             "name": "mongodb/mongodb",
@@ -9486,7 +9490,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "mongodb/laravel-mongodb": 15
+        "mongodb/laravel-mongodb": 5
     },
     "prefer-stable": true,
     "prefer-lowest": false,

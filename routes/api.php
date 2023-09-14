@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,5 +22,15 @@ Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+  return $request->user();
+});
+
+Route::controller(UserController::class)
+  ->prefix('users')
+  ->middleware('auth:api')
+  ->group(function () {
+  Route::get('/', 'all');
+  Route::post('/store', 'store');
+  Route::put('{id}/update', 'update');
+  Route::delete('{id}/delete', 'delete');
 });
