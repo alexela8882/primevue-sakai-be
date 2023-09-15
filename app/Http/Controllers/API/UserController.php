@@ -69,4 +69,20 @@ class UserController extends Controller
 
       return response()->json($response, 200);
     }
+
+    public function delete ($id) {
+      $user = User::where('_id', $id)->first();
+
+      // prevent deleting superadmin
+      if ($user->email === 'super@admin.com') return abort(403);
+    
+      $response = [
+        'data' => $user,
+        'message' => 'User successfully deleted'
+      ];
+
+      $user->delete(); // delete collection
+
+      return response()->json($response, 200);
+    }
 }
