@@ -29,6 +29,7 @@ Route::controller(UserController::class)
   ->prefix('users')
   ->middleware('auth:api')
   ->group(function () {
+  Route::get('{id}/get', 'get');
   Route::get('/', 'all');
   Route::post('/store', 'store');
   Route::put('{id}/update', 'update');
