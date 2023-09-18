@@ -38,7 +38,7 @@ Route::controller(UserController::class)
 });
 
 Route::controller(UserConfigController::class)
-  ->prefix('user_configs')
+  ->prefix('user-configs')
   ->middleware('auth:api')
   ->group(function () {
   Route::get('get-app-theme', 'getAppTheme');

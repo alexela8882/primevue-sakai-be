@@ -17,6 +17,11 @@ return new class extends Migration
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
         $collection->string('app_theme')->nullable();
+        $collection->string('app_theme_scale')->nullable();
+        $collection->string('app_theme_dark')->nullable();
+        $collection->string('app_theme_ripple')->nullable();
+        $collection->string('app_theme_menu_type')->nullable();
+        $collection->string('app_theme_input_style')->nullable();
         $collection->timestamps();
 
       });
