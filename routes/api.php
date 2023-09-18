@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\UserConfigController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,4 +35,12 @@ Route::controller(UserController::class)
   Route::post('/store', 'store');
   Route::put('{id}/update', 'update');
   Route::delete('{id}/delete', 'delete');
+});
+
+Route::controller(UserConfigController::class)
+  ->prefix('user_configs')
+  ->middleware('auth:api')
+  ->group(function () {
+  Route::get('get-app-theme', 'getAppTheme');
+  Route::post('change-app-theme', 'changeAppTheme');
 });
