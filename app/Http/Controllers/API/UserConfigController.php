@@ -22,6 +22,7 @@ class UserConfigController extends BaseController
 
       if ($userConfig && $userConfig->app_theme) {
         if($req->app_theme) $userConfig->app_theme = $req->app_theme;
+        if($req->app_theme_dark) $userConfig->app_theme_dark = $req->app_theme_dark;
         if($req->app_theme_scale) $userConfig->app_theme_scale = $req->app_theme_scale;
         if($req->app_theme_ripple) $userConfig->app_theme_ripple = $req->app_theme_ripple;
         if($req->app_theme_menu_type) $userConfig->app_theme_menu_type = $req->app_theme_menu_type;
@@ -31,6 +32,7 @@ class UserConfigController extends BaseController
         $newUserConfig = new UserConfig;
         $newUserConfig->user_id = $req->user()->id;
         if($req->app_theme) $newUserConfig->app_theme = $req->app_theme;
+        if($req->app_theme_dark) $newUserConfig->app_theme_dark = $req->app_theme_dark;
         if($req->app_theme_scale) $newUserConfig->app_theme_scale = $req->app_theme_scale;
         if($req->app_theme_ripple) $newUserConfig->app_theme_ripple = $req->app_theme_ripple;
         if($req->app_theme_menu_type) $newUserConfig->app_theme_menu_type = $req->app_theme_menu_type;
