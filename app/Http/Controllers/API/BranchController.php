@@ -11,7 +11,8 @@ use Validator;
 class BranchController extends BaseController
 {
   public function all () {
-    $branches = Branch::all();
+    $branches = Branch::with('country')
+                ->get();
 
     return response()->json($branches, 200);
   }
@@ -40,8 +41,11 @@ class BranchController extends BaseController
     $branch->country_id = $req->country_id;
     $branch->save();
 
+    // stored branch
+    $storedBranch = Branch::where('_id', $branch->id)->with('country')->first();
+
     $response = [
-      'data' => $branch,
+      'data' => $storedBranch,
       'message' => 'New branch has been successfully added into our records',
     ];
 
@@ -72,8 +76,11 @@ class BranchController extends BaseController
     $branch->country_id = $req->country_id;
     $branch->update();
 
+    // updated branch
+    $updatedBranch = Branch::where('_id', $id)->with('country')->first();
+
     $response = [
-      'data' => $branch,
+      'data' => $updatedBranch,
       'message' => 'Branch has been successfully updated',
     ];
 
