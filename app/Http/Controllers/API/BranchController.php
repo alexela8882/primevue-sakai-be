@@ -58,7 +58,6 @@ class BranchController extends BaseController
       'address' => 'required',
       'country_id' => 'required',
     ];
-
     $messages = [
       'required' => 'The :attribute field is required.',
       'country_id.required' => 'Please select a country',
