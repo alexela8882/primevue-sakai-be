@@ -25,7 +25,11 @@ class UserController extends Controller
 
     public function store (Request $req) {
       $validator = Validator::make($req->all(), [
-        'name' => 'required',
+        'firstName' => 'required',
+        'lastName' => 'required',
+        'middleName' => 'required',
+        'active' => 'required',
+        'branch_id' => 'required',
         'email' => 'required|email|unique:users,email',
         'password' => 'required',
       ]);
@@ -35,8 +39,13 @@ class UserController extends Controller
       }
 
       $user = new User;
-      $user->name = $req->name;
+      $user->fullName = $req->firstName + " " + $req->middleName + " " + $req->lastName;
+      $user->firstName = $req->firstName;
+      $user->lastName = $req->lastName;
+      $user->middleName = $req->middleName;
+      $user->active = $req->active;
       $user->email = $req->email;
+      $user->branch_id = $req->branch_id;
       $user->password = bcrypt($req->password);
       $user->save();
 
@@ -50,6 +59,11 @@ class UserController extends Controller
 
     public function update ($id, Request $req) {
       $validator = Validator::make($req->all(), [
+        'firstName' => 'required',
+        'lastName' => 'required',
+        'middleName' => 'required',
+        'active' => 'required',
+        'branch_id' => 'required',
         'email' => 'required|email|unique:users,email,'.$id.',_id'
       ]);
 
@@ -58,7 +72,13 @@ class UserController extends Controller
       }
 
       $user = User::where('_id', $id)->first();
+      $user->fullName = $req->firstName + " " + $req->middleName + " " + $req->lastName;
+      $user->firstName = $req->firstName;
+      $user->lastName = $req->lastName;
+      $user->middleName = $req->middleName;
+      $user->active = $req->active;
       $user->email = $req->email;
+      $user->branch_id = $req->branch_id;
       if ($req->password) $user->password = bcrypt($req->password);
       $user->update();
 
