@@ -26,7 +26,7 @@ class UserController extends Controller
       // get collection fields
       $defaultKeys = ['name', 'email', 'branch'];
       $rawFields = getCollectionRawFields('users');
-      $excludedKeys = ['password', 'created_at', 'updated_at'];
+      $excludedKeys = ['password', 'created_at', 'updated_at', 'active'];
       $fields = generateSelectableCollectionFields($rawFields, $defaultKeys, $excludedKeys);
 
       $response = [
