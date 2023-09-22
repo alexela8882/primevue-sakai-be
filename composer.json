@@ -35,7 +35,10 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
             "Laravel\\Passport\\": "app/Models/Passport"
-        }
+        },
+        "files": [
+            "app/Helpers/general.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

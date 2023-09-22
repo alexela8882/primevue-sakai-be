@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\User;
 
+use DB;
 use Validator;
 
 class UserController extends Controller
@@ -22,15 +23,26 @@ class UserController extends Controller
               ->with('branch')
               ->get();
 
-      return response()->json($users, 200);
+      // get collection fields
+      $defaultKeys = ['name', 'email', 'branch'];
+      $rawFields = getCollectionRawFields('users');
+      $excludedKeys = ['password', 'created_at', 'updated_at'];
+      $fields = generateSelectableCollectionFields($rawFields, $defaultKeys, $excludedKeys);
+
+      $response = [
+        'table' => $users,
+        'fields' => $fields,
+      ];
+
+      return response()->json($response, 200);
     }
 
     public function store (Request $req) {
       $rules = [
         'email' => 'required|email|unique:users,email',
-        'firstName' => 'required',
-        'lastName' => 'required',
-        'middleName' => 'required',
+        'first_name' => 'required',
+        'last_name' => 'required',
+        'middle_name' => 'required',
         'branch_id' => 'required',
       ];
       $messages = [
@@ -45,11 +57,11 @@ class UserController extends Controller
       }
 
       $user = new User;
-      $user->name = $req->firstName . " " . $req->lastName;
-      $user->fullName = $req->firstName . " " . $req->middleName . " " . $req->lastName;
-      $user->firstName = $req->firstName;
-      $user->lastName = $req->lastName;
-      $user->middleName = $req->middleName;
+      $user->name = $req->first_name . " " . $req->last_name;
+      $user->full_name = $req->first_name . " " . $req->middle_name . " " . $req->last_name;
+      $user->first_name = $req->first_name;
+      $user->last_name = $req->last_name;
+      $user->middle_name = $req->middle_name;
       $user->email = $req->email;
       $user->branch_id = $req->branch_id;
       $user->password = bcrypt($req->password);
@@ -71,9 +83,9 @@ class UserController extends Controller
     public function update ($id, Request $req) {
       $rules = [
         'email' => 'required|email|unique:users,email,'.$id.',_id',
-        'firstName' => 'required',
-        'lastName' => 'required',
-        'middleName' => 'required',
+        'first_name' => 'required',
+        'last_name' => 'required',
+        'middle_name' => 'required',
         'branch_id' => 'required',
       ];
       $messages = [
@@ -88,11 +100,11 @@ class UserController extends Controller
       }
 
       $user = User::where('_id', $id)->first();
-      $user->name = $req->firstName . " " . $req->lastName;
-      $user->fullName = $req->firstName . " " . $req->middleName . " " . $req->lastName;
-      $user->firstName = $req->firstName;
-      $user->lastName = $req->lastName;
-      $user->middleName = $req->middleName;
+      $user->name = $req->first_name . " " . $req->last_name;
+      $user->full_name = $req->first_name . " " . $req->middle_name . " " . $req->last_name;
+      $user->first_name = $req->first_name;
+      $user->last_name = $req->last_name;
+      $user->middle_name = $req->middle_name;
       $user->active = $req->active;
       $user->email = $req->email;
       $user->branch_id = $req->branch_id;
