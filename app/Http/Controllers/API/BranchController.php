@@ -14,7 +14,18 @@ class BranchController extends BaseController
     $branches = Branch::with('country')
                 ->get();
 
-    return response()->json($branches, 200);
+    // get collection fields
+    $defaultKeys = ['name', 'address', 'country'];
+    $rawFields = getCollectionRawFields('branches');
+    $excludedKeys = ['created_at', 'updated_at'];
+    $fields = generateSelectableCollectionFields($rawFields, $defaultKeys, $excludedKeys);
+
+    $response = [
+      'table' => $branches,
+      'fields' => $fields,
+    ];
+
+    return response()->json($response, 200);
   }
 
   public function store (Request $req) {
