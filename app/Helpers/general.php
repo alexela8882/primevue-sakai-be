@@ -45,7 +45,7 @@ if (! function_exists('generateSelectableCollectionFields')) {
       if ($label != null || $label != "") {
         array_push($data, [
           'field' => $field,
-          'label' => strtoupper($label),
+          'label' => ucwords($label),
           'default' => in_array($field, $defaultKeys) ? true : false,
           'related' => $related
         ]);
