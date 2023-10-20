@@ -22,10 +22,21 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         DB::table('users')->insert([
+          // '_id' => 99,
           'name' => "super admin",
           'email' => "super@admin.com",
           'password' => Hash::make('superadmin'),
         ]);
+
+        // DB::table('user_configs')->insert([
+        //   'user_id' => 99,
+        //   'app_theme' => 'esco',
+        //   'app_theme_dark' => 'light',
+        //   'app_theme_ripple' => true,
+        //   'app_theme_input_style' => "outlined",
+        //   'app_theme_menu_type' => "static",
+        //   'app_theme_scale' => "14",
+        // ]);
         
     }
 }
