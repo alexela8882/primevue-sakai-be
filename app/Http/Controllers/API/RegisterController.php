@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
+use App\Models\UserConfig;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use Illuminate\Http\JsonResponse;
@@ -50,6 +51,20 @@ class RegisterController extends BaseController
         $success['token'] =  $user->createToken('MyApp')-> accessToken; 
         $success['name'] =  $user->name;
         $success['_id'] =  $user->_id;
+
+        // save user config on first time login
+        $userConfig = UserConfig::where('user_id', $user->_id)->first();
+        if (!$userConfig) {
+          $newUserConfig = new UserConfig;
+          $newUserConfig->user_id = $user->_id;
+          $newUserConfig->app_theme = "esco";
+          $newUserConfig->app_theme_dark = "light";
+          $newUserConfig->app_theme_scale = 14;
+          $newUserConfig->app_theme_ripple = false;
+          $newUserConfig->app_theme_menu_type = "static";
+          $newUserConfig->app_theme_input_style = "outlined";
+          $newUserConfig->save();
+        }
 
         return $this->sendResponse($success, 'User login successfully.');
       } 
