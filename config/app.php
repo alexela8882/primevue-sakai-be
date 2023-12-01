@@ -170,6 +170,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         MongoDB\Laravel\MongoDBServiceProvider::class,
         // MongoDB\Laravel\Auth\PasswordResetServiceProvider::class,
+        Slides\Saml2\ServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -185,6 +186,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'Saml2' => Slides\Saml2\Facades\Auth::class,
     ])->toArray(),
 
 ];
