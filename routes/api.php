@@ -21,6 +21,10 @@ use App\Http\Controllers\API\BranchController;
 |
 */
 
+Route::get('/phpinfo', function () {
+  return phpinfo();
+});
+
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 
