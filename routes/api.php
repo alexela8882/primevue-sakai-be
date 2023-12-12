@@ -67,3 +67,9 @@ Route::controller(BranchController::class)
   Route::put('{id}/update', 'update');
   Route::delete('{id}/delete', 'delete');
 });
+
+// SAML2 Auth
+// Route::prefix('saml2-auth')
+//   ->group(function () {
+//   Route::get
+// });
