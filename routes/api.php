@@ -9,6 +9,7 @@ use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\UserConfigController;
 use App\Http\Controllers\API\CountryController;
 use App\Http\Controllers\API\BranchController;
+use App\Http\Controllers\API\CustomSaml2Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,7 +69,7 @@ Route::controller(BranchController::class)
   Route::delete('{id}/delete', 'delete');
 });
 
-Route::controller(BranchController::class)
+Route::controller(CustomSaml2Controller::class)
   ->prefix('custom-saml2')
   ->group(function () {
   Route::post('/', 'getTokenWithoutPassword')->name('csaml2');
