@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 
 class CustomSaml2Controller extends Controller
 {
-    public function getTokenWithoutPassword(Request $req) {
-      return $req->all();
+    public function getTokenWithoutPassword($email) {
+      return $email;
       // $client = DB::table('oauth_clients')
       //           ->where('password_client', true)
       //           ->get()[0];

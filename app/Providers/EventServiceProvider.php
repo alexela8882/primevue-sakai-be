@@ -44,7 +44,7 @@ class EventServiceProvider extends ServiceProvider
           $checkUser = User::where('email', $xuser)->first();
 
           if ($checkUser) {
-            return redirect()->route('csaml2')->with(['data' => $checkUser]);
+            return redirect()->route('csaml2', ['email' => $checkUser->email]);
             // dd($checkUser);
           }
 
