@@ -40,20 +40,10 @@ class EventServiceProvider extends ServiceProvider
           ];
 
           $xuser = implode($userData['attributes']['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress']);
+          $user = User::where('email', $xuser)->first();
 
-          $checkUser = User::where('email', $xuser)->first();
-
-          if ($checkUser) {
-            return redirect()->route('csaml2', ['email' => $checkUser->email]);
-            // dd($checkUser);
-          }
-
-          return redirect()->route('/phpinfo');
-
-          // $user = // find user by ID or attribute
-
-          // // Login a user.
-          // Auth::login($user);
+          // Login a user.
+          Auth::login($user);
         });
     }
 
