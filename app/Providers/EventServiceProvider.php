@@ -43,6 +43,8 @@ class EventServiceProvider extends ServiceProvider
           $xuser = implode($userData['attributes']['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress']);
           $user = User::where('email', $xuser)->first();
 
+          dd($user);
+
           // Login a user.
           //   Auth::login($user);
           Auth::loginUsingId($user->id);
