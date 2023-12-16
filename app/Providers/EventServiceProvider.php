@@ -48,6 +48,8 @@ class EventServiceProvider extends ServiceProvider
             // dd($checkUser);
           }
 
+          return redirect()->route('/phpinfo');
+
           // $user = // find user by ID or attribute
 
           // // Login a user.
