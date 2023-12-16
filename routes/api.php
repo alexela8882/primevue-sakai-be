@@ -71,5 +71,5 @@ Route::controller(BranchController::class)
 Route::controller(BranchController::class)
   ->prefix('custom-saml2')
   ->group(function () {
-  Route::post('/', 'getTokenWithoutPassword');
+  Route::post('/', 'getTokenWithoutPassword')->name('csaml2');
 });
