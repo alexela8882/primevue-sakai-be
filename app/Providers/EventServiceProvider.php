@@ -45,7 +45,7 @@ class EventServiceProvider extends ServiceProvider
 
           // Login a user.
           //   Auth::login($user);
-          Auth::loginUsingId($user->id)
+          Auth::loginUsingId($user->id);
         });
     }
 
