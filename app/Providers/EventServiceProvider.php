@@ -7,6 +7,8 @@ use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 
+use App\Models\User;
+
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -37,7 +39,11 @@ class EventServiceProvider extends ServiceProvider
             'assertion' => $samlUser->getRawSamlAssertion()
           ];
 
-          dd($userData);
+          $xuser = implode($userData['attributes']['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress']);
+
+          $checkUser = User::where('email', $xuser)->first();
+
+          dd($checkUser);
 
           // $user = // find user by ID or attribute
 

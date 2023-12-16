@@ -16,7 +16,6 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $connection = 'mongodb';
-
     protected $collection = 'users';
 
     /**
@@ -49,6 +48,28 @@ class User extends Authenticatable
       'email_verified_at' => 'datetime',
       'password' => 'hashed',
     ];
+
+    /**
+     * Find the user instance for the given email.
+     *
+     * @param  string  $email
+     * @return \App\User
+     */
+    public function findForPassport($email)
+    {
+        return $this->where('email', $email)->first();
+    }
+
+    /**
+     * Validate the password of the user for the Passport password grant.
+     *
+     * @param  string  $password
+     * @return bool
+     */
+    public function validateForPassportPasswordGrant($password)
+    {
+        return Hash::check($password, $this->password);
+    }
 
     // relationships
     public function branch () {

@@ -67,3 +67,9 @@ Route::controller(BranchController::class)
   Route::put('{id}/update', 'update');
   Route::delete('{id}/delete', 'delete');
 });
+
+Route::controller(BranchController::class)
+  ->prefix('custom-saml2')
+  ->group(function () {
+  Route::post('/', 'getTokenWithoutPassword');
+});
