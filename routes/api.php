@@ -24,10 +24,11 @@ use App\Http\Controllers\API\CustomSaml2Controller;
 
 Route::get('/phpinfo', function () {
   return phpinfo();
-});
+})->name('phpinfo');
 
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
+Route::post('passwordless-login', [RegisterController::class, 'passwordLessLogin']);
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
   return $request->user();
@@ -69,8 +70,12 @@ Route::controller(BranchController::class)
   Route::delete('{id}/delete', 'delete');
 });
 
-Route::controller(CustomSaml2Controller::class)
-  ->prefix('custom-saml2')
-  ->group(function () {
-  Route::get('/{email}', 'getTokenWithoutPassword')->name('csaml2');
+// SAML2 Auth
+Route::prefix('saml2-auth')->group(function () {
+  Route::get('login', function () {
+    return redirect()->route('saml.login', ['uuid' => '07766233-180f-4f62-ad22-9f16ff83e4c9']);
+  });
+  Route::get('logout', function () {
+    return redirect()->route('saml.logout', ['uuid' => '07766233-180f-4f62-ad22-9f16ff83e4c9']);
+  });
 });
