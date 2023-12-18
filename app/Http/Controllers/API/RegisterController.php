@@ -83,7 +83,7 @@ class RegisterController extends BaseController
         'message' => 'User login successfully.'
       ];
 
-      return redirect()->away('https://nav.reddotcrm.com/saml?token=' . $data);
+      return redirect()->away('https://nav.reddotcrm.com?token=' . $data);
     }
 
     public function logout (Request $request) {
