@@ -74,12 +74,17 @@ class RegisterController extends BaseController
     }
 
     public function passwordLessLogin (Request $request) {
-      $user = User::where('email', $request->email)->first();
+      $data = [
+        'success' => true,
+        'data' => ['token' => $request->session()->get('xaccessToken')],
+        'message' => 'User login successfully.'
+      ];
 
-      $success['token'] =  $user->createToken('MyApp')-> accessToken; 
-      $success['name'] =  $user->name;
-      $success['_id'] =  $user->_id;
+      return response()->json($data, 200);
+    }
 
-      return $this->sendResponse($success, 'User login successfully.');
+    public function logout (Request $request) {
+      $request->session()->forget(['xaccessToken']);
+      return response()->json('User logged out.');
     }
 }

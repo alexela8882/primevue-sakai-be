@@ -51,6 +51,9 @@ class EventServiceProvider extends ServiceProvider
           $success['name'] =  $user->name;
           $success['_id'] =  $user->_id;
 
+          // save into session
+          session(['xaccessToken', $success['token']]);
+
           return response()->json('User login successfully.', 200);
         });
     }

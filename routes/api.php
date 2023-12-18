@@ -28,7 +28,8 @@ Route::get('/phpinfo', function () {
 
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
-Route::post('passwordless-login', [RegisterController::class, 'passwordLessLogin']);
+Route::get('passwordless-login', [RegisterController::class, 'passwordLessLogin'])->middleware(['web']);
+Route::get('logout', [RegisterController::class, 'logout'])->middleware(['web']);
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
   return $request->user();
