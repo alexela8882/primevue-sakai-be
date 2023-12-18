@@ -4,11 +4,14 @@ namespace App\Http\Controllers\API;
      
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Event;
+
 use App\Models\User;
 use App\Models\UserConfig;
-use Illuminate\Support\Facades\Auth;
+
 use Validator;
-use Illuminate\Http\JsonResponse;
      
 class RegisterController extends BaseController
 {
@@ -47,8 +50,8 @@ class RegisterController extends BaseController
     public function login(Request $request): JsonResponse
     {
       if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
-        $user = Auth::user(); 
-        $success['token'] =  $user->createToken('MyApp')-> accessToken; 
+        $user = Auth::user();
+        $success['token'] =  $user->createToken('MyApp')-> accessToken;
         $success['name'] =  $user->name;
         $success['_id'] =  $user->_id;
 
@@ -74,13 +77,42 @@ class RegisterController extends BaseController
     }
 
     public function passwordLessLogin (Request $request) {
-      $data = [
-        'success' => true,
-        'data' => ['token' => $request->session()->get('xaccessToken')],
-        'message' => 'User login successfully.'
-      ];
+      Event::listen(\Slides\Saml2\Events\SignedIn::class, function (\Slides\Saml2\Events\SignedIn $event) {
+        $messageId = $event->getAuth()->getLastMessageId();
+        
+        // your own code preventing reuse of a $messageId to stop replay attacks
+        $samlUser = $event->getSaml2User();
+        
+        $userData = [
+          'id' => $samlUser->getUserId(),
+          'attributes' => $samlUser->getAttributes(),
+          'assertion' => $samlUser->getRawSamlAssertion()
+        ];
 
-      return response()->json($data, 200);
+        // get email from attributes
+        $xuser = implode($userData['attributes']['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress']);
+
+        // get user from database
+        $user = User::where('email', $xuser)->first();
+
+        // Password-less login
+        $success['token'] =  $user->createToken('MyAppUsingPasswordLessAuth')-> accessToken; 
+        $success['name'] =  $user->name;
+        $success['_id'] =  $user->_id;
+
+        // save into session
+        session(['xaccessToken' => $success['token']]);
+
+        return response()->json('User login successfully.', 200);
+      });
+
+      // $data = [
+      //   'success' => true,
+      //   'data' => ['token' => $request->session()->get('xaccessToken')],
+      //   'message' => 'User login successfully.'
+      // ];
+
+      // return response()->json($data, 200);
     }
 
     public function logout (Request $request) {
