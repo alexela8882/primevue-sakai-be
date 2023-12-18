@@ -51,7 +51,7 @@ class EventServiceProvider extends ServiceProvider
           $success['name'] =  $user->name;
           $success['_id'] =  $user->_id;
 
-          return $this->sendResponse($success, 'User login successfully.');
+          return response()->json('User login successfully.', 200);
         });
     }
 
