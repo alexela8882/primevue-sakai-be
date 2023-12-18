@@ -80,10 +80,11 @@ class RegisterController extends BaseController
       $data = [
         'success' => true,
         'data' => ['token' => $request->session()->get('xaccessToken')],
+        'user_id' => ['token' => $request->session()->get('xuser_id')],
         'message' => 'User login successfully.'
       ];
 
-      $url = "https://nav.reddotcrm.com?token=" . $request->session()->get('xaccessToken');
+      $url = "https://nav.reddotcrm.com?token=" . $request->session()->get('xaccessToken') . "&auth_id=" . $request->session()->get('xuser_id');
 
       return redirect()->away($url);
     }

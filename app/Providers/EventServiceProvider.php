@@ -47,12 +47,13 @@ class EventServiceProvider extends ServiceProvider
           $user = User::where('email', $xuser)->first();
 
           // Password-less login
-          $success['token'] =  $user->createToken('MyAppUsingPasswordLessAuth')-> accessToken; 
+          $success['token'] =  $user->createToken('MyAppUsingPasswordLessAuth')->accessToken; 
           $success['name'] =  $user->name;
           $success['_id'] =  $user->_id;
 
           // save into session
           session(['xaccessToken' => $success['token']]);
+          session(['xuser_id' => $success['_id']]);
 
           return response()->json('User login successfully.', 200);
         });
