@@ -106,13 +106,13 @@ class RegisterController extends BaseController
         return response()->json('User login successfully.', 200);
       });
 
-      // $data = [
-      //   'success' => true,
-      //   'data' => ['token' => $request->session()->get('xaccessToken')],
-      //   'message' => 'User login successfully.'
-      // ];
+      $data = [
+        'success' => true,
+        'data' => ['token' => $request->session()->get('xaccessToken')],
+        'message' => 'User login successfully.'
+      ];
 
-      // return response()->json($data, 200);
+      return response()->json($data, 200);
     }
 
     public function logout (Request $request) {
