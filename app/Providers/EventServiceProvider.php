@@ -46,16 +46,21 @@ class EventServiceProvider extends ServiceProvider
           // get user from database
           $user = User::where('email', $xuser)->first();
 
-          // Password-less login
-          $success['token'] =  $user->createToken('MyAppUsingPasswordLessAuth')->accessToken; 
-          $success['name'] =  $user->name;
-          $success['_id'] =  $user->_id;
+          if ($user) {
+            // Password-less login
+            $success['token'] =  $user->createToken('MyAppUsingPasswordLessAuth')->accessToken; 
+            $success['name'] =  $user->name;
+            $success['_id'] =  $user->_id;
 
-          // save into session
-          session(['xaccessToken' => $success['token']]);
-          session(['xuser_id' => $success['_id']]);
+            // save into session
+            session(['xaccessToken' => $success['token']]);
+            session(['xuser_id' => $success['_id']]);
 
-          return response()->json('User login successfully.', 200);
+            return response()->json('User login successfully.', 200);
+          } else {
+            $message = "Your microsoft account" . $xuser . " not found in our records. Please contact the administrator.";
+            dd($message);
+          }
         });
     }
 
