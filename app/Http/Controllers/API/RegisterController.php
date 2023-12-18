@@ -83,7 +83,9 @@ class RegisterController extends BaseController
         'message' => 'User login successfully.'
       ];
 
-      return redirect()->away('https://nav.reddotcrm.com?token=' . $data);
+      $url = "https://nav.reddotcrm.com?token" . $request->session()->get('xaccessToken');
+
+      return redirect()->away($url);
     }
 
     public function logout (Request $request) {
