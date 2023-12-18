@@ -84,7 +84,7 @@ class RegisterController extends BaseController
         'message' => 'User login successfully.'
       ];
 
-      $url = "https://nav.reddotcrm.com?token=" . $request->session()->get('xaccessToken') . "&auth_id=" . $request->session()->get('xuser_id');
+      $url = "https://nav.reddotcrm.com/#/auth/saml-login?token=" . $request->session()->get('xaccessToken') . "&auth_id=" . $request->session()->get('xuser_id');
 
       return redirect()->away($url);
     }
