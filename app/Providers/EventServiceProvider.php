@@ -40,14 +40,18 @@ class EventServiceProvider extends ServiceProvider
             'assertion' => $samlUser->getRawSamlAssertion()
           ];
 
+          // get email from attributes
           $xuser = implode($userData['attributes']['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress']);
+
+          // get user from database
           $user = User::where('email', $xuser)->first();
 
-          dd($user);
+          // Password-less login
+          $success['token'] =  $user->createToken('MyAppUsingPasswordLessAuth')-> accessToken; 
+          $success['name'] =  $user->name;
+          $success['_id'] =  $user->_id;
 
-          // Login a user.
-          //   Auth::login($user);
-          Auth::loginUsingId($user->id);
+          return $this->sendResponse($success, 'User login successfully.');
         });
     }
 
