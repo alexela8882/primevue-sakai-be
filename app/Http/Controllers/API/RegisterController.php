@@ -83,7 +83,7 @@ class RegisterController extends BaseController
         'message' => 'User login successfully.'
       ];
 
-      return response()->json($data, 200);
+      return redirect()->away('https://nav.reddotcrm.com')->with(['data' => $data]);
     }
 
     public function logout (Request $request) {
