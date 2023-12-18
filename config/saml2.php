@@ -135,7 +135,7 @@ return [
     |
     */
 
-    'proxyVars' => false,
+    'proxyVars' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -195,7 +195,7 @@ return [
         */
 
         'assertionConsumerService' => [
-            'url' => '',
+            'url' => 'https://api.reddotcrm.com/saml2/5e7cfe07-5de3-407d-9b26-0f42143d3ab7/acs',
         ],
 
         /*
@@ -212,7 +212,7 @@ return [
         */
 
         'singleLogoutService' => [
-            'url' => ''
+            'url' => 'https://api.reddotcrm.com/saml2/5e7cfe07-5de3-407d-9b26-0f42143d3ab7/sls'
         ],
     ],
 

@@ -23,10 +23,11 @@ use App\Http\Controllers\API\BranchController;
 
 Route::get('/phpinfo', function () {
   return phpinfo();
-});
+})->name('phpinfo');
 
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
+Route::post('passwordless-login', [RegisterController::class, 'passwordLessLogin']);
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
   return $request->user();

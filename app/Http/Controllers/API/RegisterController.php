@@ -72,4 +72,14 @@ class RegisterController extends BaseController
         return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
       } 
     }
+
+    public function passwordLessLogin (Request $request) {
+      $user = User::where('email', $request->email)->first();
+
+      $success['token'] =  $user->createToken('MyApp')-> accessToken; 
+      $success['name'] =  $user->name;
+      $success['_id'] =  $user->_id;
+
+      return $this->sendResponse($success, 'User login successfully.');
+    }
 }
