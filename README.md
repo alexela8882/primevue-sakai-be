@@ -54,4 +54,15 @@ db.saml2_tenants.update("key": {<key eg. rdv2>}, {$set: {"id": 1}})
 db.saml2_tenants.update("key": {<key eg. rdv2>}, {$set: {"uuid": "67cf9876-2fe5-43f4-b07f-8c97690a1a53"}})
 ```
 8. Execute `php artisan saml2:tenant-credentials 1` again to confirm
-9. If everything is setup correctly, you can now login using this laravel route `saml2.login`
+9. When you encounter `AADSTS50011: The Reply URL does not match the reply URL configure in metadata` error when logging into Microsoft Account, in `config/saml2.php` set:
+```
+'proxyVars' => true, // to allow ssl
+'assertionConsumerService' => [
+  'url' => 'https://your.domain.com/saml2/{uui}/acs',
+],
+'singleLogoutService' => [
+  'url' => 'https://your.domain.com/saml2/{uui}/acs'
+],
+```
+Note: We need to change `assertionConsumerService` and `singleLogoutService` because by sometimes metadata generates `http` instead of `https`
+10. If everything is setup correctly, you can now login using this laravel route `saml2.login`
