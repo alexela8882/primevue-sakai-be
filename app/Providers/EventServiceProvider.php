@@ -55,11 +55,13 @@ class EventServiceProvider extends ServiceProvider
             // save into session
             session(['xaccessToken' => $success['token']]);
             session(['xuser_id' => $success['_id']]);
-
-            return response()->json('User login successfully.', 200);
           } else {
-            $message = "Your microsoft account" . $xuser . " not found in our records. Please contact the administrator.";
-            dd($message);
+            // $message = "Your microsoft account" . $xuser . " not found in our records. Please contact the administrator.";
+            // dd($message);
+
+            // save into session
+            session(['xaccessToken' => null]);
+            session(['xuser_id' => null]);
           }
         });
     }
