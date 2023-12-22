@@ -72,11 +72,8 @@ Route::controller(BranchController::class)
 });
 
 // SAML2 Auth
-Route::prefix('saml2-auth')->group(function () {
-  Route::get('login', function () {
-    return redirect()->route('saml.login', ['uuid' => '07766233-180f-4f62-ad22-9f16ff83e4c9']);
-  });
-  Route::get('logout', function () {
-    return redirect()->route('saml.logout', ['uuid' => '07766233-180f-4f62-ad22-9f16ff83e4c9']);
-  });
+Route::controller(CustomSaml2Controller::class)
+  ->prefix('custom-saml2')
+  ->group(function () {
+  Route::get('/access-token', 'getAccessToken');
 });

@@ -37,32 +37,36 @@ class EventServiceProvider extends ServiceProvider
           $userData = [
             'id' => $samlUser->getUserId(),
             'attributes' => $samlUser->getAttributes(),
-            'assertion' => $samlUser->getRawSamlAssertion()
+            'assertion' => $samlUser->getRawSamlAssertion(),
+            'session' => $samlUser->getSessionIndex()
           ];
 
           // get email from attributes
           $xuser = implode($userData['attributes']['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress']);
 
+          // dd($samlUser);
+          dd($userData);
+
           // get user from database
-          $user = User::where('email', $xuser)->first();
+          // $user = User::where('email', $xuser)->first();
 
-          if ($user) {
-            // Password-less login
-            $success['token'] =  $user->createToken('MyAppUsingPasswordLessAuth')->accessToken; 
-            $success['name'] =  $user->name;
-            $success['_id'] =  $user->_id;
+          // if ($user) {
+          //   // Password-less login
+          //   $success['token'] =  $user->createToken('MyAppUsingPasswordLessAuth')->accessToken; 
+          //   $success['name'] =  $user->name;
+          //   $success['_id'] =  $user->_id;
 
-            // save into session
-            session(['xaccessToken' => $success['token']]);
-            session(['xuser_id' => $success['_id']]);
-          } else {
-            // $message = "Your microsoft account" . $xuser . " not found in our records. Please contact the administrator.";
-            // dd($message);
+          //   // save into session
+          //   session(['xaccessToken' => $success['token']]);
+          //   session(['xuser_id' => $success['_id']]);
+          // } else {
+          //   // $message = "Your microsoft account" . $xuser . " not found in our records. Please contact the administrator.";
+          //   // dd($message);
 
-            // save into session
-            session(['xaccessToken' => null]);
-            session(['xuser_id' => null]);
-          }
+          //   // save into session
+          //   session(['xaccessToken' => null]);
+          //   session(['xuser_id' => null]);
+          // }
         });
     }
 
