@@ -76,8 +76,9 @@ Route::controller(BranchController::class)
 // SAML2 Auth
 Route::controller(CustomSaml2Controller::class)
   ->prefix('custom-saml2')
+  ->middleware(['web'])
   ->group(function () {
-  Route::get('/access-token', 'getAccessToken');
+  Route::get('/logout', 'logout');
 });
 
 // MS GRAPH
@@ -89,7 +90,7 @@ Route::group(['prefix' => 'msgraph', 'middleware' => ['web', 'saml2']], function
       //display your details
       return MsGraph::get('me');
     }
-  })->middleware(['web']);
+  });
 
   // Route::get('/', function() {
   //   return MsGraph::get('me');

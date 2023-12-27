@@ -94,4 +94,18 @@ class CustomSaml2Controller extends Controller
 
       return $graph_response;
     }
+
+    public function logout (Request $request) {
+      // reset saml2 sessions
+      // session(['xaccessToken' => null]);
+      // session(['xuser_id' => null]);
+      // session(['xuser_email' => null]);
+
+      // forget saml2 sessions
+      session()->forget('xaccessToken');
+      session()->forget('xuser_id');
+      session()->forget('xuser_email');
+
+      return redirect()->route('phpinfo');
+    }
 }

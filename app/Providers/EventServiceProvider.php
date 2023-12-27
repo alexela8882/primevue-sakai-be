@@ -28,6 +28,7 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // listen to saml2 login event
         Event::listen(\Slides\Saml2\Events\SignedIn::class, function (\Slides\Saml2\Events\SignedIn $event) {
           $messageId = $event->getAuth()->getLastMessageId();
           
@@ -57,10 +58,12 @@ class EventServiceProvider extends ServiceProvider
             $success['token'] =  $user->createToken('MyAppUsingPasswordLessAuth')->accessToken; 
             $success['name'] =  $user->name;
             $success['_id'] =  $user->_id;
+            $success['email'] =  $user->email;
 
             // save into session
             session(['xaccessToken' => $success['token']]);
             session(['xuser_id' => $success['_id']]);
+            session(['xuser_email' => $success['email']]);
           } else {
             // $message = "Your microsoft account" . $xuser . " not found in our records. Please contact the administrator.";
             // dd($message);
@@ -68,6 +71,7 @@ class EventServiceProvider extends ServiceProvider
             // save into session
             session(['xaccessToken' => null]);
             session(['xuser_id' => null]);
+            session(['xuser_email' => null]);
           }
         });
     }

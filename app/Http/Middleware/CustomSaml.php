@@ -16,10 +16,12 @@ class CustomSaml
     public function handle(Request $request, Closure $next): Response
     {
         if ($request->session()->get('xaccessToken')) {
+          // $token = $request->session()->get('xaccessToken');
+          // return response()->json($token);
           return $next($request);
         } else {
           $res = "not authorized";
-          return redirect()->route('saml.login', ['uuid' => 'cd4d3b47-576c-4df6-9fa0-09a3dffe9f27']);
+          return redirect()->route('saml.login', ['uuid' => config('saml2.uuid')]);
         }
 
         return $next($request);
