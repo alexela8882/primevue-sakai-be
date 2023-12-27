@@ -81,7 +81,7 @@ $this->storeToken(
     $accessToken->getRefreshToken(),
     $accessToken->getExpires(),
     $id,
-    null
+    $response['mail']
 );
 ```
 2. Protect all routes using msgraph with `web` and `saml2`
