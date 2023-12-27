@@ -66,3 +66,39 @@ db.saml2_tenants.update("key": {<key eg. rdv2>}, {$set: {"uuid": "67cf9876-2fe5-
 ```
 Note: We need to change `assertionConsumerService` and `singleLogoutService` because by sometimes metadata generates `http` instead of `https`
 10. If everything is setup correctly, you can now login using this laravel route `saml2.login`
+
+# MS GRAPH
+
+Please refer to this documentation https://github.com/dcblogdev/laravel-microsoft-graph/tree/2.0.0
+
+## Customizing MS GRAPH package
+
+1. Open `vendor/daveismyname/src/MsGraph.php` and in **connect** method, comment out the line starts with `if (auth()->check())` the replace it with this instead (since we are not using the default `auth` for authentication):
+
+```
+$this->storeToken(
+    $accessToken->getToken(),
+    $accessToken->getRefreshToken(),
+    $accessToken->getExpires(),
+    $id,
+    null
+);
+```
+2. Protect all routes using msgraph with `web` and `saml2`
+```
+Route::group(['prefix' => 'msgraph', 'middleware' => ['web', 'saml2']], function(){
+  Route::get('/', function(){
+    if ((string) MsGraph::getAccessToken()) {
+      return redirect(env('MSGRAPH_OAUTH_URL'));
+    } else {
+      //display your details
+      return MsGraph::get('me');
+    }
+  })->middleware(['web']);
+
+  Route::get('oauth', function() {
+    return MsGraph::connect();
+  });
+});
+```
+3. `saml2` middleware is a custom middleware created to check user logged in using `24slides saml` package

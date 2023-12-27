@@ -45,28 +45,30 @@ class EventServiceProvider extends ServiceProvider
           $xuser = implode($userData['attributes']['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress']);
 
           // dd($samlUser);
-          dd($userData);
+          // dd($userData);
 
           // get user from database
-          // $user = User::where('email', $xuser)->first();
+          $user = User::where('email', $xuser)->first();
+          // dd($user);
 
-          // if ($user) {
-          //   // Password-less login
-          //   $success['token'] =  $user->createToken('MyAppUsingPasswordLessAuth')->accessToken; 
-          //   $success['name'] =  $user->name;
-          //   $success['_id'] =  $user->_id;
 
-          //   // save into session
-          //   session(['xaccessToken' => $success['token']]);
-          //   session(['xuser_id' => $success['_id']]);
-          // } else {
-          //   // $message = "Your microsoft account" . $xuser . " not found in our records. Please contact the administrator.";
-          //   // dd($message);
+          if ($user) {
+            // Password-less login
+            $success['token'] =  $user->createToken('MyAppUsingPasswordLessAuth')->accessToken; 
+            $success['name'] =  $user->name;
+            $success['_id'] =  $user->_id;
 
-          //   // save into session
-          //   session(['xaccessToken' => null]);
-          //   session(['xuser_id' => null]);
-          // }
+            // save into session
+            session(['xaccessToken' => $success['token']]);
+            session(['xuser_id' => $success['_id']]);
+          } else {
+            // $message = "Your microsoft account" . $xuser . " not found in our records. Please contact the administrator.";
+            // dd($message);
+
+            // save into session
+            session(['xaccessToken' => null]);
+            session(['xuser_id' => null]);
+          }
         });
     }
 

@@ -171,6 +171,8 @@ return [
         MongoDB\Laravel\MongoDBServiceProvider::class,
         // MongoDB\Laravel\Auth\PasswordResetServiceProvider::class,
         Slides\Saml2\ServiceProvider::class,
+        // Daveismyname\MsGraph\MsGraphServiceProvider::class,
+        Dcblogdev\MsGraph\MsGraphServiceProvider::class,
     ])->toArray(),
 
     /*

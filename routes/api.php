@@ -11,6 +11,8 @@ use App\Http\Controllers\API\CountryController;
 use App\Http\Controllers\API\BranchController;
 use App\Http\Controllers\API\CustomSaml2Controller;
 
+// use Daveismyname\MsGraph\Models\MsGraphToken;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -76,4 +78,33 @@ Route::controller(CustomSaml2Controller::class)
   ->prefix('custom-saml2')
   ->group(function () {
   Route::get('/access-token', 'getAccessToken');
+});
+
+// MS GRAPH
+Route::group(['prefix' => 'msgraph', 'middleware' => ['web', 'saml2']], function(){
+  Route::get('/', function(){
+    if (json_decode(MsGraph::getAccessToken())) {
+      return redirect(env('MSGRAPH_OAUTH_URL'));
+    } else {
+      //display your details
+      return MsGraph::get('me');
+    }
+  })->middleware(['web']);
+
+  // Route::get('/', function() {
+  //   return MsGraph::get('me');
+  // })->middleware(['web', 'MsGraphAuthenticated']);
+
+  Route::get('oauth', function() {
+    return MsGraph::connect();
+  });
+
+  Route::get('me', function() {
+    return MsGraph::get('me');
+  });
+
+  Route::get('token', function() {
+    $isConnected = MsGraph::getAccessToken();
+    return response()->json($isConnected);
+  });
 });
