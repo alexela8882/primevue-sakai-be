@@ -84,8 +84,38 @@ Route::controller(CustomSaml2Controller::class)
 // MS GRAPH
 Route::group(['prefix' => 'msgraph', 'middleware' => ['web', 'saml2']], function() {
   Route::group(['middleware' => ['web', 'MsGraphAuthenticated']], function() {
-    Route::get('msgraph', function() {
+    Route::get('/', function() {
       return MsGraph::get('me');
+    });
+
+    Route::group(['prefix' => '/mail-folders'], function () {
+      Route::get('/', function() {
+        return MsGraph::get('me/mailFolders');
+      });
+  
+      Route::get('{id}', function($id) {
+        return MsGraph::get('me/mailFolders/' . $id);
+      });
+  
+      Route::get('{id}/messages', function($id) {
+        return MsGraph::get('me/mailFolders/' . $id . '/messages');
+      });
+  
+      Route::get('{id}/messages', function($id) {
+        return MsGraph::get('me/mailFolders/' . $id . '/messages');
+      });
+  
+      Route::get('{id}/messages/{messageId}', function($id, $messageId) {
+        return MsGraph::get('me/mailFolders/' . $id . '/messages/' . $messageId);
+      });
+    });
+
+    Route::get('/messages', function() {
+      return MsGraph::get('me/messages');
+    });
+
+    Route::get('/messages/{id}', function($id) {
+      return MsGraph::get('me/messages/' . $id . '=/?$select=subject,body,bodyPreview,uniqueBody');
     });
   });
 
