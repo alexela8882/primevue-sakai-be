@@ -73,7 +73,7 @@ Please refer to this documentation https://github.com/dcblogdev/laravel-microsof
 
 ## Customizing MS GRAPH package
 
-1. Open `vendor/daveismyname/src/MsGraph.php` and in **connect** method, comment out the line starts with `if (auth()->check())` the replace it with this instead (since we are not using the default `auth` for authentication):
+1. Open `vendor/daveismyname/src/MsGraph.php` and in **connect** method, comment out the line starts with `if (auth()->check())` the replace it with this instead (since we are not using the default laravel `auth` for authentication):
 
 ```
 $this->storeToken(
@@ -84,21 +84,28 @@ $this->storeToken(
     $response['mail']
 );
 ```
-2. Protect all routes using msgraph with `web` and `saml2`
+2. Protect all msgraph routes with `web` and `saml2`
 ```
-Route::group(['prefix' => 'msgraph', 'middleware' => ['web', 'saml2']], function(){
-  Route::get('/', function(){
-    if ((string) MsGraph::getAccessToken()) {
-      return redirect(env('MSGRAPH_OAUTH_URL'));
-    } else {
-      //display your details
+Route::group(['prefix' => 'msgraph', 'middleware' => ['web', 'saml2']], function() {
+  Route::group(['middleware' => ['web', 'MsGraphAuthenticated']], function() {
+    Route::get('/', function() {
       return MsGraph::get('me');
-    }
-  })->middleware(['web']);
+    });
+
+    Route::get('/messages', function() {
+      return MsGraph::get('me/messages');
+    });
+
+    Route::get('/messages/{id}', function($id) {
+      return MsGraph::get('me/messages/' . $id . '=/?$select=subject,body,bodyPreview,uniqueBody');
+    });
+  });
 
   Route::get('oauth', function() {
     return MsGraph::connect();
   });
 });
 ```
-3. `saml2` middleware is a custom middleware created to check user logged in using `24slides saml` package
+3. `saml2` middleware is a custom middleware created to check user logged in using `24slides saml` package.
+4. Then after user logged in using `saml2`, calling `api/msgraph` route will automatically call `api/msgraph/oauth` first for authentication.
+5. Since user already logged in using `saml2`, user will not need to enter credentials again, it will log the user automatically.
