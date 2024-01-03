@@ -109,3 +109,4 @@ Route::group(['prefix' => 'msgraph', 'middleware' => ['web', 'saml2']], function
 3. `saml2` middleware is a custom middleware created to check user logged in using `24slides saml` package.
 4. Then after user logged in using `saml2`, calling `api/msgraph` route will automatically call `api/msgraph/oauth` first for authentication.
 5. Since user already logged in using `saml2`, user will not need to enter credentials again, it will log the user automatically.
+6. If you encounter error in line `$response['mail']`, just truncate the table `ms_graph_tokens`
