@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-// use MongoDB\Laravel\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 
 class UserConfig extends Model
 {
   use HasFactory;
 
-  // protected $connection = 'mongodb';
-  // protected $collection = 'user_configs';
+  protected $connection = 'mongodb';
+  protected $collection = 'user_configs';
 }
