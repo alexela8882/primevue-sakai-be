@@ -30,6 +30,7 @@ Route::get('/phpinfo', function () {
 
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
+Route::post('saml-login', [RegisterController::class, 'samlLogin']);
 Route::get('passwordless-login', [RegisterController::class, 'passwordLessLogin'])->middleware(['web']);
 Route::get('logout', [RegisterController::class, 'logout'])->middleware(['web']);
 
@@ -86,6 +87,8 @@ Route::group(['prefix' => 'msgraph', 'middleware' => ['web', 'saml2']], function
   Route::group(['middleware' => ['web', 'MsGraphAuthenticated']], function() {
     Route::get('/', function() {
       return MsGraph::get('me');
+      // $url = "http://localhost:5173/#/outlook-mail"
+      // return redirect()->away($url);
     });
 
     Route::group(['prefix' => '/mail-folders'], function () {

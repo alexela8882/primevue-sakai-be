@@ -73,7 +73,12 @@ class RegisterController extends BaseController
       } 
       else{ 
         return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
-      } 
+      }
+    }
+
+    public function samlLogin (Request $request) {
+      // return response()->json("test", 200);
+      return redirect()->route('saml.login', ['uuid' => config('saml2.uuid')]);
     }
 
     public function passwordLessLogin (Request $request) {
@@ -84,7 +89,7 @@ class RegisterController extends BaseController
         'message' => 'User login successfully.'
       ];
 
-      $url = "https://nav.reddotcrm.com/#/auth/saml-login?token=" . $request->session()->get('xaccessToken') . "&auth_id=" . $request->session()->get('xuser_id');
+      $url = "http://localhost:5173/#/auth/saml-login?token=" . $request->session()->get('xaccessToken') . "&auth_id=" . $request->session()->get('xuser_id');
 
       return redirect()->away($url);
     }

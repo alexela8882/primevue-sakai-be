@@ -20,8 +20,10 @@ return [
         'localhost,
         nav.reddotcrm.com,
         localhost:3000,
+        localhost:5173,
         127.0.0.1,
         127.0.0.1:8000,
+        https://ce32-49-151-220-133.ngrok-free.app,
         ::1',
         Sanctum::currentApplicationUrlWithPort()
     ))),
