@@ -198,7 +198,7 @@ return [
         */
 
         'assertionConsumerService' => [
-            'url' => 'https://api.reddotcrm.com/saml2/5e7cfe07-5de3-407d-9b26-0f42143d3ab7/acs',
+            'url' => 'https://38ba-163-116-223-55.ngrok-free.app/saml2/4766585a-ce77-4041-b40c-bc4a7c4a56cc/acs',
         ],
 
         /*
@@ -215,7 +215,7 @@ return [
         */
 
         'singleLogoutService' => [
-            'url' => 'https://api.reddotcrm.com/saml2/5e7cfe07-5de3-407d-9b26-0f42143d3ab7/sls'
+            'url' => 'https://38ba-163-116-223-55.ngrok-free.app/saml2/4766585a-ce77-4041-b40c-bc4a7c4a56cc/sls'
         ],
     ],
 

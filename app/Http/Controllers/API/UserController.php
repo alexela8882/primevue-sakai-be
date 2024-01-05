@@ -43,11 +43,11 @@ class UserController extends Controller
         'first_name' => 'required',
         'last_name' => 'required',
         'middle_name' => 'required',
-        'branch_id' => 'required',
+        // 'branch_id' => 'required',
       ];
       $messages = [
         'required' => 'The :attribute field is required.',
-        'branch_id.required' => 'Please select a branch',
+        // 'branch_id.required' => 'Please select a branch',
         'unique' => 'This :attribute has already been taken'
       ];
       $validator = Validator::make($req->all(), $rules, $messages);
@@ -63,7 +63,7 @@ class UserController extends Controller
       $user->last_name = $req->last_name;
       $user->middle_name = $req->middle_name;
       $user->email = $req->email;
-      $user->branch_id = $req->branch_id;
+      // $user->branch_id = $req->branch_id;
       $user->password = bcrypt($req->password);
       $user->save();
 
