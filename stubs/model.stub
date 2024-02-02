@@ -2,7 +2,7 @@
 
 namespace {{ namespace }};
 
-use MongoDB\Laravel\Eloquent\Model;
+use App\Models\Model\Base;
 
 class {{ class }} extends Model
 {
