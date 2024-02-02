@@ -4,7 +4,7 @@ namespace {{ namespace }};
 
 use App\Models\Model\Base;
 
-class {{ class }} extends Model
+class {{ class }} extends Base
 {
     protected $connection = 'mongodb';
 }
