@@ -3,10 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-// use Illuminate\Database\Eloquent\Model;
-use MongoDB\Laravel\Eloquent\Model;
+use App\Models\Model\Base;
 
-class Country extends Model
+class Country extends Base
 {
   use HasFactory;
 

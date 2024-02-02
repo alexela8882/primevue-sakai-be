@@ -25,9 +25,9 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-      'name',
-      'email',
-      'password',
+        'name',
+        'email',
+        'password',
     ];
 
     /**
@@ -36,8 +36,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-      'password',
-      'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
@@ -46,8 +46,8 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-      'email_verified_at' => 'datetime',
-      'password' => 'hashed',
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
     ];
 
     /**
@@ -56,8 +56,9 @@ class User extends Authenticatable
      * @param  string  $email
      * @return \App\User
      */
-    public function findForPassport($email) {
-      return $this->where('email', $email)->first();
+    public function findForPassport($email)
+    {
+        return $this->where('email', $email)->first();
     }
 
     /**
@@ -66,12 +67,14 @@ class User extends Authenticatable
      * @param  string  $password
      * @return bool
      */
-    public function validateForPassportPasswordGrant($password) {
+    public function validateForPassportPasswordGrant($password)
+    {
         return Hash::check($password, $this->password);
     }
 
     // relationships
-    public function branch () {
-      return $this->belongsTo(Branch::class, 'branch_id');
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 }

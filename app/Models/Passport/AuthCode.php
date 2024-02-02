@@ -2,10 +2,9 @@
 
 namespace Laravel\Passport;
 
-// use Illuminate\Database\Eloquent\Model;
-use MongoDB\Laravel\Eloquent\Model;
+use App\Models\Model\Base;
 
-class AuthCode extends Model
+class AuthCode extends Base
 {
     /**
      * The database table used by the model.

@@ -4,11 +4,11 @@ namespace Laravel\Passport;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 // use Illuminate\Database\Eloquent\Model;
-use MongoDB\Laravel\Eloquent\Model;
+use App\Models\Model\Base;
 use Illuminate\Support\Str;
 use Laravel\Passport\Database\Factories\ClientFactory;
 
-class Client extends Model
+class Client extends Base
 {
     use HasFactory;
     use ResolvesInheritedScopes;
@@ -128,7 +128,7 @@ class Client extends Model
     {
         $this->plainSecret = $value;
 
-        if (is_null($value) || ! Passport::$hashesClientSecrets) {
+        if (is_null($value) || !Passport::$hashesClientSecrets) {
             $this->attributes['secret'] = $value;
 
             return;
@@ -165,7 +165,7 @@ class Client extends Model
      */
     public function hasScope($scope)
     {
-        if (! is_array($this->scopes)) {
+        if (!is_array($this->scopes)) {
             return true;
         }
 
@@ -189,7 +189,7 @@ class Client extends Model
      */
     public function confidential()
     {
-        return ! empty($this->secret);
+        return !empty($this->secret);
     }
 
     /**
