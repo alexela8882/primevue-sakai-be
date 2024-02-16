@@ -5,14 +5,21 @@ namespace App\Models\Passport;
 use App\Models\Model\Base;
 use Laravel\Passport\Passport;
 
-class AuthCode extends Base
+class RefreshToken extends Base
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'oauth_auth_codes';
+    protected $table = 'oauth_refresh_tokens';
+
+    /**
+     * The "type" of the primary key ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -46,19 +53,32 @@ class AuthCode extends Base
     public $timestamps = false;
 
     /**
-     * The "type" of the primary key ID.
-     *
-     * @var string
-     */
-    protected $keyType = 'string';
-
-    /**
-     * Get the client that owns the authentication code.
+     * Get the access token that the refresh token belongs to.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function client()
+    public function accessToken()
     {
-        return $this->belongsTo(Passport::clientModel());
+        return $this->belongsTo(Passport::tokenModel());
+    }
+
+    /**
+     * Revoke the token instance.
+     *
+     * @return bool
+     */
+    public function revoke()
+    {
+        return $this->forceFill(['revoked' => true])->save();
+    }
+
+    /**
+     * Determine if the token is a transient JWT token.
+     *
+     * @return bool
+     */
+    public function transient()
+    {
+        return false;
     }
 }

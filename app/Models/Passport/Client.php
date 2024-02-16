@@ -1,12 +1,13 @@
 <?php
 
-namespace Laravel\Passport;
+namespace App\Models\Passport;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-// use Illuminate\Database\Eloquent\Model;
 use App\Models\Model\Base;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 use Laravel\Passport\Database\Factories\ClientFactory;
+use Laravel\Passport\ResolvesInheritedScopes;
+use Laravel\Passport\Passport;
 
 class Client extends Base
 {

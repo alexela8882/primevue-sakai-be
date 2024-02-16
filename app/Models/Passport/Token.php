@@ -1,8 +1,10 @@
 <?php
 
-namespace Laravel\Passport;
+namespace App\Models\Passport;
 
 use App\Models\Model\Base;
+use Laravel\Passport\Passport;
+use Laravel\Passport\ResolvesInheritedScopes;
 
 class Token extends Base
 {

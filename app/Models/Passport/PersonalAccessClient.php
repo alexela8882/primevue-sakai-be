@@ -1,8 +1,9 @@
 <?php
 
-namespace Laravel\Passport;
+namespace App\Models\Passport;
 
 use App\Models\Model\Base;
+use Laravel\Passport\Passport;
 
 class PersonalAccessClient extends Base
 {
