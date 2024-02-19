@@ -8,6 +8,7 @@ use App\Http\Controllers\API\UserConfigController;
 use App\Http\Controllers\API\CountryController;
 use App\Http\Controllers\API\BranchController;
 use App\Http\Controllers\API\CustomSaml2Controller;
+use App\Http\Controllers\Customer\LeadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,13 @@ Route::controller(UserController::class)
         Route::post('/store', 'store');
         Route::put('{id}/update', 'update');
         Route::delete('{id}/delete', 'delete');
+    });
+
+    
+Route::controller(LeadController::class)
+    ->middleware('auth:api')
+    ->group(function() {
+        Route::apiResource('leads', LeadController::class);
     });
 
 Route::controller(UserConfigController::class)
