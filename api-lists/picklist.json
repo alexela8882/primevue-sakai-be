@@ -1,0 +1,868 @@
+{
+  "account_type": {
+    "values": [
+      {
+        "value": "Collaborator",
+        "active": true,
+        "_id": "5df89621a6ebc7ad4e0c11f2",
+        "order": 0
+      },
+      {
+        "value": "Competitor",
+        "active": true,
+        "_id": "651fce16a6ebc72c08607fa2",
+        "order": 1
+      },
+      {
+        "value": "Contractor/Construction Firm",
+        "active": true,
+        "_id": "5bb104d4678f71061f6440b7",
+        "order": 2
+      },
+      {
+        "value": "Dealer",
+        "active": true,
+        "_id": "5bb104d4678f71061f6440ba",
+        "order": 3
+      },
+      {
+        "value": "Distributor",
+        "active": true,
+        "_id": "5bb104d4678f71061f6440b9",
+        "order": 4
+      },
+      {
+        "value": "End User",
+        "active": true,
+        "_id": "5bb104d4678f71061f6440b8",
+        "order": 5
+      },
+      {
+        "value": "Investor",
+        "active": true,
+        "_id": "5df89621a6ebc7ad4e0c11f3",
+        "order": 6
+      },
+      {
+        "value": "Manufacturer Sales Rep",
+        "active": true,
+        "_id": "5bb104d4678f71061f6440bb",
+        "order": 7
+      },
+      {
+        "value": "Service",
+        "active": true,
+        "_id": "5bb104d4678f71061f6440bc",
+        "order": 8
+      }
+    ],
+    "catSrcListName": null
+  },
+  "industry": {
+    "values": [
+      {
+        "value": "Government",
+        "active": true,
+        "_id": "5bb104d5678f71061f644103",
+        "order": 0
+      },
+      {
+        "value": "Private",
+        "active": true,
+        "_id": "5bb104d5678f71061f644104",
+        "order": 1
+      }
+    ],
+    "catSrcListName": null
+  },
+  "major_segment": {
+    "values": [
+      {
+        "value": "Aerospace",
+        "active": true,
+        "_id": "5bb104d5678f71061f64410d",
+        "order": 0
+      },
+      {
+        "value": "Agri Biotech",
+        "active": true,
+        "_id": "5bb104d5678f71061f64410c",
+        "order": 1
+      },
+      {
+        "value": "Bank/Pawn Shop",
+        "active": true,
+        "_id": "5bb104d5678f71061f644117",
+        "order": 2
+      },
+      {
+        "value": "Consultant",
+        "active": true,
+        "_id": "5bb104d5678f71061f644110",
+        "order": 3
+      },
+      {
+        "value": "Contractor",
+        "active": true,
+        "_id": "5bb104d5678f71061f644111",
+        "order": 4
+      },
+      {
+        "value": "Dealer",
+        "active": true,
+        "_id": "5bb104d5678f71061f644113",
+        "order": 5
+      },
+      {
+        "value": "Distributor",
+        "active": true,
+        "_id": "5bb104d5678f71061f644112",
+        "order": 6
+      },
+      {
+        "value": "Engineering Firm",
+        "active": true,
+        "_id": "5bb104d5678f71061f644114",
+        "order": 7
+      },
+      {
+        "value": "Hospital",
+        "active": true,
+        "_id": "5bb104d5678f71061f644108",
+        "order": 8
+      },
+      {
+        "value": "IVF Clinic",
+        "active": true,
+        "_id": "5bb104d5678f71061f644115",
+        "order": 9
+      },
+      {
+        "value": "Industrial Lab",
+        "active": true,
+        "_id": "5bb104d5678f71061f64410e",
+        "order": 10
+      },
+      {
+        "value": "Manufacturer",
+        "active": true,
+        "_id": "5bb104d5678f71061f64410f",
+        "order": 11
+      },
+      {
+        "value": "Mining",
+        "active": true,
+        "_id": "5bb104d5678f71061f644116",
+        "order": 12
+      },
+      {
+        "value": "Oil and Gas",
+        "active": true,
+        "_id": "5bb104d5678f71061f64410b",
+        "order": 13
+      },
+      {
+        "value": "Research Institute",
+        "active": true,
+        "_id": "5bb104d5678f71061f64410a",
+        "order": 14
+      },
+      {
+        "value": "University",
+        "active": true,
+        "_id": "5bb104d5678f71061f644109",
+        "order": 15
+      }
+    ],
+    "catSrcListName": null
+  },
+  "industry_minor_segment": {
+    "values": [
+      {
+        "value": "Agricultural Biotech",
+        "active": true,
+        "_id": "5bb104d5678f71061f64411c",
+        "order": 2
+      },
+      {
+        "value": "Agriculture",
+        "active": true,
+        "_id": "5bb104d5678f71061f644146",
+        "order": 3
+      },
+      {
+        "value": "Animal Breeding",
+        "active": true,
+        "_id": "5bb104d5678f71061f64411d",
+        "order": 4
+      },
+      {
+        "value": "Animal Lab",
+        "active": true,
+        "_id": "5bb104d5678f71061f64413d",
+        "order": 5
+      },
+      {
+        "value": "Automotive",
+        "active": true,
+        "_id": "5bb104d5678f71061f64411e",
+        "order": 6
+      },
+      {
+        "value": "Biotechnology",
+        "active": true,
+        "_id": "5bb104d5678f71061f64413a",
+        "order": 8
+      },
+      {
+        "value": "CDC",
+        "active": true,
+        "_id": "5bb104d5678f71061f64411f",
+        "order": 9
+      },
+      {
+        "value": "Cell Processing Centers",
+        "active": true,
+        "_id": "5bb104d5678f71061f644120",
+        "order": 10
+      },
+      {
+        "value": "Chemicals",
+        "active": true,
+        "_id": "5bb104d5678f71061f644121",
+        "order": 11
+      },
+      {
+        "value": "Chemistry Lab",
+        "active": true,
+        "_id": "5bb104d5678f71061f64413b",
+        "order": 12
+      },
+      {
+        "value": "Clinical Lab",
+        "active": true,
+        "_id": "5bb104d5678f71061f64413e",
+        "order": 13
+      },
+      {
+        "value": "Cocoa",
+        "active": true,
+        "_id": "5bb104d5678f71061f644142",
+        "order": 14
+      },
+      {
+        "value": "Cosmetics",
+        "active": true,
+        "_id": "5bb104d5678f71061f644122",
+        "order": 17
+      },
+      {
+        "value": "Diagnostic Labs",
+        "active": true,
+        "_id": "5bb104d5678f71061f644123",
+        "order": 18
+      },
+      {
+        "value": "Electronics",
+        "active": true,
+        "_id": "5bb104d5678f71061f644124",
+        "order": 20
+      },
+      {
+        "value": "Environmental Lab",
+        "active": true,
+        "_id": "5bb104d5678f71061f644125",
+        "order": 21
+      },
+      {
+        "value": "Fish",
+        "active": true,
+        "_id": "5bb104d5678f71061f644144",
+        "order": 22
+      },
+      {
+        "value": "Food and Beverage",
+        "active": true,
+        "_id": "5bb104d5678f71061f644126",
+        "order": 23
+      },
+      {
+        "value": "Forensic",
+        "active": true,
+        "_id": "5bb104d5678f71061f644127",
+        "order": 24
+      },
+      {
+        "value": "Forest",
+        "active": true,
+        "_id": "5bb104d5678f71061f644141",
+        "order": 25
+      },
+      {
+        "value": "Lab Furniture Manufacturer",
+        "active": true,
+        "_id": "5bff0fff678f715bf86a0852",
+        "order": 30
+      },
+      {
+        "value": "Manufacturer - Rubber Products",
+        "active": true,
+        "_id": "5bb104d5678f71061f644139",
+        "order": 31
+      },
+      {
+        "value": "Medical Devices",
+        "active": true,
+        "_id": "5bb104d5678f71061f644128",
+        "order": 35
+      },
+      {
+        "value": "Microbiology lab",
+        "active": true,
+        "_id": "5bb104d5678f71061f64413c",
+        "order": 36
+      },
+      {
+        "value": "Military",
+        "active": true,
+        "_id": "5bb104d5678f71061f644147",
+        "order": 37
+      },
+      {
+        "value": "Others",
+        "active": true,
+        "_id": "5bb104d5678f71061f644129",
+        "order": 42
+      },
+      {
+        "value": "Paper and Plastic",
+        "active": true,
+        "_id": "5bb104d5678f71061f64412a",
+        "order": 43
+      },
+      {
+        "value": "Pathology Lab",
+        "active": true,
+        "_id": "5bb104d5678f71061f644140",
+        "order": 45
+      },
+      {
+        "value": "Pharma - Conglomerate",
+        "active": true,
+        "_id": "5bb104d5678f71061f64412c",
+        "order": 47
+      },
+      {
+        "value": "Pharma - Contract manufacturing",
+        "active": true,
+        "_id": "5bb104d5678f71061f64412d",
+        "order": 48
+      },
+      {
+        "value": "Pharma - Contract research org",
+        "active": true,
+        "_id": "5bb104d5678f71061f64412e",
+        "order": 49
+      },
+      {
+        "value": "Pharma - Generics",
+        "active": true,
+        "_id": "5bb104d5678f71061f644130",
+        "order": 50
+      },
+      {
+        "value": "Pharma - High potency active ingredients",
+        "active": true,
+        "_id": "5bb104d5678f71061f644131",
+        "order": 51
+      },
+      {
+        "value": "Pharma - Insulin production",
+        "active": true,
+        "_id": "5bb104d5678f71061f644132",
+        "order": 52
+      },
+      {
+        "value": "Pharma - Milk powder / nutraceuticals",
+        "active": true,
+        "_id": "5bb104d5678f71061f644133",
+        "order": 53
+      },
+      {
+        "value": "Pharma - Optics / eyecare",
+        "active": true,
+        "_id": "5bb104d5678f71061f644134",
+        "order": 54
+      },
+      {
+        "value": "Pharma - Pilot plants / kilo labs",
+        "active": true,
+        "_id": "5bb104d5678f71061f644135",
+        "order": 55
+      },
+      {
+        "value": "Pharma - Skincare / ointments",
+        "active": true,
+        "_id": "5bb104d5678f71061f644136",
+        "order": 56
+      },
+      {
+        "value": "Pharma - Total parenteral nutrition",
+        "active": true,
+        "_id": "5bb104d5678f71061f644137",
+        "order": 57
+      },
+      {
+        "value": "Pharmacy Compounding",
+        "active": true,
+        "_id": "5bb104d5678f71061f64412f",
+        "order": 59
+      },
+      {
+        "value": "Research Institutes",
+        "active": true,
+        "_id": "5bb104d5678f71061f644138",
+        "order": 63
+      },
+      {
+        "value": "Research Lab",
+        "active": true,
+        "_id": "5bb104d5678f71061f64413f",
+        "order": 64
+      },
+      {
+        "value": "Test Labs",
+        "active": true,
+        "_id": "5bb104d5678f71061f64411b",
+        "order": 67
+      },
+      {
+        "value": "Veterinary",
+        "active": true,
+        "_id": "5bb104d5678f71061f644145",
+        "order": 71
+      },
+      {
+        "value": "Wildlife",
+        "active": true,
+        "_id": "5bb104d5678f71061f644143",
+        "order": 72
+      }
+    ],
+    "catSrcListName": null
+  },
+  "account_location_coverage": {
+    "values": [
+      {
+        "value": "Luzon : Batangas",
+        "active": true,
+        "_id": "5bb104d5678f71061f64414c",
+        "order": 0
+      },
+      {
+        "value": "Luzon : Dagupan",
+        "active": true,
+        "_id": "5bb104d5678f71061f64414d",
+        "order": 1
+      },
+      {
+        "value": "Luzon : Manila",
+        "active": true,
+        "_id": "5bb104d5678f71061f64414b",
+        "order": 2
+      },
+      {
+        "value": "Mindanao : Cagayan de Oro",
+        "active": true,
+        "_id": "5bb104d5678f71061f644150",
+        "order": 3
+      },
+      {
+        "value": "Mindanao : Davao",
+        "active": true,
+        "_id": "5bb104d5678f71061f644151",
+        "order": 4
+      },
+      {
+        "value": "Visayas : Cebu",
+        "active": true,
+        "_id": "5bb104d5678f71061f64414e",
+        "order": 5
+      },
+      {
+        "value": "Visayas : Iloilo",
+        "active": true,
+        "_id": "5bb104d5678f71061f64414f",
+        "order": 6
+      }
+    ],
+    "catSrcListName": null
+  },
+  "contact_role": {
+    "values": [
+      {
+        "value": "Accounts",
+        "active": true,
+        "_id": "5c0e1222678f716f654593c6",
+        "order": 0
+      },
+      {
+        "value": "Change user to end user",
+        "active": true,
+        "_id": "5c0e1222678f716f654593c3",
+        "order": 2
+      },
+      {
+        "value": "Consultant",
+        "active": true,
+        "_id": "5c0e1222678f716f654593c4",
+        "order": 3
+      },
+      {
+        "value": "Contractor",
+        "active": true,
+        "_id": "5c0e1222678f716f654593c5",
+        "order": 4
+      },
+      {
+        "value": "Dealer",
+        "active": true,
+        "_id": "5c0e1222678f716f654593c2",
+        "order": 5
+      },
+      {
+        "value": "Decision Maker",
+        "active": true,
+        "_id": "5bb104d5678f71061f644195",
+        "order": 6
+      },
+      {
+        "value": "Employee",
+        "active": true,
+        "_id": "5df9d62aa6ebc7b49f4e1b72",
+        "order": 7
+      },
+      {
+        "value": "Influencer",
+        "active": true,
+        "_id": "5bb104d5678f71061f644197",
+        "order": 8
+      },
+      {
+        "value": "Purchaser",
+        "active": true,
+        "_id": "5bb104d5678f71061f644198",
+        "order": 9
+      },
+      {
+        "value": "Rep",
+        "active": true,
+        "_id": "5f92e058a6ebc79ed1528ba2",
+        "order": 10
+      },
+      {
+        "value": "User",
+        "active": true,
+        "_id": "5bb104d5678f71061f644196",
+        "order": 11
+      }
+    ],
+    "catSrcListName": null
+  },
+  "philippine_regions": {
+    "values": [
+      {
+        "value": "Region I — Ilocos Region",
+        "active": true,
+        "_id": "6023c456a6ebc72b9829a492",
+        "order": 0
+      },
+      {
+        "value": "Region II — Cagayan Valley",
+        "active": true,
+        "_id": "6023c456a6ebc72b9829a493",
+        "order": 1
+      },
+      {
+        "value": "Region III — Central Luzon",
+        "active": true,
+        "_id": "6023c456a6ebc72b9829a494",
+        "order": 2
+      },
+      {
+        "value": "Region IV-A — CALABARZON",
+        "active": true,
+        "_id": "6023c456a6ebc72b9829a495",
+        "order": 3
+      },
+      {
+        "value": "MIMAROPA Region",
+        "active": true,
+        "_id": "6023c456a6ebc72b9829a496",
+        "order": 4
+      },
+      {
+        "value": "Region V — Bicol Region",
+        "active": true,
+        "_id": "6023c456a6ebc72b9829a497",
+        "order": 5
+      },
+      {
+        "value": "Region VI — Western Visayas",
+        "active": true,
+        "_id": "6023c456a6ebc72b9829a498",
+        "order": 6
+      },
+      {
+        "value": "Region VII — Central Visayas",
+        "active": true,
+        "_id": "6023c456a6ebc72b9829a499",
+        "order": 7
+      },
+      {
+        "value": "Region VIII — Eastern Visayas",
+        "active": true,
+        "_id": "6023c456a6ebc72b9829a49a",
+        "order": 8
+      },
+      {
+        "value": "Region IX — Zamboanga Peninsula",
+        "active": true,
+        "_id": "6023c456a6ebc72b9829a49b",
+        "order": 9
+      },
+      {
+        "value": "Region X — Northern Mindanao",
+        "active": true,
+        "_id": "6023c456a6ebc72b9829a49c",
+        "order": 10
+      },
+      {
+        "value": "Region XI — Davao Region",
+        "active": true,
+        "_id": "6023c456a6ebc72b9829a49d",
+        "order": 11
+      },
+      {
+        "value": "Region XII — SOCCSKSARGEN",
+        "active": true,
+        "_id": "6023c456a6ebc72b9829a49e",
+        "order": 12
+      },
+      {
+        "value": "Region XIII — Caraga",
+        "active": true,
+        "_id": "6023c456a6ebc72b9829a49f",
+        "order": 13
+      },
+      {
+        "value": "NCR — National Capital Region",
+        "active": true,
+        "_id": "6023c456a6ebc72b9829a4a0",
+        "order": 14
+      },
+      {
+        "value": "CAR — Cordillera Administrative Region",
+        "active": true,
+        "_id": "6023c456a6ebc72b9829a4a1",
+        "order": 15
+      },
+      {
+        "value": "BARMM — Bangsamoro Autonomous Region in Muslim Mindanao",
+        "active": true,
+        "_id": "6023c456a6ebc72b9829a4a2",
+        "order": 16
+      }
+    ],
+    "catSrcListName": null
+  },
+  "account_technology_brands": {
+    "values": [
+      {
+        "value": "CooperSurgical",
+        "active": true,
+        "order": 0,
+        "_id": "6213515ea6ebc7d7f12a655a"
+      },
+      {
+        "value": "Esco",
+        "active": true,
+        "order": 1,
+        "_id": "6213515ea6ebc7d7f12a655b"
+      },
+      {
+        "value": "IVFTech",
+        "active": true,
+        "order": 2,
+        "_id": "6213515ea6ebc7d7f12a655c"
+      },
+      {
+        "value": "Merck",
+        "active": true,
+        "order": 3,
+        "_id": "6213515ea6ebc7d7f12a655d"
+      },
+      {
+        "value": "Others",
+        "active": true,
+        "order": 4,
+        "_id": "6213515ea6ebc7d7f12a655e"
+      },
+      {
+        "value": "Vitrolife",
+        "active": true,
+        "order": 5,
+        "_id": "6213515ea6ebc7d7f12a655f"
+      }
+    ],
+    "catSrcListName": null
+  },
+  "account_currency": {
+    "values": [
+      {
+        "_id": "5a7ff2c8678f716be22b37f2",
+        "code": "AUD",
+        "name": "Australia Dollar",
+        "symbol": "AU$"
+      },
+      {
+        "_id": "5a7ff2c8678f716be22b37f3",
+        "code": "EUR",
+        "name": "Euro Member Countries",
+        "symbol": "â‚¬"
+      },
+      {
+        "_id": "5a7ff2c8678f716be22b37f4",
+        "code": "GBP",
+        "name": "United Kingdom Pound",
+        "symbol": "Â£"
+      },
+      {
+        "_id": "5a7ff2c8678f716be22b37f5",
+        "code": "HKD",
+        "name": "Hong Kong Dollar",
+        "symbol": "HK$"
+      },
+      {
+        "_id": "5a7ff2c8678f716be22b37f6",
+        "code": "IDR",
+        "name": "Indonesia Rupiah",
+        "symbol": "Rp"
+      },
+      {
+        "_id": "5a7ff2c8678f716be22b37f7",
+        "code": "JPY",
+        "name": "Japan Yen",
+        "symbol": "Â¥"
+      },
+      {
+        "_id": "5a7ff2c8678f716be22b37f8",
+        "code": "KRW",
+        "name": "Korea (South) Won",
+        "symbol": "â‚©"
+      },
+      {
+        "_id": "5a7ff2c8678f716be22b37f9",
+        "code": "MYR",
+        "name": "Malaysia Ringgit",
+        "symbol": "RM"
+      },
+      {
+        "_id": "5a7ff2c8678f716be22b37fa",
+        "code": "PHP",
+        "name": "Philippine Peso",
+        "symbol": "₱"
+      },
+      {
+        "_id": "5a7ff2c8678f716be22b37fb",
+        "code": "SGD",
+        "name": "Singapore Dollar",
+        "symbol": "S$"
+      },
+      {
+        "_id": "5a7ff2c8678f716be22b37fc",
+        "code": "USD",
+        "name": "United States Dollar",
+        "symbol": "$"
+      },
+      {
+        "_id": "5a7ff2c8678f716be22b37fd",
+        "code": "ZAR",
+        "name": "South Africa Rand",
+        "symbol": "R"
+      },
+      {
+        "_id": "5a83652e678f7170f3400682",
+        "code": "CAD",
+        "name": "Canada Dollar",
+        "symbol": "CA$"
+      },
+      {
+        "_id": "5a83652e678f7170f3400683",
+        "code": "CNY",
+        "name": "China Yuan Renminbi",
+        "symbol": "CN¥"
+      },
+      {
+        "_id": "5a83652e678f7170f3400684",
+        "code": "THB",
+        "name": "Thailand Baht",
+        "symbol": "฿"
+      },
+      {
+        "_id": "5a83652e678f7170f3400685",
+        "code": "TWD",
+        "name": "Taiwan New Dollar",
+        "symbol": "NT$"
+      },
+      {
+        "_id": "5a83652e678f7170f3400686",
+        "code": "VND",
+        "name": "Viet Nam Dong",
+        "symbol": "₫"
+      },
+      {
+        "_id": "5bcfb0d0678f7125be0e04b2",
+        "code": "AED",
+        "name": "United Arab Emirates Dirham",
+        "symbol": "AED"
+      },
+      {
+        "_id": "5bcfb0d0678f7125be0e04b8",
+        "code": "BDT",
+        "name": "Bangladesh Taka",
+        "symbol": "Tk"
+      },
+      {
+        "_id": "5c6102c4a6ebc726c77e8b32",
+        "code": "XOF",
+        "name": "Communauté Financière Africaine (BCEAO) Franc",
+        "symbol": "CFA"
+      },
+      {
+        "_id": "5e54b6cda6ebc7b480423432",
+        "code": "MMK",
+        "name": "Myanmar (Burma) Kyat",
+        "symbol": "KYAT"
+      },
+      {
+        "_id": "5f475947a6ebc73df50f3752",
+        "code": "ILS",
+        "name": "Israeli Shekel",
+        "symbol": "ILS"
+      },
+      {
+        "_id": "5f8cefe6a6ebc7ac9a033f02",
+        "code": "INR",
+        "name": "India Rupee",
+        "symbol": "Rs"
+      },
+      {
+        "_id": "6544c8f4a6ebc736c15809a2",
+        "code": "KES",
+        "name": "Kenya Shilling",
+        "symbol": "Ksh"
+      }
+    ]
+  }
+}

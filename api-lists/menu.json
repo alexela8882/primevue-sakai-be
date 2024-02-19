@@ -1,0 +1,113 @@
+{
+  "top": {
+    "folders": [
+      {
+        "icon": "hub",
+        "label": "Core",
+        "name": "cores",
+        "order": 0,
+        "folders": [],
+        "modules": [
+          "640fe3c6a6ebc7053d281b02"
+        ]
+      },
+      {
+        "icon": "business",
+        "label": "Accounts",
+        "name": "accounts",
+        "order": 3,
+        "folders": [
+          {
+            "icon": "fiber_manual_record",
+            "label": "Esco Ventures",
+            "name": "escoventures",
+            "order": 5,
+            "folders": [],
+            "modules": [
+              "5ec66b78a6ebc72fee671153",
+              "5ec66b78a6ebc72fee671159",
+              "5ec66b78a6ebc72fee67115f"
+            ]
+          },
+          {
+            "icon": "fiber_manual_record",
+            "label": "Esco Aster",
+            "name": "escoaster",
+            "order": 6,
+            "folders": [],
+            "modules": [
+              "5ef33d45a6ebc76dc849e09f",
+              "5f695ca7a6ebc721f01a7914",
+              "5f881daca6ebc7d1bf792902",
+              "60ff64a9a6ebc7f482057db3"
+            ]
+          }
+        ],
+        "modules": [
+          "5c906a1ba6ebc7193110f8bd",
+          "5c906a1ba6ebc7193110f8c5",
+          "5c906a1ba6ebc7193110f8cd",
+          "5c906a1ba6ebc7193110f926"
+        ]
+      },
+      {
+        "icon": "subtitles",
+        "label": "Work Orders",
+        "name": "workorder",
+        "order": 9,
+        "folders": [],
+        "modules": [
+          "5c906a1ba6ebc7193110f906",
+          "5c906a1ba6ebc7193110f91e",
+          "64900dfba6ebc7103a473c13"
+        ]
+      },
+      {
+        "icon": "local_car_wash",
+        "label": "Services",
+        "name": "services",
+        "order": 10,
+        "folders": [],
+        "modules": [
+          "5c906a1ba6ebc7193110f92c",
+          "5c906a1ba6ebc7193110f932",
+          "5c906a1ba6ebc7193110f93b",
+          "5c906a1ba6ebc7193110f941",
+          "5fe2ab68a6ebc7130d02921c"
+        ]
+      },
+      {
+        "icon": "kitchen",
+        "label": "Products",
+        "name": "products",
+        "order": 7,
+        "folders": [],
+        "modules": [
+          "5c906a1ba6ebc7193110f8f9",
+          "5c906a1ba6ebc7193110f8ff",
+          "64265f51a6ebc722f15baca4",
+          "64265f51a6ebc722f15bacaa"
+        ]
+      },
+      {
+        "icon": "price_change",
+        "label": "Pricelists",
+        "name": "pricelists",
+        "order": 8,
+        "folders": [],
+        "modules": [
+          "64265f51a6ebc722f15bacb0",
+          "64265f51a6ebc722f15bacb6"
+        ]
+      }
+    ],
+    "modules": [
+      "5c906a1ba6ebc7193110f8ac",
+      "5c906a1ba6ebc7193110f8b4",
+      "5c906a1ba6ebc7193110f8d3",
+      "5c906a1ba6ebc7193110f8e3",
+      "5c906a1ba6ebc7193110f8f3",
+      "640fe3c6a6ebc7053d281b04"
+    ]
+  }
+}

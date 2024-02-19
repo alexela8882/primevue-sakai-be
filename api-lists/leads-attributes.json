@@ -1,0 +1,2455 @@
+{
+  "collection": {
+    "data": [
+      {
+        "_id": "65288b4ca6ebc75d70589d02",
+        "firstName": "Tim",
+        "lastName": "Dahl",
+        "company": "Wright County of Minnesota",
+        "status_id": "Open",
+        "source_id": "Website",
+        "owner_id": {
+          "_id": "5cadbb8aa6ebc720a0361ef3",
+          "email": "jane.luu@escolifesciences.com",
+          "firstName": "Jane",
+          "lastName": "Luu",
+          "peopleUnder": null,
+          "people": [
+            "5cadbb8aa6ebc720a0361ef3"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa5678f7138736cc251",
+          "name": "United States of America",
+          "alpha2Code": "US"
+        },
+        "created_at": "2023-10-13",
+        "inquiry_type_id": "New Product Quote"
+      },
+      {
+        "_id": "65287fa6a6ebc74d72336893",
+        "firstName": "Luiz",
+        "lastName": "Porto",
+        "company": "Nbryo Pty Ltd",
+        "status_id": "Open",
+        "source_id": "Website",
+        "owner_id": {
+          "_id": "619c998ba6ebc7d6441ce6d3",
+          "firstName": "Chung Yu",
+          "lastName": "Fen",
+          "email": "yufen.chung@escolifesciences.com",
+          "peopleUnder": null,
+          "people": [
+            "619c998ba6ebc7d6441ce6d3"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa4678f7138736cc16f",
+          "name": "Australia",
+          "alpha2Code": "AU"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": null
+      },
+      {
+        "_id": "65285756a6ebc71e371f5962",
+        "firstName": "Li",
+        "lastName": "Li",
+        "company": "TTUHSC",
+        "status_id": "Open",
+        "source_id": "Website",
+        "owner_id": {
+          "_id": "5cadbb8aa6ebc720a0361ef3",
+          "email": "jane.luu@escolifesciences.com",
+          "firstName": "Jane",
+          "lastName": "Luu",
+          "peopleUnder": null,
+          "people": [
+            "5cadbb8aa6ebc720a0361ef3"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa5678f7138736cc251",
+          "name": "United States of America",
+          "alpha2Code": "US"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": "New Product Quote"
+      },
+      {
+        "_id": "652856ada6ebc7193b7db657",
+        "firstName": "Rivas",
+        "lastName": "Gabriella",
+        "company": "UCLA",
+        "status_id": "Send to person-in-charge via Email",
+        "source_id": "Website",
+        "owner_id": {
+          "_id": "5cadbb8aa6ebc720a0361ef3",
+          "email": "jane.luu@escolifesciences.com",
+          "firstName": "Jane",
+          "lastName": "Luu",
+          "peopleUnder": null,
+          "people": [
+            "5cadbb8aa6ebc720a0361ef3"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa5678f7138736cc251",
+          "name": "United States of America",
+          "alpha2Code": "US"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": "New Product Quote"
+      },
+      {
+        "_id": "65283592a6ebc770b2115553",
+        "firstName": "McSherry",
+        "lastName": "Ben",
+        "company": "ThermoFisher Scientific",
+        "status_id": "Open",
+        "source_id": "Website",
+        "owner_id": {
+          "_id": "5bb104ed678f71061f645232",
+          "email": "thomas.gibson@escolifesciences.com",
+          "firstName": "Thomas",
+          "lastName": "Gibson",
+          "peopleUnder": null,
+          "people": [
+            "5bb104ed678f71061f645232"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa5678f7138736cc250",
+          "name": "United Kingdom of Great Britain and Northern Ireland",
+          "alpha2Code": "GB"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": "Service and Parts Inquiry"
+      },
+      {
+        "_id": "65282951a6ebc7629b1a9902",
+        "firstName": "luke",
+        "lastName": "pomper",
+        "company": "Trinity Solutions and Services",
+        "status_id": "Open",
+        "source_id": "Website",
+        "owner_id": {
+          "_id": "60c194caa6ebc7348d608652",
+          "email": "nick.reed@escolifesciences.com",
+          "firstName": "Nick",
+          "lastName": "Reed",
+          "peopleUnder": null,
+          "people": [
+            "60c194caa6ebc7348d608652"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa5678f7138736cc251",
+          "name": "United States of America",
+          "alpha2Code": "US"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": "Service and Parts Inquiry"
+      },
+      {
+        "_id": "652815baa6ebc74e733062f2",
+        "firstName": "Hernando",
+        "lastName": "del Castillo",
+        "company": "INML y CF",
+        "status_id": "Open",
+        "source_id": "Website",
+        "owner_id": {
+          "_id": "5c342ef3678f710d825fc392",
+          "email": "alvin.heah@escolifesciences.com",
+          "firstName": "Alvin",
+          "lastName": "Heah",
+          "peopleUnder": null,
+          "people": [
+            "5c342ef3678f710d825fc392"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa4678f7138736cc195",
+          "name": "Colombia",
+          "alpha2Code": "CO"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": "Service and Parts Inquiry"
+      },
+      {
+        "_id": "652809fca6ebc73a361d9e14",
+        "firstName": "Schaelynn",
+        "lastName": "Cole",
+        "company": "Covert Mfg.",
+        "status_id": "Open",
+        "source_id": "Website",
+        "owner_id": {
+          "_id": "60c194caa6ebc7348d608652",
+          "email": "nick.reed@escolifesciences.com",
+          "firstName": "Nick",
+          "lastName": "Reed",
+          "peopleUnder": null,
+          "people": [
+            "60c194caa6ebc7348d608652"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa5678f7138736cc251",
+          "name": "United States of America",
+          "alpha2Code": "US"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": "Service and Parts Inquiry"
+      },
+      {
+        "_id": "65280897a6ebc73ca44601b2",
+        "firstName": "Sanchari",
+        "lastName": "Roy",
+        "company": "Rxcelerate LTd",
+        "status_id": "Open",
+        "source_id": "Website",
+        "owner_id": {
+          "_id": "622f16e2a6ebc7ec350bd109",
+          "firstName": "Rebecca",
+          "lastName": "Howland",
+          "email": "rebecca.howland@escolifesciences.com",
+          "peopleUnder": null,
+          "people": [
+            "622f16e2a6ebc7ec350bd109"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa5678f7138736cc250",
+          "name": "United Kingdom of Great Britain and Northern Ireland",
+          "alpha2Code": "GB"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": "New Product Quote"
+      },
+      {
+        "_id": "6527dcb3a6ebc70975088132",
+        "firstName": "Esteban",
+        "lastName": "Guerra",
+        "company": "Benten Biotech",
+        "status_id": "Open",
+        "source_id": "Website",
+        "owner_id": {
+          "_id": "60768f7ea6ebc792894bb4d2",
+          "email": "cristina.lambert@escolifesciences.com",
+          "firstName": "Cristina",
+          "lastName": "Lambert",
+          "peopleUnder": null,
+          "people": [
+            "60768f7ea6ebc792894bb4d2"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa5678f7138736cc252",
+          "name": "Uruguay",
+          "alpha2Code": "UY"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": "New Product Quote"
+      },
+      {
+        "_id": "6527d091a6ebc7790d184c62",
+        "firstName": "usha",
+        "lastName": "rani",
+        "company": "DXN manufacturing india private limited",
+        "status_id": "Open",
+        "source_id": "Website",
+        "owner_id": {
+          "_id": "606bb2a7a6ebc7a3c26f4c92",
+          "email": "anuradha@escolifesciences.com",
+          "firstName": null,
+          "lastName": "Anuradha",
+          "peopleUnder": null,
+          "people": [
+            "606bb2a7a6ebc7a3c26f4c92"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa4678f7138736cc1ca",
+          "name": "India",
+          "alpha2Code": "IN"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": "New Product Quote"
+      },
+      {
+        "_id": "6527c82ea6ebc76e7a3d6b73",
+        "firstName": null,
+        "lastName": null,
+        "company": "RS Mardi Rahayu",
+        "status_id": "Converted to Opportunity",
+        "source_id": "Researched Information",
+        "owner_id": {
+          "_id": "5bff0f34678f715bf0332122",
+          "email": "fenny.suana@escolifesciences.com",
+          "firstName": "Fenny",
+          "lastName": "Suana",
+          "peopleUnder": null,
+          "people": [
+            "5bff0f34678f715bf0332122"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa4678f7138736cc1cb",
+          "name": "Indonesia",
+          "alpha2Code": "ID"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": null
+      },
+      {
+        "_id": "6527c81ba6ebc76e7a3d6b72",
+        "firstName": "Syafiq",
+        "lastName": "Ibrahim",
+        "company": "Lablink (M) Sdn Bhd",
+        "status_id": "Converted to Opportunity",
+        "source_id": "Nav Service Reminder",
+        "owner_id": {
+          "_id": "62ea1c44a6ebc727e830c8e3",
+          "firstName": "Nur Anis Binti",
+          "lastName": "Alias",
+          "email": "anis.alias@escolifesciences.com",
+          "peopleUnder": null,
+          "people": [
+            "62ea1c44a6ebc727e830c8e3"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa4678f7138736cc1e9",
+          "name": "Malaysia",
+          "alpha2Code": "MY"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": null
+      },
+      {
+        "_id": "6527bcb1a6ebc75d3e4e3e97",
+        "firstName": "Martina",
+        "lastName": "Amadio",
+        "company": "CIA LAB SRL",
+        "status_id": "Open",
+        "source_id": "Website",
+        "owner_id": {
+          "_id": "5c342ef3678f710d825fc392",
+          "email": "alvin.heah@escolifesciences.com",
+          "firstName": "Alvin",
+          "lastName": "Heah",
+          "peopleUnder": null,
+          "people": [
+            "5c342ef3678f710d825fc392"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa4678f7138736cc1d2",
+          "name": "Italy",
+          "alpha2Code": "IT"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": "Service and Parts Inquiry"
+      },
+      {
+        "_id": "6527bb88a6ebc75b4208e023",
+        "firstName": "Tan",
+        "lastName": "Poh Poh",
+        "company": "Labpedia Sdn Bhd c/o KPMC Puchong Specialist Hospital",
+        "status_id": "Open",
+        "source_id": "Website",
+        "owner_id": {
+          "_id": "5be9ca7b678f7140b667b894",
+          "email": "meiying.lee@escolifesciences.com",
+          "firstName": "Mei Ying",
+          "lastName": "Lee",
+          "peopleUnder": null,
+          "people": [
+            "5be9ca7b678f7140b667b894"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa4678f7138736cc1e9",
+          "name": "Malaysia",
+          "alpha2Code": "MY"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": "New Product Quote"
+      },
+      {
+        "_id": "6527b57ba6ebc7535c2020a2",
+        "firstName": "Rinee",
+        "lastName": "van Wyk",
+        "company": "University of Freestate",
+        "status_id": "Open",
+        "source_id": "Website",
+        "owner_id": {
+          "_id": "5c37de3f678f7115274fdd24",
+          "email": "nelson.freitas@escolifesciences.com",
+          "firstName": "Nelson",
+          "lastName": "De Freitas",
+          "peopleUnder": null,
+          "people": [
+            "5c37de3f678f7115274fdd24"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa5678f7138736cc232",
+          "name": "South Africa",
+          "alpha2Code": "ZA"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": "Service and Parts Inquiry"
+      },
+      {
+        "_id": "6527ade4a6ebc747a16971b3",
+        "firstName": "Ming Liang",
+        "lastName": "Liu",
+        "company": "Academab Biomedical Inc.",
+        "status_id": "Open",
+        "source_id": "Website",
+        "owner_id": {
+          "_id": "5cd3a00fa6ebc70287362152",
+          "email": "john.tan@escolifesciences.com",
+          "firstName": "John",
+          "lastName": "Tan",
+          "peopleUnder": null,
+          "people": [
+            "5cd3a00fa6ebc70287362152"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa5678f7138736cc23f",
+          "name": "Taiwan",
+          "alpha2Code": "TW"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": "New Product Quote"
+      },
+      {
+        "_id": "65279fb2a6ebc72e5a7a2aca",
+        "firstName": "OMRAN",
+        "lastName": "ALMAGHRIBI ",
+        "company": "modern technology co ",
+        "status_id": "Open",
+        "source_id": "Trade Show",
+        "owner_id": {
+          "_id": "639b2d86a6ebc728aa566a88",
+          "firstName": "Joan",
+          "lastName": "Mueca",
+          "email": "joan.mueca@escolifesciences.com",
+          "peopleUnder": null,
+          "people": [
+            "639b2d86a6ebc728aa566a88"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa5678f7138736cc23e",
+          "name": "Syrian Arab Republic",
+          "alpha2Code": "SY"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": null
+      },
+      {
+        "_id": "65279faea6ebc72e5a7a2ac9",
+        "firstName": "Mohammad",
+        "lastName": "Azaruddin",
+        "company": "Business International Group",
+        "status_id": "Open",
+        "source_id": "Trade Show",
+        "owner_id": {
+          "_id": "639b2d86a6ebc728aa566a88",
+          "firstName": "Joan",
+          "lastName": "Mueca",
+          "email": "joan.mueca@escolifesciences.com",
+          "peopleUnder": null,
+          "people": [
+            "639b2d86a6ebc728aa566a88"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa5678f7138736cc20a",
+          "name": "Oman",
+          "alpha2Code": "OM"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": null
+      },
+      {
+        "_id": "65279faba6ebc72e5a7a2ac8",
+        "firstName": "Alaa",
+        "lastName": "Sabbah",
+        "company": "Corodex trading",
+        "status_id": "Open",
+        "source_id": "Trade Show",
+        "owner_id": {
+          "_id": "639b2d86a6ebc728aa566a88",
+          "firstName": "Joan",
+          "lastName": "Mueca",
+          "email": "joan.mueca@escolifesciences.com",
+          "peopleUnder": null,
+          "people": [
+            "639b2d86a6ebc728aa566a88"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa5678f7138736cc24f",
+          "name": "United Arab Emirates",
+          "alpha2Code": "AE"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": null
+      },
+      {
+        "_id": "65279fa8a6ebc72e5a7a2ac7",
+        "firstName": "Savata",
+        "lastName": "Jagtap",
+        "company": "Eflochem Lab",
+        "status_id": "Open",
+        "source_id": "Trade Show",
+        "owner_id": {
+          "_id": "639b2d86a6ebc728aa566a88",
+          "firstName": "Joan",
+          "lastName": "Mueca",
+          "email": "joan.mueca@escolifesciences.com",
+          "peopleUnder": null,
+          "people": [
+            "639b2d86a6ebc728aa566a88"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa5678f7138736cc24f",
+          "name": "United Arab Emirates",
+          "alpha2Code": "AE"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": null
+      },
+      {
+        "_id": "65279fa5a6ebc72e5a7a2ac6",
+        "firstName": "Ihab",
+        "lastName": "Tawfiq",
+        "company": "ASNA Company for Advanced Technologies Ltd",
+        "status_id": "Open",
+        "source_id": "Trade Show",
+        "owner_id": {
+          "_id": "639b2d86a6ebc728aa566a88",
+          "firstName": "Joan",
+          "lastName": "Mueca",
+          "email": "joan.mueca@escolifesciences.com",
+          "peopleUnder": null,
+          "people": [
+            "639b2d86a6ebc728aa566a88"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa5678f7138736cc227",
+          "name": "Saudi Arabia",
+          "alpha2Code": "SA"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": null
+      },
+      {
+        "_id": "65279fa2a6ebc72e5a7a2ac5",
+        "firstName": "Mohamed",
+        "lastName": "Ramadam",
+        "company": "Quality measurements laboratory",
+        "status_id": "Open",
+        "source_id": "Trade Show",
+        "owner_id": {
+          "_id": "639b2d86a6ebc728aa566a88",
+          "firstName": "Joan",
+          "lastName": "Mueca",
+          "email": "joan.mueca@escolifesciences.com",
+          "peopleUnder": null,
+          "people": [
+            "639b2d86a6ebc728aa566a88"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa5678f7138736cc227",
+          "name": "Saudi Arabia",
+          "alpha2Code": "SA"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": null
+      },
+      {
+        "_id": "65279f9fa6ebc72e5a7a2ac4",
+        "firstName": "Roney",
+        "lastName": "philip",
+        "company": "Burgan equipment",
+        "status_id": "Open",
+        "source_id": "Trade Show",
+        "owner_id": {
+          "_id": "639b2d86a6ebc728aa566a88",
+          "firstName": "Joan",
+          "lastName": "Mueca",
+          "email": "joan.mueca@escolifesciences.com",
+          "peopleUnder": null,
+          "people": [
+            "639b2d86a6ebc728aa566a88"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa4678f7138736cc1da",
+          "name": "Kuwait",
+          "alpha2Code": "KW"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": null
+      },
+      {
+        "_id": "65279f9ca6ebc72e5a7a2ac3",
+        "firstName": "ARJUN",
+        "lastName": "K",
+        "company": "CARE SOURCE FOR SCIENTIFIC AND LABORATORY EQUIPMENT TR. CO. L.L.C",
+        "status_id": "Open",
+        "source_id": "Trade Show",
+        "owner_id": {
+          "_id": "639b2d86a6ebc728aa566a88",
+          "firstName": "Joan",
+          "lastName": "Mueca",
+          "email": "joan.mueca@escolifesciences.com",
+          "peopleUnder": null,
+          "people": [
+            "639b2d86a6ebc728aa566a88"
+          ]
+        },
+        "country_id": {
+          "_id": "5a529aa5678f7138736cc24f",
+          "name": "United Arab Emirates",
+          "alpha2Code": "AE"
+        },
+        "created_at": "2023-10-12",
+        "inquiry_type_id": null
+      },
+      {
+        "_id": 1707794081147,
+        "company": "asd",
+        "phoneNo": "asd",
+        "status_id": "asd",
+        "source_id": "asd",
+        "type_id": "asd",
+        "business_unit_ids": "asd",
+        "country_id": "asdasd",
+        "owner_id": {
+          "_id": "5bb104ed678f71061f6451f8",
+          "firstName": "Ninoy",
+          "lastName": "Cahayon",
+          "email": "ninoy.cahayon@escolifesciences.com"
+        }
+      }
+    ],
+    "meta": {
+      "pagination": {
+        "total": 12812,
+        "count": 25,
+        "per_page": 25,
+        "current_page": 1,
+        "total_pages": 513,
+        "links": {
+          "next": "http://localhost:3000/leads?page=2"
+        }
+      }
+    }
+  },
+  "fields": [
+    {
+      "_id": "5c906a14a6ebc7193110ef9i",
+      "name": "inquiry_id",
+      "label": "Inquiry",
+      "uniqueName": "lead_inquiry_id",
+      "fieldGlue": " ",
+      "rules": {
+        "ss_pop_up": true,
+        "hide": true
+      },
+      "field_type": {
+        "name": "lookupModel",
+        "_id": "5c906a0ea6ebc7193110e738"
+      },
+      "relation": {
+        "_id": "5c906a14a6ebc7193110ef99",
+        "displayFieldName": [
+          "source_id"
+        ],
+        "foreign_key": "inquiry_id",
+        "local_key": "_id",
+        "entity_id": {
+          "_id": "5c906a0fa6ebc7193110e7d4",
+          "name": "Inquiry"
+        }
+      }
+    },
+    {
+      "_id": "5c906a14a6ebc7193110ef68",
+      "name": "firstName",
+      "label": "First Name",
+      "uniqueName": "lead_first_name",
+      "groupWith": {
+        "firstName": "firstName",
+        "lastName": "lastName",
+        "academicSuffix": "academicSuffix"
+      },
+      "concatenated": false,
+      "fieldGlue": " ",
+      "groupLabel": "Name",
+      "group": "name",
+      "rules": {
+        "required_with": [
+          "lastName"
+        ]
+      },
+      "title": true,
+      "searchKey": false,
+      "field_type": {
+        "name": "text",
+        "_id": "5c906a0ea6ebc7193110e73b"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110ef6b",
+      "name": "lastName",
+      "label": "Last Name",
+      "uniqueName": "lead_last_name",
+      "group": "name",
+      "rules": {
+        "required_with": [
+          "firstName"
+        ]
+      },
+      "title": true,
+      "searchKey": false,
+      "field_type": {
+        "name": "text",
+        "_id": "5c906a0ea6ebc7193110e73b"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110ef6e",
+      "name": "academicSuffix",
+      "label": "Academic Suffix",
+      "uniqueName": "lead_academic_suffix",
+      "group": "name",
+      "rules": [],
+      "tooltip": [
+        "Eg. PhD, MD",
+        "helper"
+      ],
+      "searchKey": false,
+      "field_type": {
+        "name": "text",
+        "_id": "5c906a0ea6ebc7193110e73b"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110ef71",
+      "name": "designation",
+      "label": "Designation",
+      "uniqueName": "lead_designation",
+      "onlyWithin": {
+        "values": [
+          "5a529aa5678f7138736cc212"
+        ],
+        "reference": {
+          "prop": "managedbranches",
+          "key": "country_id"
+        }
+      },
+      "tooltip": [
+        "Eg. Director, Lab Manager, Purchaser etc.",
+        "helper"
+      ],
+      "header": true,
+      "rules": {
+        "between": {
+          "min": 0,
+          "max": 155
+        },
+        "string": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "text",
+        "_id": "5c906a0ea6ebc7193110e73b"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110ef74",
+      "name": "company",
+      "label": "Company",
+      "uniqueName": "lead_company",
+      "quick": true,
+      "header": true,
+      "rules": {
+        "required": true,
+        "between": {
+          "min": 0,
+          "max": 155
+        },
+        "string": true
+      },
+      "searchKey": true,
+      "field_type": {
+        "name": "text",
+        "_id": "5c906a0ea6ebc7193110e73b"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110ef78",
+      "name": "department",
+      "label": "Department",
+      "uniqueName": "lead_department",
+      "rules": {
+        "between": {
+          "min": 0,
+          "max": 155
+        },
+        "string": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "text",
+        "_id": "5c906a0ea6ebc7193110e73b"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110ef7b",
+      "name": "email",
+      "label": "Email",
+      "uniqueName": "lead_email",
+      "header": true,
+      "rules": {
+        "between": {
+          "min": 0,
+          "max": 155
+        },
+        "email": true
+      },
+      "searchKey": true,
+      "field_type": {
+        "name": "text",
+        "_id": "5c906a0ea6ebc7193110e73b"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110ef7e",
+      "name": "email2",
+      "label": "Email 2",
+      "uniqueName": "lead_email2",
+      "rules": {
+        "between": {
+          "min": 0,
+          "max": 155
+        },
+        "email": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "text",
+        "_id": "5c906a0ea6ebc7193110e73b"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110ef81",
+      "name": "email3",
+      "label": "Email 3",
+      "uniqueName": "lead_email3",
+      "rules": {
+        "between": {
+          "min": 0,
+          "max": 155
+        },
+        "email": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "text",
+        "_id": "5c906a0ea6ebc7193110e73b"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110ef84",
+      "name": "phoneNo",
+      "label": "Int'l Phone No",
+      "uniqueName": "lead_phone_no",
+      "tooltip": [
+        "International Phone Number",
+        "helper"
+      ],
+      "quick": true,
+      "header": true,
+      "rules": {
+        "between": {
+          "min": 0,
+          "max": 155
+        },
+        "phone": true,
+        "required": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "text",
+        "_id": "5c906a0ea6ebc7193110e73b"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110ef88",
+      "name": "fax",
+      "label": "Int'l Fax No",
+      "uniqueName": "lead_fax",
+      "tooltip": [
+        "International Fax Number",
+        "helper"
+      ],
+      "rules": {
+        "between": {
+          "min": 0,
+          "max": 155
+        },
+        "fax": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "text",
+        "_id": "5c906a0ea6ebc7193110e73b"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110ef8b",
+      "name": "mobileNo",
+      "label": "Mobile/Cell No",
+      "uniqueName": "lead_mobile_no",
+      "tooltip": [
+        "Mobile or Cell Number",
+        "helper"
+      ],
+      "rules": {
+        "between": {
+          "min": 0,
+          "max": 155
+        },
+        "phone": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "text",
+        "_id": "5c906a0ea6ebc7193110e73b"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110ef8e",
+      "name": "status_id",
+      "label": "Status",
+      "uniqueName": "lead_status_id",
+      "listName": "lead_status",
+      "rules": {
+        "ss_dropdown": true,
+        "required": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "picklist",
+        "_id": "5c906a0ea6ebc7193110e737"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110ef91",
+      "name": "source_id",
+      "label": "Source",
+      "uniqueName": "lead_source_id",
+      "listName": "lead_source",
+      "quick": true,
+      "rules": {
+        "ss_dropdown": true,
+        "required": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "picklist",
+        "_id": "5c906a0ea6ebc7193110e737"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110ef94",
+      "name": "type_id",
+      "label": "Type",
+      "uniqueName": "lead_type_id",
+      "listName": "lead_type",
+      "quick": true,
+      "rules": {
+        "ss_dropdown": true,
+        "required": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "picklist",
+        "_id": "5c906a0ea6ebc7193110e737"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110ef97",
+      "name": "dealer_id",
+      "label": "Dealer's Assigned",
+      "uniqueName": "lead_dealer_id",
+      "fieldGlue": " ",
+      "extraInfo": [
+        "isEscoBranch"
+      ],
+      "filterQuery": "where(\"Account::type_id\", \"in\", picklist(\"account_type\",[\"Dealer\", \"Distributor\"]))",
+      "rules": {
+        "ss_pop_up": true
+      },
+      "addable": {
+        "moduleName": "accounts",
+        "parentField": null
+      },
+      "field_type": {
+        "name": "lookupModel",
+        "_id": "5c906a0ea6ebc7193110e738"
+      },
+      "relation": {
+        "_id": "5c906a14a6ebc7193110ef99",
+        "displayFieldName": [
+          "name"
+        ],
+        "foreign_key": "dealer_id",
+        "local_key": "_id",
+        "entity_id": {
+          "_id": "5c906a0fa6ebc7193110e7d4",
+          "name": "Account"
+        },
+        "popupDisplayFieldName": [
+          "name",
+          "owner_id",
+          "is_locked"
+        ]
+      }
+    },
+    {
+      "_id": "5c906a14a6ebc7193110ef9a",
+      "name": "man_sales_rep_id",
+      "label": "Manufacturer Sales Rep",
+      "uniqueName": "lead_man_sales_rep_id",
+      "onlyWithin": {
+        "values": [
+          "5a529aa5678f7138736cc251"
+        ],
+        "reference": {
+          "prop": "managedbranches",
+          "key": "country_id"
+        }
+      },
+      "fieldGlue": " ",
+      "extraInfo": [
+        "isEscoBranch"
+      ],
+      "filterQuery": "where(\"Account::type_id\", \"in\", picklist(\"account_type\",[\"Manufacturer Sales Rep\"]))",
+      "tooltip": [
+        "For USA Market",
+        "helper"
+      ],
+      "rules": {
+        "ss_pop_up": true
+      },
+      "field_type": {
+        "name": "lookupModel",
+        "_id": "5c906a0ea6ebc7193110e738"
+      },
+      "relation": {
+        "_id": "5c906a14a6ebc7193110ef9c",
+        "displayFieldName": [
+          "name"
+        ],
+        "foreign_key": "man_sales_rep_id",
+        "local_key": "_id",
+        "entity_id": {
+          "_id": "5c906a0fa6ebc7193110e7d4",
+          "name": "Account"
+        },
+        "popupDisplayFieldName": [
+          "name",
+          "owner_id",
+          "is_locked"
+        ]
+      }
+    },
+    {
+      "_id": "5c906a14a6ebc7193110ef9d",
+      "name": "business_unit_ids",
+      "label": "Business Unit",
+      "uniqueName": "lead_business_unit_ids",
+      "fieldGlue": " ",
+      "level": "level",
+      "quick": true,
+      "rules": {
+        "required": true
+      },
+      "controls": "product_of_interest_ids",
+      "searchKey": false,
+      "field_type": {
+        "name": "lookupModel",
+        "_id": "5c906a0ea6ebc7193110e738"
+      },
+      "relation": {
+        "_id": "5c906a14a6ebc7193110efa0",
+        "displayFieldName": [
+          "name"
+        ],
+        "foreign_key": "lead_ids",
+        "local_key": "business_unit_ids",
+        "entity_id": {
+          "_id": "5c906a0fa6ebc7193110e7c9",
+          "name": "BusinessUnit"
+        },
+        "popupDisplayFieldName": [
+          "name",
+          "description",
+          "level"
+        ]
+      }
+    },
+    {
+      "_id": "5c906a14a6ebc7193110efa1",
+      "name": "salesperson_in_charge_id",
+      "label": "Sales Person In-Charge",
+      "uniqueName": "lead_salesperson_in_charge_id",
+      "fieldGlue": " ",
+      "filterQuery": "where(\"Employee::_id\", \"=\", \"Role::user_id\")->where(\"Role::name\", \"=\", \"sales_person\")",
+      "tooltip": [
+        "For Esco offices who have sales team and want to assign this lead to their specific sales person",
+        "helper"
+      ],
+      "rules": {
+        "ss_pop_up": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "lookupModel",
+        "_id": "5c906a0ea6ebc7193110e738"
+      },
+      "relation": {
+        "_id": "5c906a14a6ebc7193110efa3",
+        "displayFieldName": [
+          "firstName",
+          "lastName"
+        ],
+        "foreign_key": "salesperson_in_charge_id",
+        "local_key": "_id",
+        "entity_id": {
+          "_id": "5c906a0fa6ebc7193110e7b3",
+          "name": "Employee"
+        },
+        "popupDisplayFieldName": [
+          "firstName",
+          "lastName",
+          "email"
+        ]
+      }
+    },
+    {
+      "_id": "5c906a14a6ebc7193110efa4",
+      "name": "rating_id",
+      "label": "Rating",
+      "uniqueName": "lead_rating_id",
+      "listName": "lead_rating",
+      "rules": {
+        "ss_dropdown": true
+      },
+      "field_type": {
+        "name": "picklist",
+        "_id": "5c906a0ea6ebc7193110e737"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110efa6",
+      "name": "owner_id",
+      "label": "Lead Owner",
+      "uniqueName": "lead_owner_id",
+      "fieldGlue": " ",
+      "noRoleFilter": true,
+      "filterQuery": "where(\"Employee::_id\", \"=\", \"Role::user_id\")->where(\"Role::name\", \"not_in\", [\"crm_admin\", \"service_engineer\"])",
+      "rules": {
+        "required_unless": {
+          "anotherField": "assignUsingActive",
+          "values": true
+        },
+        "ss_pop_up": true,
+        "set_val_disable_if": {
+          "expression": "{assignUsingActive} == true",
+          "value": null,
+          "field": "_id"
+        }
+      },
+      "searchKey": true,
+      "field_type": {
+        "name": "lookupModel",
+        "_id": "5c906a0ea6ebc7193110e738"
+      },
+      "relation": {
+        "_id": "5c906a14a6ebc7193110efaa",
+        "displayFieldName": [
+          "firstName",
+          "lastName"
+        ],
+        "foreign_key": "owner_id",
+        "local_key": "_id",
+        "entity_id": {
+          "_id": "5c906a0fa6ebc7193110e7b3",
+          "name": "Employee"
+        },
+        "popupDisplayFieldName": [
+          "firstName",
+          "lastName",
+          "email"
+        ]
+      }
+    },
+    {
+      "_id": "5c906a14a6ebc7193110efab",
+      "name": "campaign_id",
+      "label": "Campaign",
+      "uniqueName": "lead_campaign_id",
+      "fieldGlue": " ",
+      "rules": {
+        "ss_pop_up": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "lookupModel",
+        "_id": "5c906a0ea6ebc7193110e738"
+      },
+      "relation": {
+        "_id": "5c906a14a6ebc7193110efad",
+        "displayFieldName": [
+          "name"
+        ],
+        "foreign_key": "campaign_id",
+        "local_key": "_id",
+        "entity_id": {
+          "_id": "5c906a0fa6ebc7193110e7d7",
+          "name": "Campaign"
+        }
+      }
+    },
+    {
+      "_id": "5c906a14a6ebc7193110efae",
+      "name": "street",
+      "label": "Street",
+      "uniqueName": "lead_street",
+      "groupWith": {
+        "street": "street",
+        "zipcode": "zipcode",
+        "city": "city",
+        "state": "state",
+        "country_id": "country_id"
+      },
+      "concatenated": false,
+      "fieldGlue": ",",
+      "groupLabel": "Address",
+      "group": "address",
+      "rules": {
+        "between": {
+          "min": 0,
+          "max": 155
+        },
+        "string": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "text",
+        "_id": "5c906a0ea6ebc7193110e73b"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110efb1",
+      "name": "zipcode",
+      "label": "Zipcode",
+      "uniqueName": "lead_zipcode",
+      "group": "address",
+      "rules": {
+        "between": {
+          "min": 0,
+          "max": 155
+        },
+        "string": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "text",
+        "_id": "5c906a0ea6ebc7193110e73b"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110efb4",
+      "name": "city",
+      "label": "City",
+      "uniqueName": "lead_city",
+      "group": "address",
+      "rules": {
+        "between": {
+          "min": 0,
+          "max": 155
+        },
+        "string": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "text",
+        "_id": "5c906a0ea6ebc7193110e73b"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110efb7",
+      "name": "state",
+      "label": "State",
+      "uniqueName": "lead_state",
+      "group": "address",
+      "rules": {
+        "between": {
+          "min": 0,
+          "max": 155
+        },
+        "string": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "text",
+        "_id": "5c906a0ea6ebc7193110e73b"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110efba",
+      "name": "country_id",
+      "label": "Country",
+      "uniqueName": "lead_country_id",
+      "fieldGlue": " ",
+      "extraInfo": [
+        "alpha2Code"
+      ],
+      "group": "address",
+      "rules": {
+        "ss_dropdown": true,
+        "required": true
+      },
+      "quick": true,
+      "field_type": {
+        "name": "lookupModel",
+        "_id": "5c906a0ea6ebc7193110e738"
+      },
+      "relation": {
+        "_id": "5c906a14a6ebc7193110efbc",
+        "displayFieldName": [
+          "name"
+        ],
+        "foreign_key": "country_id",
+        "local_key": "_id",
+        "entity_id": {
+          "_id": "5c906a0fa6ebc7193110e7bd",
+          "name": "Country"
+        }
+      }
+    },
+    {
+      "_id": "5c906a14a6ebc7193110efbd",
+      "name": "website",
+      "label": "Website",
+      "uniqueName": "lead_website",
+      "rules": {
+        "url": true,
+        "hide": true,
+        "between": {
+          "min": 0,
+          "max": 155
+        }
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "text",
+        "_id": "5c906a0ea6ebc7193110e73b"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110efc1",
+      "name": "industry_major_segment_id",
+      "label": "Industry Major Segment",
+      "uniqueName": "lead_industry_major_segment_id",
+      "listName": "industry_major_segment",
+      "rules": {
+        "ss_dropdown": true
+      },
+      "field_type": {
+        "name": "picklist",
+        "_id": "5c906a0ea6ebc7193110e737"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110efc3",
+      "name": "industry_minor_segment_id",
+      "label": "Industry Minor Segment",
+      "uniqueName": "lead_industry_minor_segment_id",
+      "listName": "industry_minor_segment",
+      "rules": {
+        "ss_dropdown": true
+      },
+      "field_type": {
+        "name": "picklist",
+        "_id": "5c906a0ea6ebc7193110e737"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a14a6ebc7193110efc5",
+      "name": "application_ids",
+      "label": "Application",
+      "uniqueName": "lead_application_ids",
+      "fieldGlue": " ",
+      "rules": {
+        "ms_dropdown": true
+      },
+      "field_type": {
+        "name": "lookupModel",
+        "_id": "5c906a0ea6ebc7193110e738"
+      },
+      "relation": {
+        "_id": "5c906a15a6ebc7193110efc7",
+        "displayFieldName": [
+          "name"
+        ],
+        "foreign_key": "lead_ids",
+        "local_key": "application_ids",
+        "entity_id": {
+          "_id": "5c906a0fa6ebc7193110e7db",
+          "name": "Application"
+        }
+      }
+    },
+    {
+      "_id": "5c906a15a6ebc7193110efc8",
+      "name": "product_of_interest_ids",
+      "label": "Product Of Interest",
+      "uniqueName": "lead_product_of_interest_ids",
+      "fieldGlue": " ",
+      "extraInfo": [
+        "business_unit_ids"
+      ],
+      "filterSourceField": "business_unit_ids",
+      "rules": {
+        "filtered_by": "business_unit_ids",
+        "tab_multi_select": true
+      },
+      "field_type": {
+        "name": "lookupModel",
+        "_id": "5c906a0ea6ebc7193110e738"
+      },
+      "relation": {
+        "_id": "5c906a15a6ebc7193110efcb",
+        "displayFieldName": [
+          "name"
+        ],
+        "foreign_key": "lead_ids",
+        "local_key": "product_of_interest_ids",
+        "entity_id": {
+          "_id": "5c906a0fa6ebc7193110e7c8",
+          "name": "ProductCategory"
+        }
+      }
+    },
+    {
+      "_id": "5c906a15a6ebc7193110efcc",
+      "name": "modelXQuantity",
+      "label": "Exact Product Model x Quantity",
+      "uniqueName": "lead_model_x_quantity",
+      "searchKey": false,
+      "field_type": {
+        "name": "longText",
+        "_id": "5c906a0ea6ebc7193110e73c"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a15a6ebc7193110efcd",
+      "name": "quantity",
+      "label": "Quantity",
+      "uniqueName": "lead_quantity",
+      "rules": {
+        "digits_between": {
+          "min": 0,
+          "max": 15
+        }
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "number",
+        "_id": "5c906a0ea6ebc7193110e73d"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a15a6ebc7193110efcf",
+      "name": "timeframe_id",
+      "label": "Timeframe",
+      "uniqueName": "lead_timeframe_id",
+      "listName": "lead_timeframe",
+      "rules": {
+        "ss_dropdown": true
+      },
+      "field_type": {
+        "name": "picklist",
+        "_id": "5c906a0ea6ebc7193110e737"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a15a6ebc7193110efd1",
+      "name": "reqSalesContract",
+      "label": "Requesting Sales Contract",
+      "uniqueName": "lead_req_sales_contract",
+      "rules": {
+        "default_value": false,
+        "checkbox": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "boolean",
+        "_id": "5c906a0ea6ebc7193110e733"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a15a6ebc7193110efd4",
+      "name": "reqProductInfo",
+      "label": "Requesting Product Info",
+      "uniqueName": "lead_req_product_info",
+      "rules": {
+        "default_value": false,
+        "checkbox": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "boolean",
+        "_id": "5c906a0ea6ebc7193110e733"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a15a6ebc7193110efd7",
+      "name": "reqProductQuote",
+      "label": "Requesting Product Quote",
+      "uniqueName": "lead_req_product_quote",
+      "rules": {
+        "default_value": false,
+        "checkbox": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "boolean",
+        "_id": "5c906a0ea6ebc7193110e733"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a15a6ebc7193110efda",
+      "name": "reqProductService",
+      "label": "Requesting Service",
+      "uniqueName": "lead_req_product_service",
+      "rules": {
+        "default_value": false,
+        "checkbox": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "boolean",
+        "_id": "5c906a0ea6ebc7193110e733"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a15a6ebc7193110efdd",
+      "name": "reqReplacementParts",
+      "label": "Requesting Replacement Parts",
+      "uniqueName": "lead_req_replacement_parts",
+      "rules": {
+        "default_value": false,
+        "checkbox": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "boolean",
+        "_id": "5c906a0ea6ebc7193110e733"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a15a6ebc7193110efe0",
+      "name": "subject",
+      "label": "Subject",
+      "uniqueName": "lead_subject",
+      "searchKey": false,
+      "field_type": {
+        "name": "longText",
+        "_id": "5c906a0ea6ebc7193110e73c"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a15a6ebc7193110efe1",
+      "name": "description",
+      "label": "Description",
+      "uniqueName": "lead_description",
+      "searchKey": false,
+      "field_type": {
+        "name": "longText",
+        "_id": "5c906a0ea6ebc7193110e73c"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a15a6ebc7193110efe2",
+      "name": "assignUsingActive",
+      "label": "Assign Using Active Assignment Rule",
+      "uniqueName": "lead_assign_using_active",
+      "rules": {
+        "default_value": true,
+        "checkbox": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "boolean",
+        "_id": "5c906a0ea6ebc7193110e733"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a15a6ebc7193110efe5",
+      "name": "doNotCall",
+      "label": "Do Not Call",
+      "uniqueName": "lead_do_not_call",
+      "rules": {
+        "default_value": false,
+        "checkbox": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "boolean",
+        "_id": "5c906a0ea6ebc7193110e733"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a15a6ebc7193110efe8",
+      "name": "doNotEmail",
+      "label": "Email Opt Out",
+      "uniqueName": "lead_do_not_email",
+      "rules": {
+        "default_value": false,
+        "checkbox": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "boolean",
+        "_id": "5c906a0ea6ebc7193110e733"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a15a6ebc7193110efeb",
+      "name": "doNotFax",
+      "label": "Fax Opt Out",
+      "uniqueName": "lead_do_not_fax",
+      "rules": {
+        "default_value": false,
+        "checkbox": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "boolean",
+        "_id": "5c906a0ea6ebc7193110e733"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a15a6ebc7193110efee",
+      "name": "account_id",
+      "label": "Account",
+      "uniqueName": "lead_account_id",
+      "addable": {
+        "moduleName": "accounts",
+        "parentField": null
+      },
+      "fieldGlue": " ",
+      "extraInfo": [
+        "isEscoBranch"
+      ],
+      "tooltip": [
+        "Select or create Account",
+        "info"
+      ],
+      "rules": {
+        "ss_pop_up": true
+      },
+      "field_type": {
+        "name": "lookupModel",
+        "_id": "5c906a0ea6ebc7193110e738"
+      },
+      "relation": {
+        "_id": "5c906a15a6ebc7193110eff0",
+        "displayFieldName": [
+          "name"
+        ],
+        "foreign_key": "account_id",
+        "local_key": "_id",
+        "entity_id": {
+          "_id": "5c906a0fa6ebc7193110e7d4",
+          "name": "Account"
+        },
+        "popupDisplayFieldName": [
+          "name",
+          "owner_id",
+          "is_locked"
+        ]
+      }
+    },
+    {
+      "_id": "5c906a15a6ebc7193110eff1",
+      "name": "contact_id",
+      "label": "Contact",
+      "uniqueName": "lead_contact_id",
+      "addable": {
+        "moduleName": "contacts",
+        "parentField": "account_id"
+      },
+      "fieldGlue": " ",
+      "filterQueryParams": [],
+      "filterQuery": "where(\"Contact::account_ids\", \"in\", \"%Lead::account_id%\")",
+      "rules": {
+        "ss_pop_up": true
+      },
+      "field_type": {
+        "name": "lookupModel",
+        "_id": "5c906a0ea6ebc7193110e738"
+      },
+      "relation": {
+        "_id": "5c906a15a6ebc7193110eff3",
+        "displayFieldName": [
+          "firstName",
+          "lastName"
+        ],
+        "foreign_key": "contact_id",
+        "local_key": "_id",
+        "entity_id": {
+          "_id": "5c906a0fa6ebc7193110e7d6",
+          "name": "Contact"
+        },
+        "popupDisplayFieldName": [
+          "firstName",
+          "lastName",
+          "email",
+          "phoneNo"
+        ]
+      }
+    },
+    {
+      "_id": "5c906a15a6ebc7193110eff4",
+      "name": "converted",
+      "label": "Converted",
+      "uniqueName": "lead_converted",
+      "rules": {
+        "hide": true,
+        "default_value": false,
+        "checkbox": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "boolean",
+        "_id": "5c906a0ea6ebc7193110e733"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a15a6ebc7193110eff8",
+      "name": "updated_at",
+      "label": "Last Modified Date",
+      "uniqueName": "lead_updated_at",
+      "rules": {
+        "hide_in": [
+          "create",
+          "update"
+        ],
+        "date_format": "m/d/Y",
+        "date_only": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "date",
+        "_id": "5c906a0ea6ebc7193110e732"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a15a6ebc7193110effc",
+      "name": "created_at",
+      "label": "Created Date",
+      "uniqueName": "lead_created_at",
+      "rules": {
+        "hide_in": [
+          "create",
+          "update"
+        ],
+        "date_format": "m/d/Y",
+        "date_only": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "date",
+        "_id": "5c906a0ea6ebc7193110e732"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a15a6ebc7193110f000",
+      "name": "updated_by",
+      "label": "Last Modified By",
+      "uniqueName": "lead_updated_by",
+      "fieldGlue": " ",
+      "rules": {
+        "hide_in": [
+          "create",
+          "update"
+        ],
+        "ss_pop_up": true
+      },
+      "field_type": {
+        "name": "lookupModel",
+        "_id": "5c906a0ea6ebc7193110e738"
+      },
+      "relation": {
+        "_id": "5c906a15a6ebc7193110f003",
+        "displayFieldName": [
+          "firstName",
+          "lastName"
+        ],
+        "foreign_key": "updated_by",
+        "local_key": "_id",
+        "entity_id": {
+          "_id": "5c906a0fa6ebc7193110e7b4",
+          "name": "User"
+        }
+      }
+    },
+    {
+      "_id": "5c906a15a6ebc7193110f004",
+      "name": "created_by",
+      "label": "Created By",
+      "uniqueName": "lead_created_by",
+      "fieldGlue": " ",
+      "rules": {
+        "hide_in": [
+          "create",
+          "update"
+        ],
+        "ss_pop_up": true
+      },
+      "field_type": {
+        "name": "lookupModel",
+        "_id": "5c906a0ea6ebc7193110e738"
+      },
+      "relation": {
+        "_id": "5c906a15a6ebc7193110f007",
+        "class": "App\\User",
+        "displayFieldName": [
+          "firstName",
+          "lastName"
+        ],
+        "foreign_key": "created_by",
+        "local_key": "_id",
+        "entity_id": {
+          "_id": "5c906a0fa6ebc7193110e7b4",
+          "name": "User"
+        }
+      }
+    },
+    {
+      "_id": "5c906a15a6ebc7193110f008",
+      "name": "deleted_at",
+      "label": "Deleted At",
+      "uniqueName": "lead_deleted_at",
+      "rules": {
+        "hide_in": [
+          "create",
+          "update"
+        ],
+        "date_format": "m/d/Y",
+        "date_only": true
+      },
+      "searchKey": false,
+      "field_type": {
+        "name": "date",
+        "_id": "5c906a0ea6ebc7193110e732"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5c906a15a6ebc7193110f00c",
+      "name": "deleted_by",
+      "label": "Deleted By",
+      "uniqueName": "lead_deleted_by",
+      "fieldGlue": " ",
+      "rules": {
+        "hide_in": [
+          "create",
+          "update"
+        ],
+        "ss_pop_up": true
+      },
+      "field_type": {
+        "name": "lookupModel",
+        "_id": "5c906a0ea6ebc7193110e738"
+      },
+      "relation": {
+        "_id": "5c906a15a6ebc7193110f00f",
+        "displayFieldName": [
+          "firstName",
+          "lastName"
+        ],
+        "foreign_key": "deleted_by",
+        "local_key": "_id",
+        "entity_id": {
+          "_id": "5c906a0fa6ebc7193110e7b4",
+          "name": "User"
+        }
+      }
+    },
+    {
+      "_id": "5ccbad85a6ebc762164eda53",
+      "name": "state_province_us_id",
+      "label": "Status",
+      "uniqueName": "lead_state_province_us_id",
+      "listName": "lead_us_state",
+      "rules": {
+        "ss_dropdown": true,
+        "hide_if": "{country_id.name} != \"United States of America\""
+      },
+      "field_type": {
+        "name": "picklist",
+        "_id": "5c906a0ea6ebc7193110e737"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5ccbad85a6ebc762164eda8a",
+      "name": "state_province_cn_id",
+      "label": "Source",
+      "uniqueName": "lead_state_province_cn_id",
+      "listName": "lead_cn_state",
+      "rules": {
+        "ss_dropdown": true,
+        "hide_if": "{country_i.name} != \"China\""
+      },
+      "field_type": {
+        "name": "picklist",
+        "_id": "5c906a0ea6ebc7193110e737"
+      },
+      "relation": null
+    },
+    {
+      "_id": "5cfa06eca6ebc76ec3119202",
+      "name": "rfqproduct_of_interest_ids",
+      "label": "Product of Interests",
+      "uniqueName": "lead_rfqproduct_of_interest_ids",
+      "listName": "lead_rfq_poi",
+      "rules": {
+        "ms_dropdown": true
+      },
+      "field_type": {
+        "name": "picklist",
+        "_id": "5c906a0ea6ebc7193110e737"
+      },
+      "relation": null
+    },
+    {
+      "_id": "60b4b945a6ebc70d6c5e67b2",
+      "name": "product_category_ids",
+      "label": "Product Categories",
+      "uniqueName": "lead_product_category_ids",
+      "fieldGlue": " ",
+      "rules": {
+        "ms_dropdown": true
+      },
+      "field_type": {
+        "name": "lookupModel",
+        "_id": "5c906a0ea6ebc7193110e738"
+      },
+      "relation": {
+        "_id": "60b4b945a6ebc70d6c5e67b4",
+        "displayFieldName": [
+          "name"
+        ],
+        "foreign_key": "lead_ids",
+        "local_key": "product_category_ids",
+        "entity_id": {
+          "_id": "5c906a0fa6ebc7193110e7c8",
+          "name": "ProductCategory"
+        }
+      }
+    },
+    {
+      "_id": "61445d13a6ebc793a30e4dd2",
+      "name": "inquiry_type_id",
+      "label": "Type of Inquiry",
+      "uniqueName": "lead_inquiry_type_id",
+      "listName": "lead_inquiry_types",
+      "rules": {
+        "ss_dropdown": true
+      },
+      "field_type": {
+        "name": "picklist",
+        "_id": "5c906a0ea6ebc7193110e737"
+      },
+      "relation": null
+    },
+    {
+      "_id": "6147f4a6a6ebc79d516a05c2",
+      "name": "email_recipient_ids",
+      "label": "Email Recipient(s)",
+      "uniqueName": "lead_email_recipient_ids",
+      "fieldGlue": " ",
+      "rules": {
+        "ss_pop_up": true
+      },
+      "cloak": true,
+      "field_type": {
+        "name": "lookupModel",
+        "_id": "5c906a0ea6ebc7193110e738"
+      },
+      "relation": {
+        "_id": "6147f4a6a6ebc79d516a05c4",
+        "displayFieldName": [
+          "firstName",
+          "lastName"
+        ],
+        "foreign_key": "lead_ids",
+        "local_key": "email_recipient_ids",
+        "entity_id": {
+          "_id": "5c906a0fa6ebc7193110e7b3",
+          "name": "Employee"
+        },
+        "popupDisplayFieldName": [
+          "firstName",
+          "lastName",
+          "email"
+        ]
+      }
+    },
+    {
+      "_id": "6170d038a6ebc7dbd5496172",
+      "name": "medical_survey_id",
+      "label": "How did you hear about us?",
+      "uniqueName": "lead_medical_survey_id",
+      "listName": "lead_medical_survey",
+      "cloak": true,
+      "rules": {
+        "ss_dropdown": true
+      },
+      "field_type": {
+        "name": "picklist",
+        "_id": "5c906a0ea6ebc7193110e737"
+      },
+      "relation": null
+    },
+    {
+      "_id": "61e51fc1a6ebc7acbf034ba4",
+      "name": "where_learn_product_id",
+      "label": "Where did you learn about our products?",
+      "uniqueName": "lead_where_learn_product_id",
+      "listName": "lead_learn_products",
+      "rules": {
+        "ss_dropdown": true
+      },
+      "field_type": {
+        "name": "picklist",
+        "_id": "5c906a0ea6ebc7193110e737"
+      },
+      "relation": null
+    },
+    {
+      "_id": "61e51fc1a6ebc7acbf034bb4",
+      "name": "whereLearnProduct",
+      "label": "Which one: ",
+      "uniqueName": "lead_where_learn_product",
+      "rules": {
+        "string": true,
+        "between": {
+          "min": 0,
+          "max": 155
+        },
+        "visible_if": "{where_learn_product_id.value} == \"Other Website\" || {where_learn_product_id.value} == \"Other email blast\" || {where_learn_product_id.value} == \"Other search\" || {where_learn_product_id.value} == \"Trade Show\" || {where_learn_product_id.value} == \"Another Esco user\" || {where_learn_product_id.value} == \"Field Certifier\" || {where_learn_product_id.value} == \"Esco Distributor / Rep\""
+      },
+      "field_type": {
+        "name": "text",
+        "_id": "5c906a0ea6ebc7193110e73b"
+      },
+      "relation": null
+    },
+    {
+      "_id": "6221c779a6ebc7a5aa690122",
+      "name": "service_engineer_id",
+      "label": "Service Engineer",
+      "uniqueName": "lead_service_engineer_id",
+      "fieldGlue": " ",
+      "filterQuery": "where(\"Employee::_id\", \"=\", \"Role::user_id\")->where(\"Role::name\", \"=\", \"service_engineer\")",
+      "rules": {
+        "ss_pop_up": true
+      },
+      "field_type": {
+        "name": "lookupModel",
+        "_id": "5c906a0ea6ebc7193110e738"
+      },
+      "relation": {
+        "_id": "6221c779a6ebc7a5aa690124",
+        "displayFieldName": [
+          "firstName",
+          "lastName"
+        ],
+        "foreign_key": "service_engineer_id",
+        "local_key": "_id",
+        "entity_id": {
+          "_id": "5c906a0fa6ebc7193110e7b3",
+          "name": "Employee"
+        },
+        "popupDisplayFieldName": [
+          "firstName",
+          "lastName",
+          "email"
+        ]
+      }
+    },
+    {
+      "_id": "65001eb0a6ebc77710061605",
+      "name": "planToPurchase",
+      "label": "When do you plan to purchase",
+      "uniqueName": "lead_plan_to_purchase",
+      "rules": {
+        "between": {
+          "min": 0,
+          "max": 155
+        },
+        "string": true
+      },
+      "field_type": {
+        "name": "text",
+        "_id": "5c906a0ea6ebc7193110e73b"
+      },
+      "relation": null
+    },
+    {
+      "_id": "65001eb0a6ebc77710061608",
+      "name": "existingUser",
+      "label": "Are you an existing Esco user?",
+      "uniqueName": "lead_existing_user",
+      "rules": {
+        "default_value": false,
+        "checkbox": true
+      },
+      "field_type": {
+        "name": "boolean",
+        "_id": "5c906a0ea6ebc7193110e733"
+      },
+      "relation": null
+    },
+    {
+      "_id": "65041ce7a6ebc749986ac4b2",
+      "name": "title",
+      "label": "Title",
+      "uniqueName": "lead_title",
+      "rules": {
+        "between": {
+          "min": 0,
+          "max": 155
+        },
+        "string": true
+      },
+      "field_type": {
+        "name": "text",
+        "_id": "5c906a0ea6ebc7193110e73b"
+      },
+      "relation": null
+    }
+  ],
+  "panels": [
+    {
+      "_id": "5cfa070aa6ebc76edb3fa2f2",
+      "panelName": "lead-panel-1",
+      "entityName": "Lead",
+      "controllerMethod": "leads@index",
+      "label": null,
+      "tabKey": "N",
+      "mutable": true,
+      "highlight": null,
+      "sections": [
+        {
+          "sectionLabel": "Lead Information",
+          "row": 1,
+          "field_ids": [
+            [
+              "5c906a14a6ebc7193110ef9d",
+              "65041ce7a6ebc749986ac4b2",
+              "5c906a14a6ebc7193110ef68",
+              "5c906a14a6ebc7193110ef6b",
+              "5c906a14a6ebc7193110ef6e",
+              "5c906a14a6ebc7193110ef71",
+              "5c906a14a6ebc7193110ef74",
+              "5c906a14a6ebc7193110ef78"
+            ],
+            [
+              "5c906a14a6ebc7193110efa6",
+              "5c906a14a6ebc7193110ef97",
+              "5c906a14a6ebc7193110ef9a",
+              "5c906a14a6ebc7193110efa1",
+              "5c906a14a6ebc7193110efa4",
+              "5c906a14a6ebc7193110ef8e",
+              "5c906a14a6ebc7193110ef91",
+              "6221c779a6ebc7a5aa690122",
+              "5c906a14a6ebc7193110ef94",
+              "5c906a14a6ebc7193110efab",
+              "61445d13a6ebc793a30e4dd2",
+              "6147f4a6a6ebc79d516a05c2",
+              "6170d038a6ebc7dbd5496172",
+              "61e51fc1a6ebc7acbf034ba4",
+              "61e51fc1a6ebc7acbf034bb4"
+            ]
+          ]
+        },
+        {
+          "sectionLabel": "Contact Information",
+          "row": 2,
+          "field_ids": [
+            [
+              "5c906a14a6ebc7193110ef7b",
+              "5c906a14a6ebc7193110ef7e",
+              "5c906a14a6ebc7193110ef81",
+              "5c906a14a6ebc7193110efbd",
+              "5c906a14a6ebc7193110ef84",
+              "5c906a14a6ebc7193110ef88",
+              "5c906a14a6ebc7193110ef8b"
+            ],
+            [
+              "5c906a15a6ebc7193110efe5",
+              "5c906a15a6ebc7193110efe8",
+              "5c906a15a6ebc7193110efeb"
+            ]
+          ]
+        },
+        {
+          "sectionLabel": "Address Information",
+          "row": 3,
+          "field_ids": [
+            [
+              "5c906a14a6ebc7193110efae",
+              "5c906a14a6ebc7193110efb4",
+              "5c906a14a6ebc7193110efb7",
+              "5c906a14a6ebc7193110efb1",
+              "5c906a14a6ebc7193110efba"
+            ]
+          ]
+        },
+        {
+          "sectionLabel": null,
+          "row": 4,
+          "field_ids": [
+            [
+              "5ccbad85a6ebc762164eda53",
+              "5ccbad85a6ebc762164eda8a"
+            ]
+          ]
+        },
+        {
+          "sectionLabel": "Product of Interests",
+          "row": 5,
+          "field_ids": [
+            [
+              "5cfa06eca6ebc76ec3119202",
+              "65001eb0a6ebc77710061605",
+              "65001eb0a6ebc77710061608",
+              "60b4b945a6ebc70d6c5e67b2"
+            ]
+          ]
+        },
+        {
+          "sectionLabel": null,
+          "row": 6,
+          "field_ids": [
+            [
+              "5c906a15a6ebc7193110efcc",
+              "5c906a15a6ebc7193110efcd",
+              "5c906a15a6ebc7193110efcf"
+            ],
+            [
+              "5c906a15a6ebc7193110efd1",
+              "5c906a15a6ebc7193110efd4",
+              "5c906a15a6ebc7193110efd7",
+              "5c906a15a6ebc7193110efda",
+              "5c906a15a6ebc7193110efdd"
+            ]
+          ]
+        },
+        {
+          "sectionLabel": "Description Information",
+          "row": 7,
+          "field_ids": [
+            [
+              "5c906a15a6ebc7193110efe0",
+              "5c906a15a6ebc7193110efe1"
+            ]
+          ]
+        },
+        {
+          "sectionLabel": null,
+          "row": 8,
+          "field_ids": [
+            [
+              "5c906a15a6ebc7193110f004",
+              "5c906a15a6ebc7193110effc"
+            ],
+            [
+              "5c906a15a6ebc7193110f000",
+              "5c906a15a6ebc7193110eff8"
+            ]
+          ]
+        },
+        {
+          "sectionLabel": "Optional",
+          "row": 9,
+          "field_ids": [
+            [
+              "5c906a15a6ebc7193110efe2"
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "viewFilters": [
+    {
+      "_id": "618f00cea6ebc7f57c21c482",
+      "query_id": "5c906a1ba6ebc7193110f8bb",
+      "sortField": "created_at",
+      "sortOrder": "DESC",
+      "filters": [
+        [
+          "5c906a15a6ebc7193110eff4",
+          "5bb104cf678f71061f643c2a",
+          true
+        ]
+      ],
+      "filterLogic": null,
+      "filterName": "My Team's Leads",
+      "moduleName": "leads",
+      "fields": [
+        "5c906a14a6ebc7193110ef74",
+        "5c906a14a6ebc7193110ef68",
+        "5c906a14a6ebc7193110ef6b",
+        "5c906a14a6ebc7193110efba",
+        "5c906a14a6ebc7193110ef8e",
+        "5c906a14a6ebc7193110ef91",
+        "61445d13a6ebc793a30e4dd2",
+        "5c906a14a6ebc7193110efa6",
+        "5c906a15a6ebc7193110effc",
+        "5c906a14a6ebc7193110ef9i"
+      ],
+      "isDefault": false,
+      "currentDisplay": "table",
+      "summarize_by": null,
+      "group_by": "5c906a14a6ebc7193110ef8e"
+    },
+    {
+      "_id": "618f00cea6ebc7f57c21c483",
+      "query_id": "5c906a1ba6ebc7193110f8bc",
+      "sortField": "created_at",
+      "sortOrder": "DESC",
+      "filters": [
+        [
+          "5c906a15a6ebc7193110eff4",
+          "5bb104cf678f71061f643c2a",
+          true
+        ]
+      ],
+      "filterLogic": null,
+      "filterName": "My Leads",
+      "moduleName": "leads",
+      "fields": [
+        "5c906a14a6ebc7193110ef74",
+        "5c906a14a6ebc7193110ef68",
+        "5c906a14a6ebc7193110ef6b",
+        "5c906a14a6ebc7193110efba",
+        "5c906a14a6ebc7193110ef8e",
+        "5c906a14a6ebc7193110ef91",
+        "5c906a14a6ebc7193110efa6",
+        "5c906a15a6ebc7193110effc",
+        "5c906a14a6ebc7193110ef9i"
+      ],
+      "isDefault": true,
+      "currentDisplay": "kanban",
+      "summarize_by": null,
+      "group_by": "5c906a14a6ebc7193110ef8e"
+    },
+    {
+      "_id": "618f00cea6ebc7f57c21c484",
+      "query_id": "5c906a1ba6ebc7193110f8bb",
+      "sortField": "created_at",
+      "sortOrder": "DESC",
+      "filters": [
+        [
+          "5c906a15a6ebc7193110eff4",
+          "5bb104cf678f71061f643c29",
+          true
+        ]
+      ],
+      "filterLogic": null,
+      "filterName": "Converted to Opportunity",
+      "moduleName": "leads",
+      "fields": [
+        "5c906a15a6ebc7193110eff4",
+        "5c906a14a6ebc7193110ef74",
+        "5c906a14a6ebc7193110ef68",
+        "5c906a14a6ebc7193110ef6b",
+        "5c906a14a6ebc7193110efba",
+        "5c906a14a6ebc7193110ef8e",
+        "5c906a14a6ebc7193110ef91",
+        "61445d13a6ebc793a30e4dd2",
+        "5c906a14a6ebc7193110efa6",
+        "5c906a15a6ebc7193110effc",
+        "5c906a14a6ebc7193110ef9i"
+      ],
+      "isDefault": false,
+      "currentDisplay": "table",
+      "summarize_by": null,
+      "group_by": "5c906a14a6ebc7193110ef8e"
+    }
+  ]
+}

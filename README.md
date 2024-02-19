@@ -13,7 +13,8 @@
 5. `php artisan passport:install`
 6. `php artisan serve` or setup linux nginx/apache.
 
-#
+## Api Lists
+Please read [APILIST.md](./APILIST.md)
 
 # SAML2 integration
 
@@ -67,7 +68,7 @@ db.saml2_tenants.update("key": {<key eg. rdv2>}, {$set: {"uuid": "67cf9876-2fe5-
 Note: We need to change `assertionConsumerService` and `singleLogoutService` because by sometimes metadata generates `http` instead of `https`
 10. If everything is setup correctly, you can now login using this laravel route `saml2.login`
 
-# MS GRAPH
+# MS GRAPH (discountinued)
 
 Please refer to this documentation https://github.com/dcblogdev/laravel-microsoft-graph/tree/2.0.0
 
