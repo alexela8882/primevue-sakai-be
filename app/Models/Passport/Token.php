@@ -1,11 +1,12 @@
 <?php
 
-namespace Laravel\Passport;
+namespace App\Models\Passport;
 
-// use Illuminate\Database\Eloquent\Model;
-use MongoDB\Laravel\Eloquent\Model;
+use App\Models\Model\Base;
+use Laravel\Passport\Passport;
+use Laravel\Passport\ResolvesInheritedScopes;
 
-class Token extends Model
+class Token extends Base
 {
     use ResolvesInheritedScopes;
 
@@ -67,7 +68,7 @@ class Token extends Model
     {
         $provider = config('auth.guards.api.provider');
 
-        $model = config('auth.providers.'.$provider.'.model');
+        $model = config('auth.providers.' . $provider . '.model');
 
         return $this->belongsTo($model, 'user_id', (new $model)->getKeyName());
     }
@@ -105,7 +106,7 @@ class Token extends Model
      */
     public function cant($scope)
     {
-        return ! $this->can($scope);
+        return !$this->can($scope);
     }
 
     /**

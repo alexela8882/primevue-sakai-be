@@ -1,0 +1,10 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Models\Model\Base;
+
+class {{ class }} extends Base
+{
+    protected $connection = 'mongodb';
+}

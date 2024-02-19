@@ -3,16 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-// use Illuminate\Database\Eloquent\Model;
-use MongoDB\Laravel\Eloquent\Model;
+use App\Models\Model\Base;
+use App\Models\Core\Country;
 
-class Branch extends Model
+class Branch extends Base
 {
   use HasFactory;
+
   protected $connection = 'mongodb';
   protected $collection = 'branches';
 
-  public function country () {
+  public function country()
+  {
     return $this->belongsTo(Country::class, 'country_id');
   }
 }

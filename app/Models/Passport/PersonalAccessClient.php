@@ -1,11 +1,11 @@
 <?php
 
-namespace Laravel\Passport;
+namespace App\Models\Passport;
 
-// use Illuminate\Database\Eloquent\Model;
-use MongoDB\Laravel\Eloquent\Model;
+use App\Models\Model\Base;
+use Laravel\Passport\Passport;
 
-class PersonalAccessClient extends Model
+class PersonalAccessClient extends Base
 {
     /**
      * The database table used by the model.
