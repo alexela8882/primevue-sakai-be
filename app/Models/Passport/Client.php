@@ -6,8 +6,8 @@ use App\Models\Model\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 use Laravel\Passport\Database\Factories\ClientFactory;
-use Laravel\Passport\ResolvesInheritedScopes;
 use Laravel\Passport\Passport;
+use Laravel\Passport\ResolvesInheritedScopes;
 
 class Client extends Base
 {
@@ -129,7 +129,7 @@ class Client extends Base
     {
         $this->plainSecret = $value;
 
-        if (is_null($value) || !Passport::$hashesClientSecrets) {
+        if (is_null($value) || ! Passport::$hashesClientSecrets) {
             $this->attributes['secret'] = $value;
 
             return;
@@ -166,7 +166,7 @@ class Client extends Base
      */
     public function hasScope($scope)
     {
-        if (!is_array($this->scopes)) {
+        if (! is_array($this->scopes)) {
             return true;
         }
 
@@ -190,7 +190,7 @@ class Client extends Base
      */
     public function confidential()
     {
-        return !empty($this->secret);
+        return ! empty($this->secret);
     }
 
     /**

@@ -2,10 +2,14 @@
 
 namespace App\Models\Core;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Model\Base;
 
-class Picklist extends Model
+class Picklist extends Base
 {
-    use HasFactory;
+    protected $connection = 'mongodb';
+
+    public function listItems()
+    {
+        return $this->embedsMany(ListItem::class, 'items');
+    }
 }

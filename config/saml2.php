@@ -90,7 +90,6 @@ return [
 
     'logoutRoute' => env('SAML2_LOGOUT_URL'),
 
-
     /*
     |--------------------------------------------------------------------------
     | Login error redirection URL.
@@ -173,8 +172,8 @@ return [
         |
         */
 
-        'x509cert' => env('SAML2_SP_CERT_x509',''),
-        'privateKey' => env('SAML2_SP_CERT_PRIVATEKEY',''),
+        'x509cert' => env('SAML2_SP_CERT_x509', ''),
+        'privateKey' => env('SAML2_SP_CERT_PRIVATEKEY', ''),
 
         /*
         |--------------------------------------------------------------------------
@@ -185,7 +184,7 @@ return [
         |
         */
 
-        'entityId' => env('SAML2_SP_ENTITYID',''),
+        'entityId' => env('SAML2_SP_ENTITYID', ''),
 
         /*
         |--------------------------------------------------------------------------
@@ -215,7 +214,7 @@ return [
         */
 
         'singleLogoutService' => [
-            'url' => 'https://7077-163-116-223-51.ngrok-free.app/saml2/6e58eb2e-062c-47f1-897c-24c9106bfa6b/sls'
+            'url' => 'https://7077-163-116-223-51.ngrok-free.app/saml2/6e58eb2e-062c-47f1-897c-24c9106bfa6b/sls',
         ],
     ],
 
@@ -363,11 +362,11 @@ return [
     'contactPerson' => [
         'technical' => [
             'givenName' => env('SAML2_CONTACT_TECHNICAL_NAME', 'name'),
-            'emailAddress' => env('SAML2_CONTACT_TECHNICAL_EMAIL', 'no@reply.com')
+            'emailAddress' => env('SAML2_CONTACT_TECHNICAL_EMAIL', 'no@reply.com'),
         ],
         'support' => [
             'givenName' => env('SAML2_CONTACT_SUPPORT_NAME', 'Support'),
-            'emailAddress' => env('SAML2_CONTACT_SUPPORT_EMAIL', 'no@reply.com')
+            'emailAddress' => env('SAML2_CONTACT_SUPPORT_EMAIL', 'no@reply.com'),
         ],
     ],
 
@@ -384,7 +383,7 @@ return [
         'en-US' => [
             'name' => env('SAML2_ORGANIZATION_NAME', 'Name'),
             'displayname' => env('SAML2_ORGANIZATION_NAME', 'Display Name'),
-            'url' => env('SAML2_ORGANIZATION_URL', 'http://url')
+            'url' => env('SAML2_ORGANIZATION_URL', 'http://url'),
         ],
     ],
 

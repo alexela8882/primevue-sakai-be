@@ -1,14 +1,15 @@
 <?php
 
+use App\Http\Controllers\API\BranchController;
+use App\Http\Controllers\API\CountryController;
+use App\Http\Controllers\API\CustomSaml2Controller;
+use App\Http\Controllers\API\RegisterController;
+use App\Http\Controllers\API\UserConfigController;
+use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\Core\ModuleController;
+use App\Http\Controllers\Customer\LeadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\RegisterController;
-use App\Http\Controllers\API\UserController;
-use App\Http\Controllers\API\UserConfigController;
-use App\Http\Controllers\API\CountryController;
-use App\Http\Controllers\API\BranchController;
-use App\Http\Controllers\API\CustomSaml2Controller;
-use App\Http\Controllers\Customer\LeadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,12 +43,17 @@ Route::controller(UserController::class)
         Route::delete('{id}/delete', 'delete');
     });
 
-    
-Route::controller(LeadController::class)
+Route::controller(ModuleController::class)
     ->middleware('auth:api')
-    ->group(function() {
-        Route::apiResource('leads', LeadController::class);
+    ->group(function () {
+        Route::resource('modules', ModuleController::class)->only('index');
     });
+
+Route::controller(LeadController::class)
+        ->middleware('auth:api')
+        ->group(function () {
+            Route::apiResource('leads', LeadController::class);
+        });
 
 Route::controller(UserConfigController::class)
     ->prefix('user-configs')
@@ -97,19 +103,19 @@ Route::group(['prefix' => 'msgraph', 'middleware' => ['web', 'saml2']], function
             });
 
             Route::get('{id}', function ($id) {
-                return MsGraph::get('me/mailFolders/' . $id);
+                return MsGraph::get('me/mailFolders/'.$id);
             });
 
             Route::get('{id}/messages', function ($id) {
-                return MsGraph::get('me/mailFolders/' . $id . '/messages');
+                return MsGraph::get('me/mailFolders/'.$id.'/messages');
             });
 
             Route::get('{id}/messages', function ($id) {
-                return MsGraph::get('me/mailFolders/' . $id . '/messages');
+                return MsGraph::get('me/mailFolders/'.$id.'/messages');
             });
 
             Route::get('{id}/messages/{messageId}', function ($id, $messageId) {
-                return MsGraph::get('me/mailFolders/' . $id . '/messages/' . $messageId);
+                return MsGraph::get('me/mailFolders/'.$id.'/messages/'.$messageId);
             });
         });
 
@@ -118,7 +124,7 @@ Route::group(['prefix' => 'msgraph', 'middleware' => ['web', 'saml2']], function
         });
 
         Route::get('/messages/{id}', function ($id) {
-            return MsGraph::get('me/messages/' . $id . '=/?$select=subject,body,bodyPreview,uniqueBody');
+            return MsGraph::get('me/messages/'.$id.'=/?$select=subject,body,bodyPreview,uniqueBody');
         });
     });
 

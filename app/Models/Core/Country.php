@@ -6,6 +6,7 @@ use App\Models\Model\Base;
 
 class Country extends Base
 {
-  protected $connection = 'mongodb';
-  protected $collection = 'countries';
+    protected $connection = 'mongodb';
+
+    protected $collection = 'countries';
 }
