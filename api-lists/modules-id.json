@@ -1,0 +1,12 @@
+{
+  "_id": "5c906a1ba6ebc7193110f8b4",
+  "name": "leads",
+  "label": "Leads",
+  "icon": "trending_up",
+  "route": "leads.index",
+  "color": "rgba(76, 175, 80, 0.7)",
+  "description": "",
+  "order": 2,
+  "folder_id": "5c906a1ba6ebc7193110f893",
+  "mainEntity": "Lead"
+}
