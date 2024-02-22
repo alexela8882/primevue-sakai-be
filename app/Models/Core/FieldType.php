@@ -12,5 +12,4 @@ class FieldType extends Base
     {
         return $this->hasMany(Field::class, 'field_type_id', '_id');
     }
-    
 }

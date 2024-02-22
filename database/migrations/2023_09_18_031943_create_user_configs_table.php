@@ -11,20 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-      Schema::create('user_configs', function (Blueprint $collection) {
-        $collection->foreignId('user_id')
-                    ->constrained()
-                    ->onUpdate('cascade')
-                    ->onDelete('cascade');
-        $collection->string('app_theme')->nullable();
-        $collection->string('app_theme_scale')->nullable();
-        $collection->string('app_theme_dark')->nullable();
-        $collection->string('app_theme_ripple')->nullable();
-        $collection->string('app_theme_menu_type')->nullable();
-        $collection->string('app_theme_input_style')->nullable();
-        $collection->timestamps();
+        Schema::create('user_configs', function (Blueprint $collection) {
+            $collection->foreignId('user_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $collection->string('app_theme')->nullable();
+            $collection->string('app_theme_scale')->nullable();
+            $collection->string('app_theme_dark')->nullable();
+            $collection->string('app_theme_ripple')->nullable();
+            $collection->string('app_theme_menu_type')->nullable();
+            $collection->string('app_theme_input_style')->nullable();
+            $collection->timestamps();
 
-      });
+        });
     }
 
     /**
@@ -33,11 +33,11 @@ return new class extends Migration
     public function down(): void
     {
 
-      Schema::table('user_configs', function (Blueprint $collection) {
-        $collection->dropForeign(['user_id']);
-        $collection->dropColumn(['app_theme']);
-      });
+        Schema::table('user_configs', function (Blueprint $collection) {
+            $collection->dropForeign(['user_id']);
+            $collection->dropColumn(['app_theme']);
+        });
 
-      // Schema::dropIfExists('user_configs');
+        // Schema::dropIfExists('user_configs');
     }
 };

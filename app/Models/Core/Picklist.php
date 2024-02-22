@@ -7,6 +7,7 @@ use App\Models\Model\Base;
 class Picklist extends Base
 {
     protected $connection = 'mongodb';
+<<<<<<< HEAD
 	protected $collection = 'picklists';
 
     protected $fillable = [
@@ -297,5 +298,11 @@ class Picklist extends Base
         $results = json_decode($response->getBody());
 
 
+=======
+
+    public function listItems()
+    {
+        return $this->embedsMany(ListItem::class, 'items');
+>>>>>>> 87617fb (Changes)
     }
 }
