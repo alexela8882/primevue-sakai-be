@@ -8,6 +8,7 @@ use App\Http\Controllers\API\UserConfigController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\Core\ModuleController;
 use App\Http\Controllers\Customer\LeadController;
+use App\Http\Controllers\Customer\SalesOpportunityController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -53,6 +54,12 @@ Route::controller(LeadController::class)
         ->middleware('auth:api')
         ->group(function () {
             Route::apiResource('leads', LeadController::class);
+        });
+
+Route::controller(SalesOpportunityController::class)
+        ->middleware('auth:api')
+        ->group(function () {
+            Route::apiResource('sales/opportunities', SalesOpportunityController::class);
         });
 
 Route::controller(UserConfigController::class)
