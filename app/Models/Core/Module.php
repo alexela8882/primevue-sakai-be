@@ -8,8 +8,13 @@ class Module extends Base
 {
     protected $connection = 'mongodb';
 
-    public function mainEntity()
+    public function entity()
     {
         return $this->belongsTo(Entity::class, 'mainEntity', '_id');
+    }
+
+    public function permissions()
+    {
+        return $this->hasMany(Permission::class);
     }
 }
