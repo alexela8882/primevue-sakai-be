@@ -8,12 +8,15 @@ use App\Models\Core\Field;
 use App\Models\Core\Module;
 use App\Models\Core\Panel;
 use App\Models\Core\ViewFilter;
+use App\Models\Customer\SalesOpportunity;
 use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+
+use App\Builders\DynamicQueryBuilder;
 
 class ModuleDataCollector
 {
@@ -33,14 +36,16 @@ class ModuleDataCollector
 
     private $viewFilters;
 
-    public function __construct()
+    private $dqb;
+
+    public function __construct(DynamicQueryBuilder $dqb)
     {
-        //
+        $this->dqb = $dqb;
     }
 
     public function setUser()
     {
-        $this->user = Auth::guard('api')->user();
+        $this->user = Auth::guard('api')->user() ?? User::find('5bf45d4a678f714eac558ba3');
 
         return $this;
     }
@@ -168,7 +173,27 @@ class ModuleDataCollector
 
         $model = App::make($this->module->entity->model_class);
 
-        $query = $model::query();
+       // dd($this->currentViewFilter->filterQuery->query);
+
+        $filterQuery = ($this->module->hasViewFilter && $this->currentViewFilter->filterQuery) ? $this->currentViewFilter->filterQuery->query : null ;
+        if($filterQuery) {
+            $q = $this->dqb->selectFrom($this->getCurrentViewFilterFieldNamesForPagination(), $this->module->entity->name, true);
+
+            $q = $q->filterGet($filterQuery);
+            
+            $query = $q;
+        }else{
+            $query = $model::query();
+        }
+
+        $query->where('deleted_at', null);
+
+
+        $field = $this->module->entity->fields()->where('name', 'branch_id')->count();
+    
+        if($field){
+            $query->whereIn('branch_id', (array) $this->user->handled_branch_ids);
+        }
 
         $page = $request->input('page', 1);
 

@@ -4,6 +4,7 @@ namespace App\Builders;
 
 use App\Models\Core\Entity;
 use App\Models\Core\Field;
+use App\Models\User;
 
 class EntityField
 {
@@ -12,7 +13,7 @@ class EntityField
     public function __construct()
     {
 
-        $this->user = \Auth::guard('api')->user();
+        $this->user = \Auth::guard('api')->user() ?? User::find('5bf45d4a678f714eac558ba3');
     }
 
     public function setUser($user)
@@ -47,10 +48,10 @@ class EntityField
                 }
             } else {
                 // get the model class name associated with the entity
-                $entityModel = Entity::where(['name' => $entity]);
+                $entityModel = Entity::where(['name' => $entity])->first();
             }
-            if (! $entityModel) {
-                throw new \Exception('Entity named "'.$entity."' is not recognized");
+            if (!$entityModel) {
+                throw new \Exception('Entity named "' . $entity . "' is not recognized");
             }
 
             return $entityModel;
@@ -72,19 +73,24 @@ class EntityField
 
         if (is_string($field)) {
             if ($field == '_id') {
-                $fieldModel = Field::build(['name' => '_id']);
+                $fieldModel = new Field(['name' => '_id']);
             } else {
                 if ($entityName == 'currentUser') {
-                    $fieldModel = $this->user->{$field};
+
+                    if ($field == 'people') {
+                        $fieldModel = $this->user->getPeople();
+                    } else
+                        $fieldModel = $this->user->{$field};
+
                     if ($fieldModel instanceof Collection) {
                         $fieldModel = $fieldModel->toArray();
-                        $fieldModel = "['".implode("','", $fieldModel)."']";
+                        $fieldModel = "['" . implode("','", $fieldModel) . "']";
                     }
                 } else {
-                    $fieldModel = Field::where(['name' => $field, 'entity_id' => $entity->_id]);
+                    $fieldModel = Field::where(['name' => $field, 'entity_id' => $entity->_id])->first();
                 }
-                if (! $fieldModel) {
-                    throw new \Exception('Field named "'.$field.'" is not found in entity "'.$entity->name.'"');
+                if (!$fieldModel) {
+                    throw new \Exception('Field named "' . $field . '" is not found in entity "' . $entity->name . '"');
                 }
             }
         } elseif (is_object($field) && $field instanceof Field) {
@@ -92,7 +98,7 @@ class EntityField
         } else {
             throw new \Exception('Error. Field given is of unrecognized type');
         }
-        if (! $returnBoolean) {
+        if (!$returnBoolean) {
             return $fieldModel;
         } else {
             return $fieldModel != null;
@@ -108,11 +114,14 @@ class EntityField
         // if field name to check is only one
         if (is_string($fieldNames)) {
             if ($fieldNames == '_id') {
-                $field = Field::build(['name' => '_id']);
+                $field = new Field(['name' => '_id']);
             } else {
+
+
+
                 $field = $entity->fields()->where('name', $fieldNames)->first();
-                if (! $field) {
-                    throw new \Exception('Field named "'.$fieldNames."' is not recognized in entity '".$entity->name."'.");
+                if (!$field) {
+                    throw new \Exception('Field named "' . $fieldNames . "' is not recognized in entity '" . $entity->name . "'.");
                 }
             }
 
@@ -123,7 +132,7 @@ class EntityField
         $entityFieldNames[] = '_id';
         $unknownFields = array_diff($fieldNames, $entityFieldNames);
         if ($unknownFields) {
-            throw new \Exception('Error. The following fields are not recognized in entity '.$entity->name.': '.implode(',', $unknownFields));
+            throw new \Exception('Error. The following fields are not recognized in entity ' . $entity->name . ': ' . implode(',', $unknownFields));
         }
     }
 
@@ -151,7 +160,7 @@ class EntityField
         $smartFieldNameElem = $smartFieldNameElems[0];
         $field = $this->checkEntityFields($currentEntity, $smartFieldNameElem);
         $currentEntity = $field->entity;
-        $fieldName .= '.'.$smartFieldNameElem;
+        $fieldName .= '.' . $smartFieldNameElem;
         try {
             if ($field->rusType) {
 
@@ -175,7 +184,6 @@ class EntityField
                 } else {
                     $value = $value->{$smartFieldNameElem};
                 }
-
             } elseif ($field->fieldType->name == 'lookupModel') {
                 $lookupEntity = $field->relation();
                 $value = $value->{$smartFieldNameElem};
@@ -192,14 +200,13 @@ class EntityField
             } else {
                 $value = $value->{$smartFieldNameElem};
             }
-
         } catch (\Exception $e) {
-            throw new \Exception('Error. Unidentified field named '.$fieldName);
+            throw new \Exception('Error. Unidentified field named ' . $fieldName);
         }
         // }
 
         if ($requireFieldType && $field->fieldType->name != $requireFieldType) {
-            throw new \Exception('Error. Field '.$field->name.' must be of type '.$requireFieldType);
+            throw new \Exception('Error. Field ' . $field->name . ' must be of type ' . $requireFieldType);
         } elseif ($requireFieldType && $field->fieldType->name == 'picklist' && $value) {
             $value = picklist_item($field->listName, $value);
             if ($value) {
@@ -214,7 +221,7 @@ class EntityField
     {
         $elements = explode($separator, $coupledData);
         if (count($elements) != 2) {
-            throw new \Exception('Invalid fieldName "'.$coupledData.'". Expected syntax is {Entity_NAME}'.$separator.'{FIELD_NAME}');
+            throw new \Exception('Invalid fieldName "' . $coupledData . '". Expected syntax is {Entity_NAME}' . $separator . '{FIELD_NAME}');
         }
 
         $entityName = $elements[0];

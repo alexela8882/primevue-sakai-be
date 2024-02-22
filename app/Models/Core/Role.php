@@ -12,4 +12,15 @@ class Role extends Base
     {
         return $this->hasMany(RoleFilter::class);
     }
+
+    public function underRole()
+    {
+        return $this->belongsToMany('App\Models\Core\Role', null, 'handled_role_id', 'under_role_id');
+    }
+
+    public function handledRole()
+    {
+        return $this->belongsToMany('App\Models\Core\Role', null, 'under_role_id', 'handled_role_id');
+    }
+
 }
