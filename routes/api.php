@@ -31,6 +31,32 @@ Route::post('saml-login', [RegisterController::class, 'samlLogin']);
 Route::get('passwordless-login', [RegisterController::class, 'passwordLessLogin'])->middleware(['web']);
 Route::get('logout', [RegisterController::class, 'logout'])->middleware(['web']);
 
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+Route::controller(UserController::class)
+    ->prefix('users')
+    ->middleware('auth:api')
+    ->group(function () {
+        Route::get('{id}/get', 'get');
+        Route::get('/', 'all');
+        Route::post('/store', 'store');
+        Route::put('{id}/update', 'update');
+        Route::delete('{id}/delete', 'delete');
+    });
+
+Route::controller(ModuleController::class)
+    ->middleware('auth:api')
+    ->group(function () {
+        Route::resource('modules', ModuleController::class)->only('index');
+    });
+
+Route::controller(LeadController::class)
+    ->middleware('auth:api')
+    ->group(function () {
+        Route::apiResource('modules/leads', LeadController::class);
+    });
 Route::middleware('auth:api')->group(function () {
     Route::apiResource('modules/accounts', AccountController::class);
 
@@ -44,7 +70,37 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResource('modules', ModuleController::class);
 
-    Route::apiResource('modules/salesopportunities', SalesOpportunityController::class);
+Route::controller(SalesOpportunityController::class)
+    ->middleware('auth:api')
+    ->group(function () {
+        Route::apiResource('modules/salesopportunities', SalesOpportunityController::class);
+    });
+
+Route::controller(UserConfigController::class)
+    ->prefix('user-configs')
+    ->middleware('auth:api')
+    ->group(function () {
+        Route::get('get-app-theme', 'getAppTheme');
+        Route::post('change-app-theme', 'changeAppTheme');
+    });
+
+Route::controller(CountryController::class)
+    ->prefix('countries')
+    ->middleware('auth:api')
+    ->group(function () {
+        Route::get('/', 'all');
+    });
+
+Route::controller(BranchController::class)
+    ->prefix('branches')
+    ->middleware('auth:api')
+    ->group(function () {
+        Route::get('/', 'all');
+        Route::post('/store', 'store');
+        Route::put('{id}/update', 'update');
+        Route::delete('{id}/delete', 'delete');
+    });
+    Route::apiResource('sales/opportunities', SalesOpportunityController::class);
 
     Route::get('/getModulePanels', [PanelController::class, 'getModulePanels']);
 
