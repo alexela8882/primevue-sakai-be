@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Core\Module;
 use App\Models\Core\ModuleQuery;
+use App\Models\Module\Module;
 use App\Models\User;
 
 class ModuleQueryService

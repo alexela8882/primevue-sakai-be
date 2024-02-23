@@ -1,16 +1,11 @@
 <?php
 
-use App\Http\Controllers\API\BranchController;
 use App\Http\Controllers\API\CountryController;
-use App\Http\Controllers\API\CustomSaml2Controller;
-use App\Http\Controllers\API\PicklistController;
 use App\Http\Controllers\API\RegisterController;
-use App\Http\Controllers\API\UserConfigController;
-use App\Http\Controllers\API\UserController;
-use App\Http\Controllers\API\ViewFilterController;
 use App\Http\Controllers\Core\ModuleController;
 use App\Http\Controllers\Customer\LeadController;
 use App\Http\Controllers\Customer\SalesOpportunityController;
+use App\Http\Controllers\Folder\FolderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,90 +25,14 @@ Route::post('saml-login', [RegisterController::class, 'samlLogin']);
 Route::get('passwordless-login', [RegisterController::class, 'passwordLessLogin'])->middleware(['web']);
 Route::get('logout', [RegisterController::class, 'logout'])->middleware(['web']);
 
-// Route::middleware('auth:api')->get('/user', [UserController::class,'getUser']);
+Route::middleware('auth:api')->group(function () {
+    Route::apiResource('countries', CountryController::class)->only('index');
 
-Route::controller(UserController::class)
-    ->prefix('users')
-    ->middleware('auth:api')
-    ->group(function () {
-        Route::get('{id}/get', 'get');
-        Route::get('/', 'all');
-        Route::post('/store', 'store');
-        Route::put('{id}/update', 'update');
-        Route::delete('{id}/delete', 'delete');
-    });
+    Route::get('/getMenuNavigation', [FolderController::class, 'getMenuNavigation']);
 
-Route::controller(LeadController::class)
-        ->middleware('auth:api')
-        ->group(function () {
-            Route::apiResource('leads', LeadController::class);
-        });
+    Route::apiResource('leads', LeadController::class);
 
-Route::controller(SalesOpportunityController::class)
-    ->middleware('auth:api')
-    ->group(function () {
-        Route::apiResource('sales/opportunities', SalesOpportunityController::class);
-    });
+    Route::apiResource('modules', ModuleController::class);
 
-Route::controller(UserConfigController::class)
-    ->prefix('user-configs')
-    ->middleware('auth:api')
-    ->group(function () {
-        Route::get('get-app-theme', 'getAppTheme');
-        Route::post('change-app-theme', 'changeAppTheme');
-    });
-
-Route::controller(CountryController::class)
-    ->prefix('countries')
-    ->middleware('auth:api')
-    ->group(function () {
-        Route::get('/', 'all');
-    });
-
-Route::controller(BranchController::class)
-    ->prefix('branches')
-    ->middleware('auth:api')
-    ->group(function () {
-        Route::get('/', 'all');
-        Route::post('/store', 'store');
-        Route::put('{id}/update', 'update');
-        Route::delete('{id}/delete', 'delete');
-    });
-
-// SAML2 Auth
-Route::controller(CustomSaml2Controller::class)
-    ->prefix('custom-saml2')
-    ->middleware(['web'])
-    ->group(function () {
-        Route::get('/logout', 'logout');
-    });
-
-Route::controller(ModuleController::class)
-    ->prefix('modules')
-    ->middleware('auth:api')
-    ->group(function () {
-        Route::get('/', 'all');
-        Route::post('/store', 'store');
-        Route::put('{id}/update', 'update');
-        Route::delete('{id}/delete', 'delete');
-    });
-
-Route::controller(PicklistController::class)
-    ->prefix('picklists')
-    ->middleware('auth:api')
-    ->group(function () {
-        Route::get('/', 'all');
-        Route::post('/store', 'store');
-        Route::put('{id}/update', 'update');
-        Route::delete('{id}/delete', 'delete');
-    });
-
-Route::controller(ViewFilterController::class)
-    ->prefix('viewFilters')
-    ->middleware('auth:api')
-    ->group(function () {
-        Route::get('/', 'all');
-        Route::post('/store', 'store');
-        Route::put('{id}/update', 'update');
-        Route::delete('{id}/delete', 'delete');
-    });
+    Route::apiResource('sales/opportunities', SalesOpportunityController::class);
+});

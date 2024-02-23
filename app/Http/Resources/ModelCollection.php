@@ -3,8 +3,8 @@
 namespace App\Http\Resources;
 
 use App\Models\Core\Country;
-use App\Models\Core\Module;
 use App\Models\Model\Base;
+use App\Models\Module\Module;
 use App\Services\FieldService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -12,8 +12,8 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 class ModelCollection extends ResourceCollection
 {
     public function __construct(
-        $reosurce,
-        Module $module,
+        $resource,
+        private Module $module,
         private Collection $fields,
         private Collection $panels,
         private Collection $viewFilters,
@@ -21,7 +21,7 @@ class ModelCollection extends ResourceCollection
         private bool $fromReport = false,
         private bool $displayFieldNameOnly = false
     ) {
-        parent::__construct($reosurce);
+        parent::__construct($resource);
 
         $this->wrap('collection');
     }
@@ -48,9 +48,6 @@ class ModelCollection extends ResourceCollection
                     ],
                 ],
             ],
-            'fields' => new FieldCollection($this->fields),
-            'panels' => new PanelCollection($this->panels),
-            'viewFilters' => new ViewFilterCollection($this->viewFilters),
         ];
     }
 

@@ -15,6 +15,7 @@ class PicklistResource extends JsonResource
     public function toArray(Request $request): array
     {
         $values = [];
+
         foreach ($this->items as $key => $item) {
             $values['value'] = $item['value'];
             $values['active'] = $item['active'];

@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Core\Module;
 use App\Models\Core\ViewFilter;
+use App\Models\Module\Module;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 
