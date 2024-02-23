@@ -6,6 +6,7 @@
     ],
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     "content-hash": "b549eb6bcb73da2518810aef0d689b45",
 =======
     "content-hash": "92504ea400fa412a561e0d196c576dfd",
@@ -13,6 +14,9 @@
 =======
     "content-hash": "f97f39251693ad7bf70be765f1b41544",
 >>>>>>> 38b9fab (tokenU)
+=======
+    "content-hash": "305e19538a9043022e2ef3f67e5a0364",
+>>>>>>> 6cf3bf4 (composer)
     "packages": [
         {
             "name": "24slides/laravel-saml2",
