@@ -53,13 +53,13 @@ Route::controller(ModuleController::class)
 Route::controller(LeadController::class)
     ->middleware('auth:api')
     ->group(function () {
-        Route::apiResource('leads', LeadController::class);
+        Route::apiResource('modules/leads', LeadController::class);
     });
 
 Route::controller(SalesOpportunityController::class)
     ->middleware('auth:api')
     ->group(function () {
-        Route::apiResource('sales/opportunities', SalesOpportunityController::class);
+        Route::apiResource('modules/salesopportunities', SalesOpportunityController::class);
     });
 
 Route::controller(UserConfigController::class)
