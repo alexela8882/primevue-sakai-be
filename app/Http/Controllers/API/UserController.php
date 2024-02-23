@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Http\Resources\User\UserResource;
 use Illuminate\Http\Request;
+
+use App\Models\User;
+
+use DB;
 use Validator;
 
 class UserController extends Controller
@@ -145,4 +149,29 @@ class UserController extends Controller
 
         return response()->json($response, 200);
     }
+
+	public function getUser(Request $request){
+
+		if ($request->headers->get('isApp')) {
+            $user = auth('api')->user();
+            // $customHeaders = json_decode($request->headers->get('CustomHeader'), true);
+
+            $loginHistory = $user->loginHistories()->create([
+                'device' => false,
+                'browser' => false,
+                'platform' => $request->headers->get('os') == 'android' ? 'Android OS' : 'iOS',
+                'ip_address' => $request->server('HTTP_CF_CONNECTING_IP'),
+                'isDesktop' => false,
+                'isMobile' => false,
+                'isApp' => true
+            ]);
+
+            $user->update(['recent_login_at' => $loginHistory->created_at->format('Y-m-d H:i:s')]);
+            $user->loginHistories()->latest('created_at')->skip(10)->get()->each(function ($loginHistory) {
+                $loginHistory->delete();
+            });
+        }
+
+		return UserResource::make(User::with(['branch','roles','handledBranches'])->find(auth()->user()->id));
+	}
 }

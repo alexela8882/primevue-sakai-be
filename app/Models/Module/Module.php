@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models\Core;
+namespace App\Models\Module;
 
+use App\Models\Core\Entity;
 use App\Models\Model\Base;
 
 class Module extends Base
