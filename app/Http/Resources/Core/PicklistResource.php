@@ -15,17 +15,17 @@ class PicklistResource extends JsonResource
     public function toArray(Request $request): array
     {
         $values = [];
-		foreach ($this->items as $key => $item) {
-			$values['value'] = $item['value'];
-			$values['active'] = $item['active'];
-			$values['_id'] =  (string)$item['_id'];
-			isset($item['order']) ? $values['order'] = $item['order'] : '';
-			isset($item['symbol']) ? $values['symbol'] = $item['symbol'] : '';
-		}
-		
-		return [
+        foreach ($this->items as $key => $item) {
+            $values['value'] = $item['value'];
+            $values['active'] = $item['active'];
+            $values['_id'] = (string) $item['_id'];
+            isset($item['order']) ? $values['order'] = $item['order'] : '';
+            isset($item['symbol']) ? $values['symbol'] = $item['symbol'] : '';
+        }
+
+        return [
             'name' => $this->name,
-			'values' => $values,
+            'values' => $values,
         ];
     }
 }

@@ -2,26 +2,23 @@
 
 namespace App\Services;
 
-use App\Models\Core\{Role,Permission,ModuleQuery, Module};
-use App\Models\User;
 use App\Models\Company\Branch;
-
+use App\Models\Core\Module;
+use App\Models\Core\ModuleQuery;
+use App\Models\Core\Permission;
+use App\Models\Core\Role;
+use App\Models\User;
 use Illuminate\Support\Collection;
-
 
 class AccessService
 {
-
-
     public function __construct()
     {
 
     }
 
     /**
-     * @param $userId
-     * @param $role
-     * @param Repository $repository
+     * @param  Repository  $repository
      * @return bool
      */
     public function match($userId, $role, &$repository)
@@ -35,16 +32,18 @@ class AccessService
             $accesses = $role->accesses()->where('user_id', $userId)->all();
 
             // if user's role is not restricted by any particular access type, don't apply any criteria
-            if (!count($accesses))
+            if (! count($accesses)) {
                 return true;
+            }
 
             foreach ($accesses as $access) {
 
-                $ids = $access->{$access->type . '_ids'};
+                $ids = $access->{$access->type.'_ids'};
 
                 // if user's role is not restricted by any particular access type, don't apply any criteria
-                if ($ids == null || is_array($ids) && !count($ids))
+                if ($ids == null || is_array($ids) && ! count($ids)) {
                     continue;
+                }
 
                 // Add access type of roles with respective criteria here....
                 switch (strtolower($access->type)) {
@@ -55,6 +54,7 @@ class AccessService
                         $repository->pushCriteria(new UnderBranches($ids));
                         break;
                 }
+
                 return true;
             }
 
@@ -91,19 +91,22 @@ class AccessService
 
             foreach ($roles as $role) {
                 $i = $role->roleFilters()->whereIn('permission_id', $permissionIds)->pluck('module_query_ids')->flatten()->toArray();
-                if (!count($i)) {
+                if (! count($i)) {
                     $queries = [];
                     break;
-                } else
+                } else {
                     $queries = array_merge($queries, $i);
+                }
             }
 
-            if (!$idsOnly)
+            if (! $idsOnly) {
                 return ModuleQuery::whereIn('_id', $queries)->get();
+            }
         } else {
             $queries = $module->queries;
-            if ($idsOnly)
+            if ($idsOnly) {
                 $queries->pluck('_id')->toArray();
+            }
         }
 
         return $queries;
@@ -116,16 +119,19 @@ class AccessService
     public function getPermissionRoles($permissionName)
     {
         $permission = Permission::where(['name' => $permissionName]);
+
         return $permission->roles;
     }
 
     public function getRoleModules($roleName)
     {
-        if (is_object($roleName))
+        if (is_object($roleName)) {
             $role = $roleName;
-        else
+        } else {
             $role = Role::where(['name' => $roleName]);
+        }
         $permissionIds = $role->perms()->pluck(['_id'])->toArray();
+
         return Module::whereIn('permission_id', $permissionIds);
     }
 
@@ -134,11 +140,12 @@ class AccessService
         if ($roleIds) {
             $roles = [];
             $b = (array) $branchId;
-            foreach ((array)$roleIds as $id) {
+            foreach ((array) $roleIds as $id) {
                 $role = Role::find($id);
 
-                if ($role)
+                if ($role) {
                     $roles = array_merge($role->underRole()->pluck('user_id')->flatten()->filter()->toArray(), $roles);
+                }
             }
 
             $roles = array_values(array_unique($roles));
@@ -151,24 +158,27 @@ class AccessService
 
     public function getModuleRoles($moduleName, $idsOnly = false)
     {
-        if (is_object($moduleName))
+        if (is_object($moduleName)) {
             $module = $moduleName;
-        else if (is_array($moduleName))
+        } elseif (is_array($moduleName)) {
             $moduleIds = Module::whereIn('name', $moduleName)->pluck(['_id'])->toArray();
-        else
+        } else {
             $module = Module::where(['name' => $moduleName]);
+        }
 
-        if (is_array($moduleName))
+        if (is_array($moduleName)) {
             $permissionIds = Permission::whereIn('module_id', $moduleIds)->pluck('_id')->toArray();
-        else
+        } else {
             $permissionIds = $module->permissions->pluck('_id')->toArray();
+        }
 
         $roles = Role::whereIn('permission_id', $permissionIds);
 
-        if ($idsOnly)
+        if ($idsOnly) {
             return $roles->pluck('_id');
-        else
+        } else {
             return $roles;
+        }
     }
 
     public function getPermissionUsers($permission, $field = '_id', $idsOnly = true)
@@ -177,23 +187,25 @@ class AccessService
         if (is_array($permission) || $permission instanceof Collection && $permission = $permission->toArray()) {
 
             //            $permissions = Permission::getModel();
-        } else if ($modelClass = Permission::getModelClass()) {
+        } elseif ($modelClass = Permission::getModelClass()) {
         }
     }
 
     public function getRoleUsersWithinBranches($role, $branch, $rField = '_id', $bField = 'name', $idsOnly = true, $fields = ['*'])
     {
-        if ($fields != ['*'])
+        if ($fields != ['*']) {
             $fields[] = 'handled_branch_ids';
+        }
         $users = $this->getRoleUsers($role, $rField, false, $fields);
         $branchIds = Branch::whereIn($bField, (array) $branch)->pluck('_id')->toArray();
         $users = $users->filter(function ($user) use ($branchIds) {
-            return count(array_intersect((array)$user->handled_branch_ids, $branchIds));
+            return count(array_intersect((array) $user->handled_branch_ids, $branchIds));
         });
-        if ($idsOnly)
+        if ($idsOnly) {
             return $users->pluck('_id')->toArray();
-        else
+        } else {
             return $users;
+        }
     }
 
     public function getRoleUsers($role, $field = '_id', $idsOnly = true, $fields = ['*'])
@@ -208,21 +220,22 @@ class AccessService
             foreach ($roles as $role) {
                 $roleUsers = $role->users()->get($fields);
                 foreach ($roleUsers as $user) {
-                    if (!$users->contains($user->_id)) {
+                    if (! $users->contains($user->_id)) {
                         $users->push($user);
                     }
                 }
             }
-        } else if ($role instanceof $modelClass) {
+        } elseif ($role instanceof $modelClass) {
             $users = $role->users()->get($fields);
         } else {
             $users = Role::where([$field => $role])->users()->get($fields);
         }
 
-        if ($idsOnly)
+        if ($idsOnly) {
             return $users->pluck(['_id'])->toArray();
-        else
+        } else {
             return $users;
+        }
     }
 
     public function getHandledUsers($userId, $withSelf = true)
@@ -230,12 +243,15 @@ class AccessService
         $user = User::find($userId);
         $branches = $user->handledBranches;
         $users = collect([]);
-        if ($withSelf)
+        if ($withSelf) {
             $users->push($user);
-        if ($branches->isNotEmpty()) {
-            foreach ($branches as $branch)
-                $users = $users->merge($branch->users);
         }
+        if ($branches->isNotEmpty()) {
+            foreach ($branches as $branch) {
+                $users = $users->merge($branch->users);
+            }
+        }
+
         return $users->unique();
     }
 

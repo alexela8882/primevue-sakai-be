@@ -22,5 +22,4 @@ class Role extends Base
     {
         return $this->belongsToMany('App\Models\Core\Role', null, 'under_role_id', 'handled_role_id');
     }
-
 }

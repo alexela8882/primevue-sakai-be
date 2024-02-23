@@ -2,24 +2,26 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Http\Controllers\Controller;
+use App\Models\Customer\Account;
+use App\Models\Customer\Lead;
+use App\Models\Customer\SalesOpportunity;
+use App\Models\Customer\SalesOpptItem;
+use App\Models\Customer\SalesQuote;
+use App\Models\User;
+use App\Services\ModuleDataCollector;
+use App\Traits\ApiResponseTrait;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
-use App\Models\Customer\{SalesOpportunity, SalesQuote, SalesOpptItem, Account, OpportunityStageHistory, Lead};
-use App\Models\User;
-
-use App\Traits\ApiResponseTrait;
-use App\Services\ModuleDataCollector;
-use Carbon\Carbon;
-
-
 
 class SalesOpportunityController extends Controller
 {
     use ApiResponseTrait;
+
     public $user;
+
     public $mdc;
-    
 
     public function __construct(private ModuleDataCollector $moduleDataCollector)
     {
@@ -27,10 +29,12 @@ class SalesOpportunityController extends Controller
         $this->user = Auth::guard('api')->user() ?? User::find('5bf45d4a678f714eac558ba3');
     }
 
-    public function index(Request $request){
-        return $this->respondFriendly(function() use ($request) {
-            if($this->user->canView('salesopportunities'))
+    public function index(Request $request)
+    {
+        return $this->respondFriendly(function () use ($request) {
+            if ($this->user->canView('salesopportunities')) {
                 return $this->mdc->data($request);
+            }
         });
     }
 
@@ -54,7 +58,7 @@ class SalesOpportunityController extends Controller
     //         $item = \DataCollector::save($request);
 
     //         $data = $this->opportunity->getStageHistoryData($request, $item->_id);
-      
+
     //         if ($data)
     //             $this->oppSH->create($data);
 
@@ -63,7 +67,6 @@ class SalesOpportunityController extends Controller
     //         return $this->respondSuccessful('Sales opportunity successfully saved', $item);
     //     });
     // }
-
 
     // public function update($id, Request $request) {
     //     return $this->respondFriendly(function() use ($id, $request){
@@ -79,7 +82,6 @@ class SalesOpportunityController extends Controller
 
     //         \DataCollector::update($id, $request);
 
-
     //         $data = $this->opportunity->getStageHistoryData($request->all(), $id, null, false, $opp);
 
     //         if ($data){
@@ -93,8 +95,6 @@ class SalesOpportunityController extends Controller
     //         if (Input::exists('PONo') && $opp->PONo ?? null !== Input::get('PONo')){
     //             $this->serviceJob->getModel()->where('sales_opportunity_id', $id)->update(['PONo' => Input::get('PONo')]);
     //         }
-
-
 
     //         return $this->respondSuccessful('Sales opportunity successfully updated', $opp->toArray());
     //     });
@@ -149,7 +149,7 @@ class SalesOpportunityController extends Controller
     //             $item = \DataCollector::save($request);
 
     //             $data = $this->opportunity->getStageHistoryData($request, $item->_id);
-      
+
     //             if ($data)
     //                 $this->oppSH->create($data);
 
@@ -192,7 +192,6 @@ class SalesOpportunityController extends Controller
     //   });
     // }
 
-
     // public function getActiveItems($id){
     //   return $this->respondFriendly(function() use ($id){
     //       $opportunity = $this->opportunity->find($id);
@@ -210,7 +209,6 @@ class SalesOpportunityController extends Controller
     //       return $this->respondUnprocessable("Invalid ID.");
     //   });
     // }
-
 
     // public function checkDetails($oppID){
 
@@ -241,7 +239,6 @@ class SalesOpportunityController extends Controller
 
     //       return ['message' => 'Invalid opportunity ID'];
 
-
     // }
 
     // public function checkQuoteStat($id){
@@ -271,7 +268,7 @@ class SalesOpportunityController extends Controller
 
     // public function compute($model, $entity){
     //     (new Compute)->handle($model, $entity);
-        
+
     //     //   $entity = $this->entityRepository->getModel()->where('name', $entity)->first();
     //     //   RusResolver::setEntity($entity);
     //     //   FormulaParser::setEntity($entity);
@@ -305,8 +302,6 @@ class SalesOpportunityController extends Controller
     //     //       }
     //     //   }
     // }
-
-
 
     // public function getAccountIds($id){
     //   $qts = $this->quote->getModel()->where('sales_opportunity_id',$id)->get();
@@ -400,24 +395,21 @@ class SalesOpportunityController extends Controller
     //                 'ship_to_name_id' => null,
 
     //              ]);
-            
 
     //         return $this->respondSuccessful('Opportunity and Quotes successfuly transfered',[]);
 
     //     });
-        
+
     // }
 
     // public function getWonItems($accountid){
 
     //     return $this->respondFriendly(function() use ($accountid){
 
-
     //         $limit = (int) Input::get('limit', 5);
     //         $page = (int) Input::get('page', 1);
     //         $skip = $limit * ($page-1);
     //         $sortField =  'created_at';
-  
 
     //         $wonId = PickList::getIDs('opportunity_status', 'Closed Won');
     //         $stat = PickList::getIDs('oppt_item_status', 'Active');
@@ -431,13 +423,12 @@ class SalesOpportunityController extends Controller
     //             'foreignField' => 'sales_opportunity_id',  // field in 'from' collection
     //             'as' => 'items'
     //         ];
-    
+
     //         $aggregate[]['$match'] =  ['items.status_id' => $stat];
     //         $aggregate[]['$unwind'] = '$items';
     //         $aggregate[]['$match'] = ['items' => ['$ne' => []]];
 
     //         $aggregate[] = ['$addFields' => ['product_oid' => '$items.product_id']];
-
 
     //         $aggregate[]['$lookup'] = [
     //             'from' =>  'products',
@@ -445,10 +436,9 @@ class SalesOpportunityController extends Controller
     //             'foreignField' => 'oid',  // field in 'from' collection
     //             'as' => 'product'
     //         ];
-    
+
     //         $aggregate[]['$match'] =  ['product.product_type_id' => $equi];
     //         $aggregate[]['$match'] = ['items' => ['$ne' => []]];
-
 
     //         $xT = $this->opportunity->getModel()->raw(function($rec) use ($aggregate){
     //             return $rec->aggregate( $aggregate , ['allowDiskUse' => true] );
@@ -458,20 +448,17 @@ class SalesOpportunityController extends Controller
     //         $aggregate[]['$skip'] = $skip;
     //         $aggregate[]['$limit'] = $limit;
 
-
     //         $x = $this->opportunity->getModel()->raw(function ($l) use ($aggregate) {
     //             return $l->aggregate($aggregate, ['allowDiskUse' => true]);
     //         });
 
-  
     //         $totalpage = ($xT > $limit) ? ceil($xT / $limit) : $totalpage = 1;
-  
+
     //         $return['data'] =  $this->fractalTransformer->createCollection($x, new OpportunityItemTransformer());
     //         $return['meta']['pagination'] = ['count' => $x->count(), 'current_page' => $page, 'per_page' => $limit, 'total' => $xT, 'total_pages' => $totalpage];
     //         return $return;
 
     //    //     return DataCollector::setTransformer(new OpportunityItemTransformer())->checkSearchPaginate($list,null,null);
-
 
     //      //   return $this->fractalTransformer->createCollection($list, );
 

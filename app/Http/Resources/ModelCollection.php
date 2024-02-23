@@ -23,7 +23,7 @@ class ModelCollection extends ResourceCollection
     ) {
         parent::__construct($reosurce);
 
-        $this->wrap($module->name);
+        $this->wrap('collection');
     }
 
     public function toArray($request)
