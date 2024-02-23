@@ -5,15 +5,14 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Company\Branch;
 use App\Models\Core\Permission;
-use App\Models\Core\Role;
 // use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Services\AccessService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
 // use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
 use MongoDB\Laravel\Auth\User as Authenticatable;
-use App\Services\AccessService;
 
 class User extends Authenticatable
 {
@@ -82,49 +81,53 @@ class User extends Authenticatable
         return $this->belongsTo(Branch::class, 'branch_id');
     }
 
+    public function canRead($moduleName)
+    {
 
-    public function canRead($moduleName){
-   
         $has = Permission::query()
-                  ->whereIn('role_id',$this->role_id)
-                  ->where('name', $moduleName.'.show')->first();
-        return $has ? true : false;
-   }
+            ->whereIn('role_id', $this->role_id)
+            ->where('name', $moduleName.'.show')->first();
 
-   public function canView($moduleName){
-   
+        return $has ? true : false;
+    }
+
+    public function canView($moduleName)
+    {
+
         $has = Permission::query()
-                  ->whereIn('role_id',$this->role_id)
-                  ->where('name', $moduleName.'.index')->first();
-        return $has ? true : false;
-   }
+            ->whereIn('role_id', $this->role_id)
+            ->where('name', $moduleName.'.index')->first();
 
-   public function canDelete($moduleName){
-   
+        return $has ? true : false;
+    }
+
+    public function canDelete($moduleName)
+    {
+
         $has = Permission::query()
-                  ->whereIn('role_id',$this->role_id)
-                  ->where('name', $moduleName.'.delete')->first();
-        return $has ? true : false;
-   }
+            ->whereIn('role_id', $this->role_id)
+            ->where('name', $moduleName.'.delete')->first();
 
-   public function canUpdate($moduleName){
-   
+        return $has ? true : false;
+    }
+
+    public function canUpdate($moduleName)
+    {
+
         $has = Permission::query()
-                  ->whereIn('role_id',$this->role_id)
-                  ->where('name', $moduleName.'.update')->first();
-        return $has ? true : false;
-        
-   }
+            ->whereIn('role_id', $this->role_id)
+            ->where('name', $moduleName.'.update')->first();
 
-   public function getPeople(){
+        return $has ? true : false;
+
+    }
+
+    public function getPeople()
+    {
 
         $people = (new AccessService)->hasUnder($this->role_id, $this->handled_branch_ids);
         $people[] = $this->_id;
 
         return $people;
-   }
-
-
-
-
+    }
 }

@@ -2,17 +2,19 @@
 
 namespace App\Models\Customer;
 
-
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Model\Base;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SalesOpportunity extends Base
 {
     use SoftDeletes;
 
     protected $date = ['deleted_at'];
+
     protected $collection = 'sales_opportunities';
+
     protected $entity = 'SalesOpportunity';
+
     protected $connection = 'mongodb';
 
     // public function account()

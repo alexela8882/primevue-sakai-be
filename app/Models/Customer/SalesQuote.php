@@ -1,18 +1,20 @@
 <?php
 
-namespace  App\Models\Customer;
+namespace App\Models\Customer;
 
-use Jenssegers\Mongodb\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Model;;
 use App\Models\Core\Country;
+use App\Models\Model\Base;
 use App\User;
+use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
-class SalesQuote extends Model
+class SalesQuote extends Base
 {
     use SoftDeletes;
 
     protected $date = ['deleted_at'];
+
     protected $entity = 'SalesQuote';
+
     protected $collection = 'sales_quotes';
 
     public function billingCountry()
