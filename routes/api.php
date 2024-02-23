@@ -8,6 +8,9 @@ use App\Http\Controllers\API\UserConfigController;
 use App\Http\Controllers\API\CountryController;
 use App\Http\Controllers\API\BranchController;
 use App\Http\Controllers\API\CustomSaml2Controller;
+use App\Http\Controllers\API\ModuleController;
+use App\Http\Controllers\API\PicklistController;
+use App\Http\Controllers\API\ViewFilterController;
 use App\Http\Controllers\Customer\LeadController;
 
 /*
@@ -22,14 +25,12 @@ use App\Http\Controllers\Customer\LeadController;
 */
 
 Route::post('register', [RegisterController::class, 'register']);
-Route::post('login', [RegisterController::class, 'login']);
+Route::post('login', [RegisterController::class, 'login'])->name('login');
 Route::post('saml-login', [RegisterController::class, 'samlLogin']);
 Route::get('passwordless-login', [RegisterController::class, 'passwordLessLogin'])->middleware(['web']);
 Route::get('logout', [RegisterController::class, 'logout'])->middleware(['web']);
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::middleware('auth:api')->get('/user', [UserController::class,'getUser']);
 
 Route::controller(UserController::class)
     ->prefix('users')
@@ -43,11 +44,11 @@ Route::controller(UserController::class)
     });
 
     
-Route::controller(LeadController::class)
-    ->middleware('auth:api')
-    ->group(function() {
-        Route::apiResource('leads', LeadController::class);
-    });
+// Route::controller(LeadController::class)
+//     ->middleware('auth:api')
+//     ->group(function() {
+//         Route::apiResource('leads', LeadController::class);
+//     });
 
 Route::controller(UserConfigController::class)
     ->prefix('user-configs')
@@ -126,3 +127,36 @@ Route::group(['prefix' => 'msgraph', 'middleware' => ['web', 'saml2']], function
         return MsGraph::connect();
     });
 });
+
+Route::controller(ModuleController::class)
+    ->prefix('modules')
+    ->middleware('auth:api')
+    ->group(function () {
+        Route::get('/', 'all');
+        Route::post('/store', 'store');
+        Route::put('{id}/update', 'update');
+        Route::delete('{id}/delete', 'delete');
+    });
+
+
+Route::controller(PicklistController::class)
+    ->prefix('picklists')
+    ->middleware('auth:api')
+    ->group(function () {
+        Route::get('/', 'all');
+        Route::post('/store', 'store');
+        Route::put('{id}/update', 'update');
+        Route::delete('{id}/delete', 'delete');
+    });
+
+Route::controller(ViewFilterController::class)
+    ->prefix('viewFilters')
+    ->middleware('auth:api')
+    ->group(function () {
+        Route::get('/', 'all');
+        Route::post('/store', 'store');
+        Route::put('{id}/update', 'update');
+        Route::delete('{id}/delete', 'delete');
+    });
+
+	
