@@ -12,16 +12,15 @@ class SectionResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-
     public function toArray(Request $request): array
     {
         $return = [
-			'_id' => $this->_id,
-			'name' => $this->name,
-			'sectionLabel' => $this->label,
-			'row' => $this->row
-		];
+            '_id' => $this->_id,
+            'name' => $this->name,
+            'sectionLabel' => $this->label,
+            'row' => $this->row,
+        ];
 
-		return $return;
+        return $return;
     }
 }

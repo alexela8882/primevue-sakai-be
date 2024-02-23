@@ -7,5 +7,6 @@ use App\Models\Model\Base;
 class Position extends Base
 {
     protected $connection = 'mongodb';
-	protected $collection = 'positions';
+
+    protected $collection = 'positions';
 }

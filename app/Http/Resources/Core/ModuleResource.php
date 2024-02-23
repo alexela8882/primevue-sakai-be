@@ -14,9 +14,9 @@ class ModuleResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-		
-		$return = [
-			'_id' => $this->_id,
+
+        $return = [
+            '_id' => $this->_id,
             'name' => $this->name,
             'label' => $this->label,
             'icon' => $this->icon,
@@ -25,8 +25,8 @@ class ModuleResource extends JsonResource
             'description' => $this->description,
             'order' => $this->order,
             'folder_id' => $this->folder_id,
-			'mainEntity' => $this->whenLoaded('entity') ? $this->entity->name : null,
-		];
+            'mainEntity' => $this->whenLoaded('entity') ? $this->entity->name : null,
+        ];
 
         return $return;
     }

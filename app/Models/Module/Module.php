@@ -13,4 +13,9 @@ class Module extends Base
     {
         return $this->belongsTo(Entity::class, 'mainEntity', '_id');
     }
+
+    public function permissions()
+    {
+        return $this->hasMany(Permission::class);
+    }
 }

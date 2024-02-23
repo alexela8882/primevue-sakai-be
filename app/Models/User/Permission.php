@@ -8,13 +8,13 @@ class Permission extends Base
 {
     protected $connection = 'mongodb';
 
-	public function module()
+    public function module()
     {
         return $this->belongsTo('App\Models\Module\Module');
     }
 
-   public function roles()
-   {
-       return $this->belongsToMany('App\Models\User\Role', null, 'permission_id', 'role_id');
-   }
+    public function roles()
+    {
+        return $this->belongsToMany('App\Models\User\Role', null, 'permission_id', 'role_id');
+    }
 }

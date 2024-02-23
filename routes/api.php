@@ -1,17 +1,15 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\RegisterController;
-use App\Http\Controllers\API\UserController;
-use App\Http\Controllers\API\UserConfigController;
-use App\Http\Controllers\API\CountryController;
 use App\Http\Controllers\API\BranchController;
+use App\Http\Controllers\API\CountryController;
 use App\Http\Controllers\API\CustomSaml2Controller;
-use App\Http\Controllers\API\ModuleController;
-use App\Http\Controllers\API\PicklistController;
-use App\Http\Controllers\API\ViewFilterController;
+use App\Http\Controllers\API\RegisterController;
+use App\Http\Controllers\API\UserConfigController;
+use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\Core\ModuleController;
 use App\Http\Controllers\Customer\LeadController;
+use App\Http\Controllers\Customer\SalesOpportunityController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +28,7 @@ Route::post('saml-login', [RegisterController::class, 'samlLogin']);
 Route::get('passwordless-login', [RegisterController::class, 'passwordLessLogin'])->middleware(['web']);
 Route::get('logout', [RegisterController::class, 'logout'])->middleware(['web']);
 
-Route::middleware('auth:api')->get('/user', [UserController::class,'getUser']);
+Route::middleware('auth:api')->get('/user', [UserController::class, 'getUser']);
 
 Route::controller(UserController::class)
     ->prefix('users')
@@ -43,12 +41,17 @@ Route::controller(UserController::class)
         Route::delete('{id}/delete', 'delete');
     });
 
-    
-// Route::controller(LeadController::class)
-//     ->middleware('auth:api')
-//     ->group(function() {
-//         Route::apiResource('leads', LeadController::class);
-//     });
+Route::controller(LeadController::class)
+        ->middleware('auth:api')
+        ->group(function () {
+            Route::apiResource('leads', LeadController::class);
+        });
+
+Route::controller(SalesOpportunityController::class)
+    ->middleware('auth:api')
+    ->group(function () {
+        Route::apiResource('sales/opportunities', SalesOpportunityController::class);
+    });
 
 Route::controller(UserConfigController::class)
     ->prefix('user-configs')
@@ -98,19 +101,19 @@ Route::group(['prefix' => 'msgraph', 'middleware' => ['web', 'saml2']], function
             });
 
             Route::get('{id}', function ($id) {
-                return MsGraph::get('me/mailFolders/' . $id);
+                return MsGraph::get('me/mailFolders/'.$id);
             });
 
             Route::get('{id}/messages', function ($id) {
-                return MsGraph::get('me/mailFolders/' . $id . '/messages');
+                return MsGraph::get('me/mailFolders/'.$id.'/messages');
             });
 
             Route::get('{id}/messages', function ($id) {
-                return MsGraph::get('me/mailFolders/' . $id . '/messages');
+                return MsGraph::get('me/mailFolders/'.$id.'/messages');
             });
 
             Route::get('{id}/messages/{messageId}', function ($id, $messageId) {
-                return MsGraph::get('me/mailFolders/' . $id . '/messages/' . $messageId);
+                return MsGraph::get('me/mailFolders/'.$id.'/messages/'.$messageId);
             });
         });
 
@@ -119,7 +122,7 @@ Route::group(['prefix' => 'msgraph', 'middleware' => ['web', 'saml2']], function
         });
 
         Route::get('/messages/{id}', function ($id) {
-            return MsGraph::get('me/messages/' . $id . '=/?$select=subject,body,bodyPreview,uniqueBody');
+            return MsGraph::get('me/messages/'.$id.'=/?$select=subject,body,bodyPreview,uniqueBody');
         });
     });
 
@@ -137,7 +140,6 @@ Route::controller(ModuleController::class)
         Route::put('{id}/update', 'update');
         Route::delete('{id}/delete', 'delete');
     });
-
 
 Route::controller(PicklistController::class)
     ->prefix('picklists')
@@ -158,5 +160,3 @@ Route::controller(ViewFilterController::class)
         Route::put('{id}/update', 'update');
         Route::delete('{id}/delete', 'delete');
     });
-
-	

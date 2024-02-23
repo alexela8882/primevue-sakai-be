@@ -8,6 +8,8 @@ class Field extends Base
 {
     protected $connection = 'mongodb';
 
+    protected $guarded = ['id'];
+
     public function relation()
     {
         return $this->hasOne(Relation::class);
@@ -26,5 +28,17 @@ class Field extends Base
     public function rules()
     {
         return $this->hasMany(Rule::class);
+    }
+
+    public function hasMultipleValues()
+    {
+        if (! $this->fieldType) {
+            return false;
+        }
+
+        $type = $this->fieldType->name;
+
+        return $type == 'lookupModel' && $this->relation->method == 'belongsToMany' ||
+            $type == 'picklist' && $this->rules()->whereIn('name', ['ms_dropdown', 'ms_list_view', 'checkbox_inline', 'checkbox', 'tab_multi_select', 'ms_pop_up', 'checkbox_inline'])->count();
     }
 }

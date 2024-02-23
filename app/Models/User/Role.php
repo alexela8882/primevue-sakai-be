@@ -8,7 +8,7 @@ class Role extends Base
 {
     protected $connection = 'mongodb';
 
-	public function permissions()
+    public function permissions()
     {
         return $this->belongsToMany('App\Models\User\Permission', null, 'role_id', 'permission_id');
     }
