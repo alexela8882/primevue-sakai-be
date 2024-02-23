@@ -8,8 +8,8 @@ class ViewFilter extends Base
 {
     protected $connection = 'mongodb';
 
-    public function filterQuery() {
+    public function filterQuery()
+    {
         return $this->belongsTo('App\Models\Core\ModuleQuery', 'query_id', '_id');
     }
-
 }

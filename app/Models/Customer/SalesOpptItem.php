@@ -3,13 +3,14 @@
 namespace App\Models\Customer;
 
 use App\Models\Company\Branch;
-use App\Models\Product\Product;
 use App\Models\Core\Currency;
-use Illuminate\Database\Eloquent\Model;;
+use App\Models\Model\Base;
+use App\Models\Product\Product;
 
-class SalesOpptItem extends Model
+class SalesOpptItem extends Base
 {
     protected $collection = 'sales_oppt_items';
+
     protected $entity = 'SalesOpptItem';
 
     public function opportunity()

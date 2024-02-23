@@ -2,21 +2,19 @@
 
 namespace App\Services;
 
+use App\Builders\DynamicQueryBuilder;
 use App\Http\Resources\ModelCollection;
 use App\Models\Core\Entity;
 use App\Models\Core\Field;
 use App\Models\Core\Module;
 use App\Models\Core\Panel;
 use App\Models\Core\ViewFilter;
-use App\Models\Customer\SalesOpportunity;
 use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-
-use App\Builders\DynamicQueryBuilder;
 
 class ModuleDataCollector
 {
@@ -173,25 +171,24 @@ class ModuleDataCollector
 
         $model = App::make($this->module->entity->model_class);
 
-       // dd($this->currentViewFilter->filterQuery->query);
+        // dd($this->currentViewFilter->filterQuery->query);
 
-        $filterQuery = ($this->module->hasViewFilter && $this->currentViewFilter->filterQuery) ? $this->currentViewFilter->filterQuery->query : null ;
-        if($filterQuery) {
+        $filterQuery = ($this->module->hasViewFilter && $this->currentViewFilter->filterQuery) ? $this->currentViewFilter->filterQuery->query : null;
+        if ($filterQuery) {
             $q = $this->dqb->selectFrom($this->getCurrentViewFilterFieldNamesForPagination(), $this->module->entity->name, true);
 
             $q = $q->filterGet($filterQuery);
-            
+
             $query = $q;
-        }else{
+        } else {
             $query = $model::query();
         }
 
         $query->where('deleted_at', null);
 
-
         $field = $this->module->entity->fields()->where('name', 'branch_id')->count();
-    
-        if($field){
+
+        if ($field) {
             $query->whereIn('branch_id', (array) $this->user->handled_branch_ids);
         }
 

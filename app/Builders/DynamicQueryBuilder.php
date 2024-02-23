@@ -3,17 +3,14 @@
 namespace App\Builders;
 
 use App\Models\Core\Field;
-
 use App\Traits\QueryTrait;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Input;
 use Moloquent\Eloquent\Builder;
 use Nette\Utils\Tokenizer;
-use App\Builders\EntityField;
 
 class DynamicQueryBuilder
 {
- 
     use QueryTrait;
 
     const INDEX_FIELD = 0;
@@ -95,7 +92,7 @@ class DynamicQueryBuilder
             $this->filters = [$addtlQuery];
         }
 
-        $this->mainEntity =  (new EntityField)->resolveEntity($entity);
+        $this->mainEntity = (new EntityField)->resolveEntity($entity);
         foreach ($filters as $key => $filter) {
             if (is_array($filter) && count($filter) == 3) {
 
@@ -245,7 +242,7 @@ class DynamicQueryBuilder
 
     public function setUser($user)
     {
-         (new EntityField)->setUser($user);
+        (new EntityField)->setUser($user);
         $this->user = $user;
 
         return $this;
@@ -288,14 +285,14 @@ class DynamicQueryBuilder
         $entity = (new EntityField)->resolveEntity($entity);
 
         if (is_array($fields)) {
-             (new EntityField)->checkEntityFields($entity, $fields);
+            (new EntityField)->checkEntityFields($entity, $fields);
             $this->selectedFields = "['".implode("','", $fields)."']";
         } elseif (is_string($fields)) {
             if ($fields == '*') {
                 // get all fields from the entity
                 $this->selectedFields = "['*']";
             } else {
-                 (new EntityField)->checkEntityFields($entity, $fields);
+                (new EntityField)->checkEntityFields($entity, $fields);
                 $this->selectedFields = [$fields];
             }
         }
@@ -327,8 +324,6 @@ class DynamicQueryBuilder
         if (preg_match('/picklist/', $query)) {
             $query = str_replace('picklist', '$this->picklist', $query);
         }
-        
-
 
         return eval('return '.$query);
     }
@@ -346,7 +341,7 @@ class DynamicQueryBuilder
 
     public function lookup($value, $entity, $fieldName)
     {
-        $entity =  (new EntityField)->resolveEntity($entity);
+        $entity = (new EntityField)->resolveEntity($entity);
         $field = $entity->fields()->where('name', $fieldName)->first();
         if (! $field) {
             throw new \Exception('Error. The field named '.$fieldName.' is not found in entity '.$entity->name);
@@ -366,7 +361,7 @@ class DynamicQueryBuilder
 
             if (! $prevEntity) {
                 [$entityName, $fieldName] = explode('::', $fieldName, 2);
-                $prevEntity =  (new EntityField)->resolveEntity($entityName);
+                $prevEntity = (new EntityField)->resolveEntity($entityName);
             }
             [$fieldName, $remToken] = explode('.', $fieldName, 2);
 
@@ -407,14 +402,14 @@ class DynamicQueryBuilder
         }
 
         $verifiableClass = [];
-        $operand1 =  (new EntityField)->extractEntityAndField($field, $this->separator);
+        $operand1 = (new EntityField)->extractEntityAndField($field, $this->separator);
 
         $className1 = $operand1['entity']->model_class;
 
         $verifiableClass[] = $className1;
 
         if ($this->isField($valueOrField)) {
-            $operand2 =  (new EntityField)->extractEntityAndField($valueOrField, $this->separator);
+            $operand2 = (new EntityField)->extractEntityAndField($valueOrField, $this->separator);
 
             if ($operand2['entity']->isCurrentUser) {
 
@@ -503,7 +498,7 @@ class DynamicQueryBuilder
 
     public function orderBy($fieldName = 'updated_at', $order = 'desc')
     {
-         (new EntityField)->checkEntityFields($this->mainEntity, $fieldName);
+        (new EntityField)->checkEntityFields($this->mainEntity, $fieldName);
     }
 
     protected function pushWhere($operand1Class, $operand1Field, $whereQuery, $operator, $operand2Class, $operand2Value = null, $isComplete = false)
@@ -540,7 +535,6 @@ class DynamicQueryBuilder
 
         $strQuery = 'where';
 
-
         $fieldName = is_array($field) ? $field['name'] : (is_object($field) ? $field->name : $field);
         //if($field->hasMultipleValues()) {
         //    dd($fieldName, $operator, $otherField, $this->isField($otherField));
@@ -552,7 +546,7 @@ class DynamicQueryBuilder
             } elseif (starts_with($otherField, '[') && ends_with($otherField, ']')) {
                 $operator = '=';
             } else {
-                $entityField =  (new EntityField)->extractEntityAndField($otherField);
+                $entityField = (new EntityField)->extractEntityAndField($otherField);
 
                 $otherField = $entityField['entity']->getModel()->pluck($entityField['field']->name)->toArray();
                 if (count($otherField)) {
@@ -776,7 +770,7 @@ class DynamicQueryBuilder
     protected function checkIfKeyIsId($id, $entityName)
     {
         // if it is an id and the key exists in the entity as a field, keep it, else return '_id'
-        return ($id != '_id' && (ends_with($id, '_id') || ends_with($id, '_ids')) &&  (new EntityField)->fieldExistsInEntity($id, $entityName)) ? '_id' : $id;
+        return ($id != '_id' && (ends_with($id, '_id') || ends_with($id, '_ids')) && (new EntityField)->fieldExistsInEntity($id, $entityName)) ? '_id' : $id;
     }
 
     protected function generateQueryVarName($className, $endsWith = 'Query')
@@ -853,7 +847,7 @@ class DynamicQueryBuilder
         preg_match_all('/%[A-Za-z_\:\$]+%/', $filterQuery, $matches);
         $matches = collect($matches)->flatten()->toArray();
         if (count($matches)) {
-            $entity =  (new EntityField)->resolveEntity($entity);
+            $entity = (new EntityField)->resolveEntity($entity);
 
             if ($requireParams && Input::exists('itemId')) {
                 $itemId = Input::get('itemId');
