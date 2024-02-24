@@ -14,6 +14,6 @@ class ModuleController extends Controller
 
     public function index()
     {
-        return $this->moduleService->getModules();
+        //
     }
 }

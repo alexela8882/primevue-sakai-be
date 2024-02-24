@@ -7,11 +7,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class PanelResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     private $params = [];
 
     private $ids;
@@ -20,8 +15,10 @@ class PanelResource extends JsonResource
 
     protected $form;
 
-    public function __construct($params = false, $ids = null, $form = false)
+    public function __construct($resource, $params = false, $ids = null, $form = false)
     {
+        parent::__construct($resource);
+
         $this->params = $params;
         $this->ids = $ids;
         $this->form = $form;
@@ -29,7 +26,6 @@ class PanelResource extends JsonResource
 
     public function toArray(Request $request): array
     {
-
         if (strpos($this->controllerMethod, '@index') && ! $this->params) {
             $this->mutable = false;
         } elseif ($this->params) {

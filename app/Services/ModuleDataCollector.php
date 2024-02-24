@@ -3,12 +3,15 @@
 namespace App\Services;
 
 use App\Builders\DynamicQueryBuilder;
+use App\Http\Resources\Core\FieldResource;
+use App\Http\Resources\Core\PanelResource;
+use App\Http\Resources\Core\ViewFilterResource;
 use App\Http\Resources\ModelCollection;
 use App\Models\Core\Entity;
 use App\Models\Core\Field;
-use App\Models\Core\Module;
 use App\Models\Core\Panel;
 use App\Models\Core\ViewFilter;
+use App\Models\Module\Module;
 use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
@@ -18,7 +21,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ModuleDataCollector
 {
-    private User $user;
+    public User $user;
 
     private Module $module;
 
@@ -34,11 +37,9 @@ class ModuleDataCollector
 
     private $viewFilters;
 
-    private $dqb;
-
-    public function __construct(DynamicQueryBuilder $dqb)
+    public function __construct(private DynamicQueryBuilder $dataQueryBuilder)
     {
-        $this->dqb = $dqb;
+        //
     }
 
     public function setUser()
@@ -173,20 +174,23 @@ class ModuleDataCollector
 
         // dd($this->currentViewFilter->filterQuery->query);
 
-        $filterQuery = ($this->module->hasViewFilter && $this->currentViewFilter->filterQuery) ? $this->currentViewFilter->filterQuery->query : null;
-        if ($filterQuery) {
-            $q = $this->dqb->selectFrom($this->getCurrentViewFilterFieldNamesForPagination(), $this->module->entity->name, true);
+        if ($this->module->hasViewFilter && $this->currentViewFilter->filterQuery) {
+            $filterQuery = $this->currentViewFilter->filterQuery->query;
+        }
 
-            $q = $q->filterGet($filterQuery);
+        if (isset($filterQuery)) {
+            $query = $this->dataQueryBuilder->selectFrom($this->getCurrentViewFilterFieldNamesForPagination(), $this->module->entity->name, true);
 
-            $query = $q;
+            $query = $query->filterGet($filterQuery);
+
+            $query = $query;
         } else {
             $query = $model::query();
         }
 
         $query->where('deleted_at', null);
 
-        $field = $this->module->entity->fields()->where('name', 'branch_id')->count();
+        $field = $this->module->entity->fields->where('name', 'branch_id')->count();
 
         if ($field) {
             $query->whereIn('branch_id', (array) $this->user->handled_branch_ids);
@@ -198,6 +202,18 @@ class ModuleDataCollector
 
         $query = $query->paginate($pageLength, $this->getCurrentViewFilterFieldNamesForPagination(), 'page', $page);
 
-        return new ModelCollection($query, $this->module, $this->currentViewFilterFields, $this->panels, $this->viewFilters, $this->pickLists);
+        return (new ModelCollection(
+            $query,
+            $this->module,
+            $this->currentViewFilterFields,
+            $this->panels,
+            $this->viewFilters,
+            $this->pickLists
+        ))
+            ->additional([
+                'fields' => FieldResource::collection($this->currentViewFilterFields),
+                'panels' => PanelResource::collection($this->panels),
+                'viewFilters' => ViewFilterResource::collection($this->viewFilters),
+            ]);
     }
 }

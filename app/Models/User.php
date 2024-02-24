@@ -3,7 +3,6 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Models\Company\Branch;
 use App\Models\Core\Permission;
 // use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Services\AccessService;
@@ -78,7 +77,27 @@ class User extends Authenticatable
     // relationships
     public function branch()
     {
-        return $this->belongsTo(Branch::class, 'branch_id');
+        return $this->belongsTo('App\Models\Company\Branch', 'branch_id', '_id');
+    }
+
+    public function handledBranches()
+    {
+        return $this->belongsToMany('App\Models\Company\Branch', null, 'handling_user_ids', 'handled_branch_ids');
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany('App\Models\User\Role', null, 'user_id', 'role_id');
+    }
+
+    public function position()
+    {
+        return $this->belongsTo('App\Models\Employee\Position', 'position_id', '_id');
+    }
+
+    public function loginHistories()
+    {
+        return $this->hasMany('App\Models\Auth\LoginHistory');
     }
 
     public function canRead($moduleName)
