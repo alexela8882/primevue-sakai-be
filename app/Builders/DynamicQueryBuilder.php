@@ -7,7 +7,7 @@ use App\Traits\QueryTrait;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Input;
 use Moloquent\Eloquent\Builder;
-use Nette\Utils\Tokenizer;
+use Nette\Tokenizer\Tokenizer;
 
 class DynamicQueryBuilder
 {
@@ -150,17 +150,17 @@ class DynamicQueryBuilder
         if ($logicString) {
             $tokens = $this->tokenizer->tokenize($logicString);
             foreach ($tokens as $token) {
-                if ($token[Tokenizer::TYPE] == self::T_PARENTHESIS) {
-                    if ($token[Tokenizer::VALUE] == '(') {
+                if ($token->type == self::T_PARENTHESIS) {
+                    if ($token->value == '(') {
                         $query .= 'where( function($query) { $query->';
                     } else {
                         $query .= '; })';
                     }
-                } elseif ($token[Tokenizer::TYPE] == self::T_OPERAND) {
-                    $operand = (int) $token[Tokenizer::VALUE];
+                } elseif ($token->type == self::T_OPERAND) {
+                    $operand = (int) $token->value;
                     $query .= $this->filters[$operand - 1];
-                } elseif ($token[Tokenizer::TYPE] == self::T_OPERATOR) {
-                    if (strtolower($token[Tokenizer::VALUE]) == 'or') {
+                } elseif ($token->type == self::T_OPERATOR) {
+                    if (strtolower($token->value) == 'or') {
                         $query .= '->or';
                     } else {
                         $query .= '->';
