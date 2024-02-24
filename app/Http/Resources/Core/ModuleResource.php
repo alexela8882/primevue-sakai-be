@@ -26,6 +26,8 @@ class ModuleResource extends JsonResource
             'folder_id' => $this->folder_id,
             'mainEntity' => $this->whenLoaded('entity') ? $this->entity->name : null,
         ];
+            'mainEntity' => $this->whenLoaded('entity') ? $this->entity->name : null,
+        ];
 
         return $return;
     }

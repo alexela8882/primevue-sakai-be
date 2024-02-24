@@ -27,6 +27,7 @@ class PicklistResource extends JsonResource
         return [
             'name' => $this->name,
             'values' => $values,
+            'values' => $values,
         ];
     }
 }
