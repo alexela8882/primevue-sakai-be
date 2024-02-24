@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('modules/salesopportunities', [SalesOpportunityController::class, 'index']);
+
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login'])->name('login');
 Route::post('saml-login', [RegisterController::class, 'samlLogin']);
@@ -34,5 +36,6 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResource('modules', ModuleController::class);
 
-    Route::apiResource('modules/salesopportunities', SalesOpportunityController::class);
+    
 });
+
