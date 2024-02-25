@@ -4,7 +4,6 @@ namespace App\Http\Resources;
 
 use App\Models\Core\Country;
 use App\Models\Model\Base;
-use App\Models\Module\Module;
 use App\Services\FieldService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -13,17 +12,14 @@ class ModelCollection extends ResourceCollection
 {
     public function __construct(
         $resource,
-        private Module $module,
         private Collection $fields,
-        private Collection $panels,
-        private Collection $viewFilters,
-        private array $pickLists,
+        private ?array $pickLists,
         private bool $fromReport = false,
         private bool $displayFieldNameOnly = false
     ) {
         parent::__construct($resource);
 
-        $this->wrap('collection');
+        $this->resource = $resource;
     }
 
     public function toArray($request)
@@ -86,6 +82,16 @@ class ModelCollection extends ResourceCollection
                         if ($field->relation->method == 'belongsTo' || $field->relation->method == 'hasOne') {
                             $items = $items->first();
 
+                            // SAVE FOR LATER
+                            // if (
+                            //     ($this->recurseLookup && $items) || ($field->uniqueName == 'salesquote_quote_to_name_id' && $items)
+                            // ) {
+                            //     $fields = $field->relation->getActualDisplayFields();
+                            //     $pls = PickList::getPicklistsFromFields($fields);
+                            //     $itemTransformer = new ModelTransformer($fields, $pls, [], $this->moduleName, $this->includeDeepFields, $this->recurseLookup - 1, $this->lookupDisplayFieldNameOnly);
+                            //     $items = FractalModelTransformer::createItem($items, $itemTransformer);
+                            // } else
+
                             if ($items) {
                                 $items = $items->toArray();
                             }
@@ -101,7 +107,6 @@ class ModelCollection extends ResourceCollection
                             $value['country_id'] = ['_id' => $value['country_id'], 'name' => Country::find($value['country_id'])->name ?? null];
                         }
                     }
-
                 } elseif ($field->fieldType->name === 'picklist') {
                     if (is_array($base->{$field->name})) {
                         $value = array_values(array_intersect_key($this->pickLists[$field->listName], array_flip($base->{$field->name})));
@@ -161,6 +166,7 @@ class ModelCollection extends ResourceCollection
             ->dynamicRelationship($field->relation->method, $field->relation->class, $field->relation->foreign_key, $field->relation->local_key, $field->uniqueName, true)
             ->get($returnableFields);
     }
+
     // public function toResponse($request)
     // {
     //     $data = $this->resolve($request);

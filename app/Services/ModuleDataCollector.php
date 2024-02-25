@@ -25,7 +25,7 @@ class ModuleDataCollector
 
     private Module $module;
 
-    private Collection $fields;
+    public Collection $fields;
 
     private Collection $currentViewFilterFields;
 
@@ -33,7 +33,7 @@ class ModuleDataCollector
 
     private $currentViewFilter;
 
-    private $pickLists;
+    public $pickLists;
 
     private $viewFilters;
 
@@ -204,11 +204,8 @@ class ModuleDataCollector
 
         return (new ModelCollection(
             $query,
-            $this->module,
             $this->currentViewFilterFields,
-            $this->panels,
-            $this->viewFilters,
-            $this->pickLists
+            $this->pickLists,
         ))
             ->additional([
                 'fields' => FieldResource::collection($this->currentViewFilterFields),
