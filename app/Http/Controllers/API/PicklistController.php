@@ -4,14 +4,23 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Core\PicklistResource;
+use App\Models\Core\Entity;
 use App\Models\Core\Picklist;
 use Illuminate\Http\Request;
 
 class PicklistController extends Controller
 {
-    public function all(){
+	protected $picklist;
+    protected $entity;
 
-		return PicklistResource::collection(Picklist::all());
+    public function __construct(PickList $pickList, Entity $entity) {
+        $this->picklist = $pickList;
+        $this->entity = $entity;
+    }
 
-	}
+	public function getLists(Request $request)	
+    {
+		$listName = $request->get('listName');
+		return $this->picklist->getList($listName, true, true);
+    }
 }

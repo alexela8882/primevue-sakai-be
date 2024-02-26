@@ -8,7 +8,7 @@ use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\UserConfigController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\ViewFilterController;
-use App\Http\Controllers\Core\ModuleController;
+use App\Http\Controllers\API\ModuleController;
 use App\Http\Controllers\Customer\LeadController;
 use App\Http\Controllers\Customer\SalesOpportunityController;
 use Illuminate\Http\Request;
@@ -155,7 +155,7 @@ Route::controller(PicklistController::class)
     ->prefix('picklists')
     ->middleware('auth:api')
     ->group(function () {
-        Route::get('/', 'all');
+        Route::post('/', 'getLists');
         Route::post('/store', 'store');
         Route::put('{id}/update', 'update');
         Route::delete('{id}/delete', 'delete');
