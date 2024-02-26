@@ -48,7 +48,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/getModulePanels', [PanelController::class, 'getModulePanels']);
 
     Route::post('/picklist', [PicklistController::class, 'index']);
-git
+
     Route::get('/user', [UserController::class, 'getUser']);
 
     Route::apiResource('viewFilters', ViewFilterController::class);
