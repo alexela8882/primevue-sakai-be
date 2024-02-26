@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Models\Customer\Lead;
+use App\Models\Customer\Account;
 use App\Services\ModuleDataCollector;
 use Illuminate\Http\Request;
 
-class LeadController extends Controller
+class AccountController extends Controller
 {
     public function __construct(private ModuleDataCollector $moduleDataCollector)
     {
-        $this->moduleDataCollector = $moduleDataCollector->setUser()->setModule('leads');
+        $this->moduleDataCollector = $moduleDataCollector->setUser()->setModule('accounts');
     }
 
     public function index(Request $request)
@@ -24,8 +24,8 @@ class LeadController extends Controller
         $lead = $this->moduleDataCollector->postStore($request);
     }
 
-    public function show(Lead $lead, Request $request)
+    public function show(Account $account, Request $request)
     {
-        return $this->moduleDataCollector->getShow($lead, $request);
+        return $this->moduleDataCollector->getShow($account, $request);
     }
 }

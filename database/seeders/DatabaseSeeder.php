@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Http\Resources\Core\ModelResource;
+use App\Models\Core\Relation;
+use App\Models\Customer\Lead;
 use App\Models\User;
 use App\Models\UserConfig;
 use Illuminate\Database\Seeder;
@@ -11,32 +14,34 @@ use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
+        // $user = User::create([
+        //     'name' => 'super admin',
+        //     'email' => 'super@admin.com',
+        //     'password' => Hash::make('superadmin'),
         // ]);
 
-        $user = User::create([
-            'name' => 'super admin',
-            'email' => 'super@admin.com',
-            'password' => Hash::make('superadmin'),
-        ]);
+        // UserConfig::create([
+        //     'user_id' => $user->_id,
+        //     'app_theme' => 'esco',
+        //     'app_theme_dark' => 'light',
+        //     'app_theme_ripple' => true,
+        //     'app_theme_input_style' => 'outlined',
+        //     'app_theme_menu_type' => 'static',
+        //     'app_theme_scale' => '14',
+        // ]);
 
-        UserConfig::create([
-            'user_id' => $user->_id,
-            'app_theme' => 'esco',
-            'app_theme_dark' => 'light',
-            'app_theme_ripple' => true,
-            'app_theme_input_style' => 'outlined',
-            'app_theme_menu_type' => 'static',
-            'app_theme_scale' => '14',
-        ]);
+        $this->changeRelationUserModelClass();
+    }
+
+    public function changeRelationUserModelClass()
+    {
+        Relation::query()
+            ->where('class', 'App\User')
+            ->get()
+            ->each(fn (Relation $relation) => $relation->update(['class' => 'App\Models\User']));
+
+        dump("Changed all relations with class of 'App\User\ to 'App\Models\User.");
     }
 }

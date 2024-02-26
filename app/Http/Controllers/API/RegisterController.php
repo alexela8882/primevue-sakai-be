@@ -78,6 +78,8 @@ class RegisterController extends BaseController
         return redirect()->route('saml.login', ['uuid' => config('saml2.uuid')]);
     }
 
+    // temp
+
     public function passwordLessLogin(Request $request)
     {
         $data = [
