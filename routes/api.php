@@ -2,9 +2,12 @@
 
 use App\Http\Controllers\API\CountryController;
 use App\Http\Controllers\API\RegisterController;
+use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\Core\FieldController;
 use App\Http\Controllers\Core\ModuleController;
 use App\Http\Controllers\Core\PanelController;
+use App\Http\Controllers\Core\PicklistController;
+use App\Http\Controllers\Core\ViewFilterController;
 use App\Http\Controllers\Customer\AccountController;
 use App\Http\Controllers\Customer\LeadController;
 use App\Http\Controllers\Customer\SalesOpportunityController;
@@ -29,7 +32,7 @@ Route::get('logout', [RegisterController::class, 'logout'])->middleware(['web'])
 
 Route::middleware('auth:api')->group(function () {
     Route::apiResource('accounts', AccountController::class);
-    
+
     Route::apiResource('countries', CountryController::class)->only('index');
 
     Route::get('/getModuleFields', [FieldController::class, 'getModuleFields']);
@@ -43,6 +46,12 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('sales/opportunities', SalesOpportunityController::class);
 
     Route::get('/getModulePanels', [PanelController::class, 'getModulePanels']);
+
+    Route::post('/picklist', [PicklistController::class, 'index']);
+
+    Route::get('/user', [UserController::class, 'getUser']);
+
+    Route::apiResource('viewFilters', ViewFilterController::class);
 });
 
 // Route::controller(UserController::class)
