@@ -3,14 +3,11 @@
 namespace App\Models\Customer;
 
 use App\Models\Core\Country;
-use App\User;
-use Illuminate\Database\Eloquent\Model;
-use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use App\Models\Model\Base;
+use App\Models\User;
 
-class SalesQuote extends Model
+class SalesQuote extends Base
 {
-    use SoftDeletes;
-
     protected $date = ['deleted_at'];
 
     protected $entity = 'SalesQuote';

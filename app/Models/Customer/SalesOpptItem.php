@@ -4,10 +4,10 @@ namespace App\Models\Customer;
 
 use App\Models\Company\Branch;
 use App\Models\Core\Currency;
+use App\Models\Model\Base;
 use App\Models\Product\Product;
-use Illuminate\Database\Eloquent\Model;
 
-class SalesOpptItem extends Model
+class SalesOpptItem extends Base
 {
     protected $collection = 'sales_oppt_items';
 

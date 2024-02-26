@@ -8,11 +8,6 @@ class Picklist extends Base
 {
     protected $connection = 'mongodb';
 
-    public function listItems()
-    {
-        return $this->embedsMany(ListItem::class, 'items');
-    }
-
     protected $collection = 'picklists';
 
     protected $fillable = [
