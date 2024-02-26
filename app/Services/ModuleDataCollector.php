@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Builders\DynamicQueryBuilder;
 use App\Http\Resources\Core\FieldResource;
+use App\Http\Resources\Core\ModelResource;
 use App\Http\Resources\Core\PanelResource;
 use App\Http\Resources\Core\ViewFilterResource;
 use App\Http\Resources\ModelCollection;
@@ -12,6 +13,7 @@ use App\Models\Core\Entity;
 use App\Models\Core\Field;
 use App\Models\Core\Panel;
 use App\Models\Core\ViewFilter;
+use App\Models\Model\Base;
 use App\Models\Module\Module;
 use App\Models\User;
 use Exception;
@@ -163,7 +165,7 @@ class ModuleDataCollector
         return $this->currentViewFilterFields->map(fn (Field $field) => $field->name)->toArray();
     }
 
-    public function getModuleDataCollection(Request $request)
+    public function getIndex(Request $request)
     {
         $this->setFields();
 
@@ -215,7 +217,7 @@ class ModuleDataCollector
             ]);
     }
 
-    public function saveModel(Request $request, bool $mainOnly = false)
+    public function postStore(Request $request, bool $mainOnly = false)
     {
         [$data, $lookupData, $formulaFields] = $this->resolveRequestForSaving($request, null, false, true);
 
@@ -227,6 +229,31 @@ class ModuleDataCollector
 
         $model = $model->create($data);
 
+    }
+
+    public function getShow(Base $base, Request $request, bool $isItemOnly = false, bool $isConnectedOnly = false, array $additional = [])
+    {
+        $data = [];
+        $deepMutables = [];
+        $connectedEntitiesList = collect();
+
+        $this->setFields();
+
+        if ($isItemOnly === false && $request->exists('itemonly')) {
+            $isItemOnly = true;
+        }
+
+        if ($isItemOnly === false) {
+
+        }
+
+        if ($request->exists('connectedonly') || $request->exists('cname') || $isConnectedOnly === true) {
+            $data = ['connected' => $connectedEntitiesList];
+        } else {
+            ModelResource::information($this->fields, $this->pickLists);
+
+            return new ModelResource($base);
+        }
     }
 
     public function resolveRequestForSaving(Request $request, mixed $model = null, bool $quickAdd = false, bool $isCreate = false)
