@@ -4,9 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Http\Resources\Core\ModelResource;
 use App\Models\Core\Relation;
-use App\Models\Customer\Lead;
 use App\Models\User;
 use App\Models\UserConfig;
 use Illuminate\Database\Seeder;

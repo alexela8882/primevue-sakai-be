@@ -3,6 +3,7 @@
 namespace App\Models\Core;
 
 use App\Models\Model\Base;
+use Illuminate\Support\Facades\App;
 
 class Entity extends Base
 {
@@ -21,5 +22,10 @@ class Entity extends Base
     public function mainModule()
     {
         return $this->hasOne(Module::class, 'mainEntity', '_id');
+    }
+
+    public function getModel()
+    {
+        return App::make($this->attributes['model_class']);
     }
 }

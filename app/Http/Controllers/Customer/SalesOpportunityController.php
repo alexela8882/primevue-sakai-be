@@ -25,8 +25,9 @@ class SalesOpportunityController extends Controller
 
     public function __construct(private ModuleDataCollector $moduleDataCollector)
     {
-        $this->mdc = $moduleDataCollector->setUser()->setModule('salesopportunities');
+
         $this->user = Auth::guard('api')->user() ?? User::find('5bf45d4a678f714eac558ba3');
+        $this->mdc = $moduleDataCollector->setUser()->setModule('salesopportunities');
     }
 
     public function index(Request $request)
@@ -38,13 +39,12 @@ class SalesOpportunityController extends Controller
         });
     }
 
-    // public function show($id){
-    //     return $this->respondFriendly(function() use ($id) {
-    //         $data = $this->opportunity->find($id);
-
-    //         return \DataCollector::getConnectedCollectionData($id);
-    //     });
-    // }
+    public function show($salesopportunity)
+    {
+        return $this->respondFriendly(function () use ($salesopportunity) {
+            return \DataCollector::getConnectedCollectionData($salesopportunity);
+        });
+    }
 
     // public function store(Request $request) {
 

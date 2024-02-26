@@ -2,9 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Core\Country;
 use App\Models\Model\Base;
-use App\Services\FieldService;
 use App\Services\ModelService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -56,5 +54,4 @@ class ModelCollection extends ResourceCollection
 
         return $default;
     }
-
 }

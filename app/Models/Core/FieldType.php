@@ -12,4 +12,9 @@ class FieldType extends Base
     {
         return $this->hasMany(Field::class, 'field_type_id', '_id');
     }
+
+    public function formulaReturnTypes()
+    {
+        return $this->belongsToMany('App\Models\Core\FieldType', null, 'return_type_ids', 'formula_type_id');
+    }
 }

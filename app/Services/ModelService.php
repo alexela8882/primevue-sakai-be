@@ -19,9 +19,9 @@ class ModelService
             $value = null;
 
             if ($field->fieldType->name == 'lookupModel') {
-                if ($field->name == 'branch_id' && $base->{$field->name} == 'esco-global' && !$fromReport) {
+                if ($field->name == 'branch_id' && $base->{$field->name} == 'esco-global' && ! $fromReport) {
                     $value = 'esco-global';
-                } elseif ($field->name == 'lastSchedule' && !$fromReport) {
+                } elseif ($field->name == 'lastSchedule' && ! $fromReport) {
                     $schedID = $base->lastSchedule ?? null;
                     $details = [];
 
@@ -60,7 +60,7 @@ class ModelService
                     $value = $items;
                 }
 
-                if ($field->relation->entity->name == 'AddressBook' && !$fromReport) {
+                if ($field->relation->entity->name == 'AddressBook' && ! $fromReport) {
                     if (is_array($value) && array_key_exists('country_id', $value) && $value['country_id']) {
                         $value['country_id'] = ['_id' => $value['country_id'], 'name' => Country::find($value['country_id'])->name ?? null];
                     }
@@ -101,7 +101,7 @@ class ModelService
             $data[$field->name] = $value;
         }
 
-        if (!$displayFieldNameOnly && !empty($appends)) {
+        if (! $displayFieldNameOnly && ! empty($appends)) {
             foreach ($appends as $append) {
                 $data[$append] = $base->{$append};
             }
@@ -109,7 +109,7 @@ class ModelService
 
         return $data;
     }
-    
+
     protected function getItemReturnables($model, $field, $returnableFields)
     {
         return $model
