@@ -100,12 +100,12 @@ Route::controller(BranchController::class)
         Route::put('{id}/update', 'update');
         Route::delete('{id}/delete', 'delete');
     });
-    Route::apiResource('sales/opportunities', SalesOpportunityController::class);
+    Route::apiResource('modules/salesopportunities', SalesOpportunityController::class);
 
     Route::get('/getModulePanels', [PanelController::class, 'getModulePanels']);
 
     Route::post('/picklist', [PicklistController::class, 'index']);
-
+git
     Route::get('/user', [UserController::class, 'getUser']);
 
     Route::apiResource('viewFilters', ViewFilterController::class);
