@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f97f39251693ad7bf70be765f1b41544",
+    "content-hash": "8ffade567af8ee153d4763ae1024e1a0",
     "packages": [
         {
             "name": "24slides/laravel-saml2",
@@ -2978,22 +2978,22 @@
         },
         {
             "name": "mongodb/laravel-mongodb",
-            "version": "4.0.0-rc1",
+            "version": "4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mongodb/laravel-mongodb.git",
-                "reference": "c112ef77d180b9c941d9c7905610d1af555da334"
+                "reference": "b1ab9dcf5b8dcbbbdcd6fb5d019e2493f1f8e2f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mongodb/laravel-mongodb/zipball/c112ef77d180b9c941d9c7905610d1af555da334",
-                "reference": "c112ef77d180b9c941d9c7905610d1af555da334",
+                "url": "https://api.github.com/repos/mongodb/laravel-mongodb/zipball/b1ab9dcf5b8dcbbbdcd6fb5d019e2493f1f8e2f1",
+                "reference": "b1ab9dcf5b8dcbbbdcd6fb5d019e2493f1f8e2f1",
                 "shasum": ""
             },
             "require": {
                 "ext-mongodb": "^1.15",
                 "illuminate/container": "^10.0",
-                "illuminate/database": "^10.0",
+                "illuminate/database": "^10.30",
                 "illuminate/events": "^10.0",
                 "illuminate/support": "^10.0",
                 "mongodb/mongodb": "^1.15",
@@ -3006,13 +3006,12 @@
                 "doctrine/coding-standard": "12.0.x-dev",
                 "mockery/mockery": "^1.4.4",
                 "orchestra/testbench": "^8.0",
-                "phpunit/phpunit": "^10.3"
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^10.3",
+                "spatie/laravel-query-builder": "^5.6"
             },
             "type": "library",
             "extra": {
-                "branch-alias": {
-                    "dev-master": "4.0.x-dev"
-                },
                 "laravel": {
                     "providers": [
                         "MongoDB\\Laravel\\MongoDBServiceProvider",
@@ -3064,9 +3063,9 @@
             "support": {
                 "issues": "https://www.mongodb.com/support",
                 "security": "https://www.mongodb.com/security",
-                "source": "https://github.com/mongodb/laravel-mongodb/tree/4.0.0-rc1"
+                "source": "https://github.com/mongodb/laravel-mongodb/tree/4.1.2"
             },
-            "time": "2023-09-13T08:43:07+00:00"
+            "time": "2024-02-22T13:10:42+00:00"
         },
         {
             "name": "mongodb/mongodb",
@@ -8592,16 +8591,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.5.10",
+            "version": "10.5.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "50b8e314b6d0dd06521dc31d1abffa73f25f850c"
+                "reference": "0d968f6323deb3dbfeba5bfd4929b9415eb7a9a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/50b8e314b6d0dd06521dc31d1abffa73f25f850c",
-                "reference": "50b8e314b6d0dd06521dc31d1abffa73f25f850c",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0d968f6323deb3dbfeba5bfd4929b9415eb7a9a4",
+                "reference": "0d968f6323deb3dbfeba5bfd4929b9415eb7a9a4",
                 "shasum": ""
             },
             "require": {
@@ -8673,7 +8672,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.10"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.11"
             },
             "funding": [
                 {
@@ -8689,7 +8688,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-04T09:07:51+00:00"
+            "time": "2024-02-25T14:05:00+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -10036,9 +10035,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "mongodb/laravel-mongodb": 5
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

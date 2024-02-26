@@ -7,6 +7,7 @@ use App\Http\Resources\Core\FieldResource;
 use App\Http\Resources\Core\PanelResource;
 use App\Http\Resources\Core\ViewFilterResource;
 use App\Http\Resources\ModelCollection;
+use App\Models\Company\Branch;
 use App\Models\Core\Entity;
 use App\Models\Core\Field;
 use App\Models\Core\Panel;
@@ -37,7 +38,7 @@ class ModuleDataCollector
 
     private $viewFilters;
 
-    public function __construct(private DynamicQueryBuilder $dataQueryBuilder)
+    public function __construct(private DynamicQueryBuilder $dataQueryBuilder, private FieldService $fieldService)
     {
         //
     }
@@ -162,7 +163,7 @@ class ModuleDataCollector
         return $this->currentViewFilterFields->map(fn (Field $field) => $field->name)->toArray();
     }
 
-    public function data(Request $request)
+    public function getModuleDataCollection(Request $request)
     {
         $this->setFields();
 
@@ -212,5 +213,155 @@ class ModuleDataCollector
                 'panels' => PanelResource::collection($this->panels),
                 'viewFilters' => ViewFilterResource::collection($this->viewFilters),
             ]);
+    }
+
+    public function saveModel(Request $request, bool $mainOnly = false)
+    {
+        [$data, $lookupData, $formulaFields] = $this->resolveRequestForSaving($request, null, false, true);
+
+        if (! $request->missing('uid')) {
+            $data['uid'] = $request->input('uid');
+        }
+
+        $model = App::make($this->module->entity->model_class);
+
+        $model = $model->create($data);
+
+    }
+
+    public function resolveRequestForSaving(Request $request, mixed $model = null, bool $quickAdd = false, bool $isCreate = false)
+    {
+        $data = [];
+        $lookupData = [];
+        $formulaFields = [];
+
+        $this->setFields();
+
+        if ($quickAdd) {
+            $fields = $this->fields->filter(fn (Field $field) => $field->quick === true || $field->rules->whereIn('name', ['required', 'required_if', 'required_with', 'required_without', 'required_unless', 'owner_id'])->isNotEmpty());
+        } else {
+            $fields = $this->fields;
+        }
+
+        if ($quickAdd === false && $isCreate === false) {
+            if ($this->user instanceof User) {
+                $data['updated_by'] = $this->user->_id;
+            }
+        }
+
+        foreach ($fields as $field) {
+            $input = $request->input($field->name);
+
+            if (
+                $request->exists($field->name) === false &&
+                $field->fieldType->name != 'autonumber' &&
+                $field->fieldType->name != 'formula' ||
+                in_array($field->name, ['created_at', 'created_by', 'updated_at', 'updated_by', 'deleted_at', 'deleted_by'])
+            ) {
+                continue;
+            } elseif ($field->fieldType->name === 'autonumber' && $isCreate === false) {
+                continue;
+            }
+
+            if ($field->fieldType->name === 'lookupModel') {
+                $returnedResult = $this->fieldService->resolveExecuteLookupField($request, $field, null);
+
+                if ($returnedResult === false) {
+                    continue;
+                } else {
+                    $lookupData[] = $returnedResult;
+
+                    continue;
+                }
+            } elseif ($field->fieldType->name === 'formula') {
+                if ($isCreate && $field->hasRUS) {
+                    continue;
+                }
+
+                $formulaFields[] = $field;
+
+                continue;
+            }
+
+            if ($this->fieldService->hasMultipleValues($field) || $field->fieldType->name === 'list' || $field->fieldType->name === 'chipbox') {
+                $data[$field->name] = [$input];
+            } elseif ($field->fieldType->name === 'autonumber' && $isCreate === true) {
+                // TO BE CLEANED LATER
+                if ($field->uniqueName == 'salesquote_quote_no') {
+                    $branch_id = $request->input('branch_id');
+                    $countryCode = Branch::find($branch_id);
+                    $countryCode = $countryCode->quote_no_prefix ?? false ? $countryCode->quote_no_prefix : $countryCode->country->alpha2Code;
+                    $s = $this->module->main->getModel()->where('quoteNo', 'like', $countryCode.'-'.date('y').'%')->count();
+                    do {
+                        $s += 1;
+                        $code = $countryCode.'-'.date('y').sprintf('%05s', $s);
+                        $check = $this->module->main->getModel()->where('quoteNo', $code)->count();
+                    } while ($check);
+
+                    $data[$field->name] = $code;
+                } elseif ($field->uniqueName === 'defectreport_drf_code') {
+                    $count = $field->entity->getModel()->count($field->name, 'like', date('Y').'-');
+                    $data[$field->name] = date('Y').'-'.sprintf('%05s', $count + 1);
+                } elseif ($field->uniqueName === 'defectreport_drf_no') {
+                    $count = $field->entity->getModel()->count($field->name, 'like', date('y').'-');
+                    $data[$field->name] = date('y').'-'.Carbon::now()->weekOfYear.'-'.sprintf('%05s', $count + 1);
+                } elseif ($field->uniqueName === 'rpworkorder_case_i_d') {
+                    $previousRPOrder = $field->entity->getModel()->withTrashed()->where('defect_report_id', $request->defect_report_id)->first();
+
+                    if (! empty($previousRPOrder)) {
+                        $data[$field->name] = $previousRPOrder->caseID;
+                    } else {
+                        $count = $field->entity->getModel()->withTrashed()->select('caseID')->distinct()->get()->count();
+                        $data[$field->name] = date('y').'-'.sprintf('%04s', $count + 1);
+                    }
+                } elseif ($field->uniqueName === 'rpworkorder_rp_no') {
+                    $items = $this->pickListRepository->getModel()->whereIn('name', ['rp_type', 'rp_form_types'])->get()->map(function ($list) {
+                        return $list->listItems->map(function ($item) use ($list) {
+                            $explodedValue = explode(' ', $item->value);
+                            $item->value = $list->name == 'rp_type'
+                                ? $explodedValue[0][0]
+                                : $explodedValue[0][0].$explodedValue[1][0];
+
+                            return $item;
+                        });
+                    })->collapse()->pluck('value', '_id')->toArray();
+
+                    $count = $field->entity->getModel()->withTrashed()->where('rpNo', 'like', '%'.$items[$request->form_type_id].'-%')->count();
+
+                    if ($items[$request->form_type_id] == 'RP') {
+                        $count = $count - 116;
+                        $count = $count + 13361;
+                    } elseif ($items[$request->form_type_id] == 'SP') {
+                        $count = $count - 19;
+                        $count = $count + 236;
+                    } elseif ($items[$request->form_type_id] == 'NP') {
+                        $count = $count - 3;
+                        $count = $count + 5;
+                    }
+
+                    $data[$field->name] = $items[$request->form_type_id].'-'.sprintf('%05s', $count).'-'.$items[$request->rp_type_id];
+                } elseif ($field->uniqueName === 'breakdownlog_ref_no') {
+                    $branch_id = $request->get('branch_id');
+                    $countryCode = Branch::find($branch_id);
+                    $s = $this->module->main->getModel()->where('branch_id', $branch_id)->where($field->name, 'like', date('Y').date('m').'%')->count();
+                    do {
+                        $s += 1;
+                        $code = date('Y').date('m').'-'.sprintf('%03s', $s);
+                        $check = $this->module->main->getModel()->where('branch_id', $branch_id)->where($field->name, $code)->count();
+                    } while ($check);
+
+                    $data[$field->name] = $code;
+                } else {
+                    $s = $this->module->main->getModel()->all()->count();
+                    $data[$field->name] = date('Y').date('m').'-'.sprintf('%06s', $s);
+                }
+            } else {
+                $data[$field->name] = is_array($input) && count($input)
+                    ? $input[0]
+                    : $input;
+            }
+        }
+
+        return [$data, $lookupData, $formulaFields];
     }
 }

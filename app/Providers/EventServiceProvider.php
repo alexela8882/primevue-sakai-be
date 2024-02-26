@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Model\Base;
 use App\Models\User;
+use App\Observers\BaseObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -26,6 +28,8 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Base::observe(BaseObserver::class);
+
         // listen to saml2 login event
         Event::listen(\Slides\Saml2\Events\SignedIn::class, function (\Slides\Saml2\Events\SignedIn $event) {
             $messageId = $event->getAuth()->getLastMessageId();

@@ -2,6 +2,7 @@
 
 namespace App\Models\Model;
 
+use App\Observers\BaseObserver;
 use MongoDB\Laravel\Eloquent\Model;
 use MongoDB\Laravel\Eloquent\SoftDeletes;
 
@@ -11,13 +12,18 @@ class Base extends Model
 
     protected $connection = 'mongodb';
 
-    protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at',];
 
     protected static $relationship_method;
 
     protected static $relationship_params = [];
 
     protected static $loadedRelationClass = [];
+
+    protected static function booted()
+    {
+        static::observe(BaseObserver::class);
+    }
 
     public function dynamicRelationship($method, $class, $foreignKey = null, $otherKey = null, $relationName = null, $fetchQuery = false)
     {

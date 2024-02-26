@@ -15,6 +15,11 @@ class LeadController extends Controller
 
     public function index(Request $request)
     {
-        return $this->moduleDataCollector->data($request);
+        return $this->moduleDataCollector->getModuleDataCollection($request);
+    }
+
+    public function store(Request $request)
+    {
+        $lead = $this->moduleDataCollector->saveModel($request);
     }
 }
