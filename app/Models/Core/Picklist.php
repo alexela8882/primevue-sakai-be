@@ -18,6 +18,11 @@ class Picklist extends Base
 
     protected $hidden = ['listItems'];
 
+    public function listItems()
+    {
+        return $this->embedsMany(ListItem::class, 'items');
+    }
+
     public function getItemsAttribute()
     {
         return $this->listItems;
