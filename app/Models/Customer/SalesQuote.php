@@ -4,7 +4,7 @@ namespace App\Models\Customer;
 
 use App\Models\Core\Country;
 use App\Models\Model\Base;
-use App\Models\User;
+use App\User;
 
 class SalesQuote extends Base
 {
