@@ -14,6 +14,8 @@ class Base extends Model
 
     protected $dates = ['deleted_at',];
 
+    protected $guarded = ['_id', 'oid'];
+
     protected static $relationship_method;
 
     protected static $relationship_params = [];
