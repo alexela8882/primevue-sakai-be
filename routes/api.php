@@ -31,7 +31,7 @@ Route::get('passwordless-login', [RegisterController::class, 'passwordLessLogin'
 Route::get('logout', [RegisterController::class, 'logout'])->middleware(['web']);
 
 Route::middleware('auth:api')->group(function () {
-    Route::apiResource('accounts', AccountController::class);
+    Route::apiResource('modules/accounts', AccountController::class);
 
     Route::apiResource('countries', CountryController::class)->only('index');
 
@@ -39,16 +39,16 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/getMenuNavigation', [FolderController::class, 'getMenuNavigation']);
 
-    Route::apiResource('leads', LeadController::class);
+    Route::apiResource('modules/leads', LeadController::class);
 
     Route::apiResource('modules', ModuleController::class);
 
-    Route::apiResource('sales/opportunities', SalesOpportunityController::class);
+    Route::apiResource('modules/salesopportunities', SalesOpportunityController::class);
 
     Route::get('/getModulePanels', [PanelController::class, 'getModulePanels']);
 
     Route::post('/picklist', [PicklistController::class, 'index']);
-
+git
     Route::get('/user', [UserController::class, 'getUser']);
 
     Route::apiResource('viewFilters', ViewFilterController::class);
