@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\App;
 
 class FieldService
 {
-    protected $lookupAddable = [
+    protected static $lookupAddable = [
         'extraInfo',
         'level',
         'filterSourceField',
@@ -21,7 +21,7 @@ class FieldService
         ],
     ];
 
-    protected $selectionRules = [
+    protected static $selectionRules = [
         'ms_dropdown',
         'ms_list_view',
         'checkbox_inline',
