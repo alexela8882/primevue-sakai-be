@@ -3,27 +3,16 @@
 use App\Http\Controllers\API\BranchController;
 use App\Http\Controllers\API\CountryController;
 use App\Http\Controllers\API\CustomSaml2Controller;
+use App\Http\Controllers\API\PicklistController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\UserConfigController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\ViewFilterController;
 use App\Http\Controllers\Core\ModuleController;
 use App\Http\Controllers\Customer\LeadController;
 use App\Http\Controllers\Customer\SalesOpportunityController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-<<<<<<< HEAD
-use App\Http\Controllers\API\RegisterController;
-use App\Http\Controllers\API\UserController;
-use App\Http\Controllers\API\UserConfigController;
-use App\Http\Controllers\API\CountryController;
-use App\Http\Controllers\API\BranchController;
-use App\Http\Controllers\API\CustomSaml2Controller;
-use App\Http\Controllers\API\ModuleController;
-use App\Http\Controllers\API\PicklistController;
-use App\Http\Controllers\API\ViewFilterController;
-use App\Http\Controllers\Customer\LeadController;
-=======
->>>>>>> 87617fb (Changes)
 
 /*
 |--------------------------------------------------------------------------
@@ -55,20 +44,11 @@ Route::controller(UserController::class)
         Route::delete('{id}/delete', 'delete');
     });
 
-<<<<<<< HEAD
-    
-// Route::controller(LeadController::class)
-//     ->middleware('auth:api')
-//     ->group(function() {
-//         Route::apiResource('leads', LeadController::class);
-//     });
-=======
 Route::controller(ModuleController::class)
     ->middleware('auth:api')
     ->group(function () {
         Route::resource('modules', ModuleController::class)->only('index');
     });
->>>>>>> 87617fb (Changes)
 
 Route::controller(LeadController::class)
     ->middleware('auth:api')

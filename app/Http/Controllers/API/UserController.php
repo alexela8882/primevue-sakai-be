@@ -3,12 +3,6 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-<<<<<<< HEAD
-use App\Http\Resources\User\UserResource;
-use Illuminate\Http\Request;
-
-=======
->>>>>>> 87617fb (Changes)
 use App\Models\User;
 use Illuminate\Http\Request;
 use Validator;
