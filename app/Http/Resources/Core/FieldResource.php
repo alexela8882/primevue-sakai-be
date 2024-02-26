@@ -6,7 +6,7 @@ use App\Http\Resources\ModelCollection;
 use App\Models\Core\Entity;
 use App\Models\Core\Field;
 use App\Models\Core\Rule;
-use App\Models\Product\Category;
+use App\Models\Product\ProductCategory;
 use App\Services\FieldService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -77,7 +77,7 @@ class FieldResource extends JsonResource
         if (empty($this->category_ids)) {
             $data['category_ids'] = [];
         } else {
-            $productCategories = Category::query()
+            $productCategories = ProductCategory::query()
                 ->whereIn('_id', $this->category_ids)
                 ->select([
                     'name',
