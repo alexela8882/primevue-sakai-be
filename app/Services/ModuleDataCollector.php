@@ -32,7 +32,7 @@ class ModuleDataCollector
 
     private Collection $currentViewFilterFields;
 
-    private Collection $panels;
+    public Collection $panels;
 
     private $currentViewFilter;
 

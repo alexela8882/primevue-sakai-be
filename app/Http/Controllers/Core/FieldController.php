@@ -22,7 +22,7 @@ class FieldController extends Controller
 
         $pickLists = $this->moduleDataCollector->pickLists;
 
-        FieldResource::information($fields, $pickLists, null);
+        FieldResource::information($fields, $pickLists);
 
         return FieldResource::collection($fields);
     }

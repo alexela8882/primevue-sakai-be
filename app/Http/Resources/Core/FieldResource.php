@@ -18,19 +18,15 @@ class FieldResource extends JsonResource
 
     protected static $pickLists;
 
-    public static function information($fields, $pickLists, $wrap = 'data')
+    public static function information($fields, $pickLists)
     {
         static::$fields = $fields;
 
         static::$pickLists = $pickLists;
-
-        static::$wrap = $wrap;
     }
 
     public function toArray(Request $request): array
     {
-        parent::$wrap = $this->wrap;
-
         $data = parent::toArray($request);
 
         $fieldService = new FieldService;

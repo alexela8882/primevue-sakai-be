@@ -4,6 +4,7 @@ use App\Http\Controllers\API\CountryController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\Core\FieldController;
 use App\Http\Controllers\Core\ModuleController;
+use App\Http\Controllers\Core\PanelController;
 use App\Http\Controllers\Customer\AccountController;
 use App\Http\Controllers\Customer\LeadController;
 use App\Http\Controllers\Customer\SalesOpportunityController;
@@ -40,6 +41,8 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('modules', ModuleController::class);
 
     Route::apiResource('sales/opportunities', SalesOpportunityController::class);
+
+    Route::get('/getModulePanels', [PanelController::class, 'getModulePanels']);
 });
 
 // Route::controller(UserController::class)
