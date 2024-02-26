@@ -7,7 +7,7 @@ use App\Services\ModuleService;
 
 class ModuleController extends Controller
 {
-    public function __construct(private ModuleService $moduleService)
+    public function __construct()
     {
         //
     }
