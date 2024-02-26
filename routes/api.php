@@ -4,6 +4,7 @@ use App\Http\Controllers\API\CountryController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\Core\FieldController;
 use App\Http\Controllers\Core\ModuleController;
+use App\Http\Controllers\Customer\AccountController;
 use App\Http\Controllers\Customer\LeadController;
 use App\Http\Controllers\Customer\SalesOpportunityController;
 use App\Http\Controllers\Folder\FolderController;
@@ -26,6 +27,8 @@ Route::get('passwordless-login', [RegisterController::class, 'passwordLessLogin'
 Route::get('logout', [RegisterController::class, 'logout'])->middleware(['web']);
 
 Route::middleware('auth:api')->group(function () {
+    Route::apiResource('accounts', AccountController::class);
+    
     Route::apiResource('countries', CountryController::class)->only('index');
 
     Route::get('/getModuleFields', [FieldController::class, 'getModuleFields']);
