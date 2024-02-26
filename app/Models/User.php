@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Company\Branch;
 use App\Models\Core\Permission;
 // use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Services\AccessService;
