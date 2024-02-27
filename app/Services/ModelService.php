@@ -82,19 +82,24 @@ class ModelService
                 }
             } elseif ($field->fieldType->name == 'boolean') {
                 $value = $base->{$field->name} ?? false;
-            } elseif ($field->rusType) {
-                $value = $base->{$field->name} ?? null;
+            } 
 
-                if ($value === null) {
-                    $value = \Rus::resolve($base, $field); // TO BE RESOLVED BY CHARISSE
-                }
-            } elseif ($field->formulaType) {
-                $value = $base->{$field->name} ?? null;
+            // TO BE RESOLVED BY CHARISSE
+            // elseif ($field->rusType) {
+            //     $value = $base->{$field->name} ?? null;
 
-                if ($value === null) {
-                    $value = FormulaParser::parseField($field, $base, true); // TO BE RESOLVED BY CHARISSE
-                }
-            } else {
+            //     if ($value === null) {
+            //         $value = \Rus::resolve($base, $field); // TO BE RESOLVED BY CHARISSE
+            //     }
+            // } elseif ($field->formulaType) {
+            //     $value = $base->{$field->name} ?? null;
+
+            //     if ($value === null) {
+            //         $value = FormulaParser::parseField($field, $base, true); // TO BE RESOLVED BY CHARISSE
+            //     }
+            // } 
+            
+            else {
                 $value = $base->{$field->name};
             }
 
