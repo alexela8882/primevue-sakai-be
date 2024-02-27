@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\CountryController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\Company\CampaignController;
 use App\Http\Controllers\Core\FieldController;
 use App\Http\Controllers\Core\ModuleController;
 use App\Http\Controllers\Core\PanelController;
@@ -52,6 +53,8 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/user', [UserController::class, 'getUser']);
 
     Route::apiResource('viewFilters', ViewFilterController::class);
+
+	Route::apiResource('campaigns', CampaignController::class);
 });
 
 // Route::controller(UserController::class)
