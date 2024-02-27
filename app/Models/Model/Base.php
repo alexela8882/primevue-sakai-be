@@ -12,7 +12,7 @@ class Base extends Model
 
     protected $connection = 'mongodb';
 
-    protected $dates = ['deleted_at',];
+    protected $dates = ['deleted_at'];
 
     protected $guarded = ['_id', 'oid'];
 
