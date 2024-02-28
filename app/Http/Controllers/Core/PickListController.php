@@ -20,20 +20,11 @@ class PickListController extends Controller
         $this->entity = $entity;
     }
 
-    public function getList($listName)
-    {
-        return $this->respondFriendly(function () use ($listName) {
-            return $this->respond($this->picklist->getList($listName, true, true));
-        });
-    }
-
     public function getLists(Request $request)
     {
-        return $this->respondFriendly(function () use ($request) {
-            $listName = $request->get('listName');
+		$listName = $request->get('listName');
 
-            return $this->picklist->getList($listName, true, true);
-        });
+		return $this->picklist->getList($listName, true, true);
     }
 
     public function index()

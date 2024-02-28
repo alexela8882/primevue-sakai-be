@@ -104,7 +104,7 @@ Route::controller(BranchController::class)
 
     Route::get('/getModulePanels', [PanelController::class, 'getModulePanels']);
 
-    Route::post('/picklist', [PicklistController::class, 'index']);
+    Route::post('/picklist', [PicklistController::class, 'getLists']);
 
     Route::get('/user', [UserController::class, 'getUser']);
 
