@@ -22,9 +22,9 @@ class PickListController extends Controller
 
     public function getLists(Request $request)
     {
-		$listName = $request->get('listName');
+        $listName = $request->get('listName');
 
-		return $this->picklist->getList($listName, true, true);
+        return $this->picklist->getList($listName, true, true);
     }
 
     public function index()

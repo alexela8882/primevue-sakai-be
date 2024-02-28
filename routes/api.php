@@ -70,36 +70,36 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResource('modules', ModuleController::class);
 
-Route::controller(SalesOpportunityController::class)
-    ->middleware('auth:api')
-    ->group(function () {
-        Route::apiResource('modules/salesopportunities', SalesOpportunityController::class);
-    });
+    Route::controller(SalesOpportunityController::class)
+        ->middleware('auth:api')
+        ->group(function () {
+            Route::apiResource('modules/salesopportunities', SalesOpportunityController::class);
+        });
 
-Route::controller(UserConfigController::class)
-    ->prefix('user-configs')
-    ->middleware('auth:api')
-    ->group(function () {
-        Route::get('get-app-theme', 'getAppTheme');
-        Route::post('change-app-theme', 'changeAppTheme');
-    });
+    Route::controller(UserConfigController::class)
+        ->prefix('user-configs')
+        ->middleware('auth:api')
+        ->group(function () {
+            Route::get('get-app-theme', 'getAppTheme');
+            Route::post('change-app-theme', 'changeAppTheme');
+        });
 
-Route::controller(CountryController::class)
-    ->prefix('countries')
-    ->middleware('auth:api')
-    ->group(function () {
-        Route::get('/', 'all');
-    });
+    Route::controller(CountryController::class)
+        ->prefix('countries')
+        ->middleware('auth:api')
+        ->group(function () {
+            Route::get('/', 'all');
+        });
 
-Route::controller(BranchController::class)
-    ->prefix('branches')
-    ->middleware('auth:api')
-    ->group(function () {
-        Route::get('/', 'all');
-        Route::post('/store', 'store');
-        Route::put('{id}/update', 'update');
-        Route::delete('{id}/delete', 'delete');
-    });
+    Route::controller(BranchController::class)
+        ->prefix('branches')
+        ->middleware('auth:api')
+        ->group(function () {
+            Route::get('/', 'all');
+            Route::post('/store', 'store');
+            Route::put('{id}/update', 'update');
+            Route::delete('{id}/delete', 'delete');
+        });
     Route::apiResource('modules/salesopportunities', SalesOpportunityController::class);
 
     Route::get('/getModulePanels', [PanelController::class, 'getModulePanels']);
@@ -110,7 +110,7 @@ Route::controller(BranchController::class)
 
     Route::apiResource('viewFilters', ViewFilterController::class);
 
-	Route::apiResource('campaigns', CampaignController::class);
+    Route::apiResource('campaigns', CampaignController::class);
 });
 
 // Route::controller(UserController::class)

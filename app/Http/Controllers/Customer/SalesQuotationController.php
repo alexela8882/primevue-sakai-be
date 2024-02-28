@@ -151,17 +151,18 @@ class SalesQuotationController extends Controller
     }
 
     public function destroy($id) //edit opptitem's quote_id
-    {return $this->respondFriendly(function () use ($id) {
-        $qt = $this->qt->find($id);
-        if ($qt) {
-            $this->qt->delete($id);
-            deleteRecent($id);
+    {
+        return $this->respondFriendly(function () use ($id) {
+            $qt = $this->qt->find($id);
+            if ($qt) {
+                $this->qt->delete($id);
+                deleteRecent($id);
 
-            return $this->respondSuccessful('Sales quotation successfully deleted.');
-        }
+                return $this->respondSuccessful('Sales quotation successfully deleted.');
+            }
 
-        return $this->respondUnprocessable('Invalid ID.');
-    });
+            return $this->respondUnprocessable('Invalid ID.');
+        });
     }
 
     public function checkQuoteStat($id, $main = false)
