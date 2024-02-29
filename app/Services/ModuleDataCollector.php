@@ -225,7 +225,7 @@ class ModuleDataCollector
             $this->pickLists,
         ))
             ->additional([
-                'fields' => FieldResource::customCollection($this->currentViewFilterFields),
+                'fields' => FieldResource::customCollection($this->fields),
                 'panels' => PanelResource::customCollection($this->panels),
                 'viewFilters' => ViewFilterResource::collection($this->viewFilters),
             ]);
