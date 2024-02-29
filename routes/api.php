@@ -44,12 +44,12 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/user', [UserController::class, 'getUser']);
 
     Route::apiResources([
-        'campaigns', CampaignController::class,
-        'countries', CountryController::class,
-        'modules', ModuleController::class,
-        'modules/accounts', AccountController::class,
-        'modules/leads', LeadController::class,
-        'modules/salesopportunities', SalesOpportunityController::class,
-        'viewFilters', ViewFilterController::class
+        'campaigns' =>  CampaignController::class,
+        'countries' =>  CountryController::class,
+        'modules' => ModuleController::class,
+        'modules/accounts' =>  AccountController::class,
+        'modules/leads' => LeadController::class,
+        'modules/salesopportunities' =>  SalesOpportunityController::class,
+        'viewFilters' => ViewFilterController::class
     ]);
 });
