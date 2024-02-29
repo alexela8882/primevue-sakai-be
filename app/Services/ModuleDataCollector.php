@@ -22,7 +22,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use App\Services\FieldService;
 use Illuminate\Support\Str;
 
 class ModuleDataCollector
@@ -134,10 +133,10 @@ class ModuleDataCollector
                 $viewFilters = $viewFilterQuery->get();
             }
 
-            if (!$this->currentViewFilter instanceof ViewFilter) {
+            if (! $this->currentViewFilter instanceof ViewFilter) {
                 $this->currentViewFilter = $viewFilters->firstWhere('isDefault', true);
 
-                if (!$this->currentViewFilter instanceof ViewFilter) {
+                if (! $this->currentViewFilter instanceof ViewFilter) {
                     $this->currentViewFilter = $viewFilters->first();
 
                     $this->currentViewFilter->update(['isDefault' => true]);
@@ -226,8 +225,8 @@ class ModuleDataCollector
             $this->pickLists,
         ))
             ->additional([
-                'fields' => FieldResource::collection($this->currentViewFilterFields),
-                'panels' => PanelResource::collection($this->panels),
+                'fields' => FieldResource::customCollection($this->currentViewFilterFields),
+                'panels' => PanelResource::customCollection($this->panels),
                 'viewFilters' => ViewFilterResource::collection($this->viewFilters),
             ]);
     }
@@ -382,28 +381,28 @@ class ModuleDataCollector
                     $branch_id = $request->input('branch_id');
                     $countryCode = Branch::find($branch_id);
                     $countryCode = $countryCode->quote_no_prefix ?? false ? $countryCode->quote_no_prefix : $countryCode->country->alpha2Code;
-                    $s = $this->module->main->getModel()->where('quoteNo', 'like', $countryCode . '-' . date('y') . '%')->count();
+                    $s = $this->module->main->getModel()->where('quoteNo', 'like', $countryCode.'-'.date('y').'%')->count();
                     do {
                         $s += 1;
-                        $code = $countryCode . '-' . date('y') . sprintf('%05s', $s);
+                        $code = $countryCode.'-'.date('y').sprintf('%05s', $s);
                         $check = $this->module->main->getModel()->where('quoteNo', $code)->count();
                     } while ($check);
 
                     $data[$field->name] = $code;
                 } elseif ($field->uniqueName === 'defectreport_drf_code') {
-                    $count = $field->entity->getModel()->count($field->name, 'like', date('Y') . '-');
-                    $data[$field->name] = date('Y') . '-' . sprintf('%05s', $count + 1);
+                    $count = $field->entity->getModel()->count($field->name, 'like', date('Y').'-');
+                    $data[$field->name] = date('Y').'-'.sprintf('%05s', $count + 1);
                 } elseif ($field->uniqueName === 'defectreport_drf_no') {
-                    $count = $field->entity->getModel()->count($field->name, 'like', date('y') . '-');
-                    $data[$field->name] = date('y') . '-' . Carbon::now()->weekOfYear . '-' . sprintf('%05s', $count + 1);
+                    $count = $field->entity->getModel()->count($field->name, 'like', date('y').'-');
+                    $data[$field->name] = date('y').'-'.Carbon::now()->weekOfYear.'-'.sprintf('%05s', $count + 1);
                 } elseif ($field->uniqueName === 'rpworkorder_case_i_d') {
                     $previousRPOrder = $field->entity->getModel()->withTrashed()->where('defect_report_id', $request->defect_report_id)->first();
 
-                    if (!empty($previousRPOrder)) {
+                    if (! empty($previousRPOrder)) {
                         $data[$field->name] = $previousRPOrder->caseID;
                     } else {
                         $count = $field->entity->getModel()->withTrashed()->select('caseID')->distinct()->get()->count();
-                        $data[$field->name] = date('y') . '-' . sprintf('%04s', $count + 1);
+                        $data[$field->name] = date('y').'-'.sprintf('%04s', $count + 1);
                     }
                 } elseif ($field->uniqueName === 'rpworkorder_rp_no') {
                     $items = $this->pickListRepository->getModel()->whereIn('name', ['rp_type', 'rp_form_types'])->get()->map(function ($list) {
@@ -411,13 +410,13 @@ class ModuleDataCollector
                             $explodedValue = explode(' ', $item->value);
                             $item->value = $list->name == 'rp_type'
                                 ? $explodedValue[0][0]
-                                : $explodedValue[0][0] . $explodedValue[1][0];
+                                : $explodedValue[0][0].$explodedValue[1][0];
 
                             return $item;
                         });
                     })->collapse()->pluck('value', '_id')->toArray();
 
-                    $count = $field->entity->getModel()->withTrashed()->where('rpNo', 'like', '%' . $items[$request->form_type_id] . '-%')->count();
+                    $count = $field->entity->getModel()->withTrashed()->where('rpNo', 'like', '%'.$items[$request->form_type_id].'-%')->count();
 
                     if ($items[$request->form_type_id] == 'RP') {
                         $count = $count - 116;
@@ -430,21 +429,21 @@ class ModuleDataCollector
                         $count = $count + 5;
                     }
 
-                    $data[$field->name] = $items[$request->form_type_id] . '-' . sprintf('%05s', $count) . '-' . $items[$request->rp_type_id];
+                    $data[$field->name] = $items[$request->form_type_id].'-'.sprintf('%05s', $count).'-'.$items[$request->rp_type_id];
                 } elseif ($field->uniqueName === 'breakdownlog_ref_no') {
                     $branch_id = $request->get('branch_id');
                     $countryCode = Branch::find($branch_id);
-                    $s = $this->module->main->getModel()->where('branch_id', $branch_id)->where($field->name, 'like', date('Y') . date('m') . '%')->count();
+                    $s = $this->module->main->getModel()->where('branch_id', $branch_id)->where($field->name, 'like', date('Y').date('m').'%')->count();
                     do {
                         $s += 1;
-                        $code = date('Y') . date('m') . '-' . sprintf('%03s', $s);
+                        $code = date('Y').date('m').'-'.sprintf('%03s', $s);
                         $check = $this->module->main->getModel()->where('branch_id', $branch_id)->where($field->name, $code)->count();
                     } while ($check);
 
                     $data[$field->name] = $code;
                 } else {
                     $s = $this->module->main->getModel()->all()->count();
-                    $data[$field->name] = date('Y') . date('m') . '-' . sprintf('%06s', $s);
+                    $data[$field->name] = date('Y').date('m').'-'.sprintf('%06s', $s);
                 }
             } else {
                 $data[$field->name] = is_array($input) && count($input)
@@ -485,7 +484,7 @@ class ModuleDataCollector
 
         return [
             'created' => $this->mutableData,
-            'updated' => $this->revertibleMutableData
+            'updated' => $this->revertibleMutableData,
         ];
     }
 }

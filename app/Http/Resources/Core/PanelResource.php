@@ -7,31 +7,34 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class PanelResource extends JsonResource
 {
-    private $params = [];
+    // FormController , QuickAddController
+    private static bool $isParams;
 
-    private $ids;
+    private static mixed $identifiers;
 
-    protected $mutable;
+    private static bool $isForm;
 
-    protected $form;
+    private static bool $isMutable;
 
-    public function __construct($resource, $params = false, $ids = null, $form = false)
+    public static function customCollection($resource, bool $isParams = false, mixed $identifiers = null, bool $isForm = false)
     {
-        parent::__construct($resource);
+        self::$isParams = $isParams;
 
-        $this->params = $params;
-        $this->ids = $ids;
-        $this->form = $form;
+        self::$identifiers = $identifiers;
+
+        self::$isForm = $isForm;
+
+        return parent::collection($resource);
     }
 
     public function toArray(Request $request): array
     {
-        if (strpos($this->controllerMethod, '@index') && ! $this->params) {
-            $this->mutable = false;
-        } elseif ($this->params) {
-            $this->mutable = true;
+        if (strpos($this->controllerMethod, '@index') && ! self::$isParams) {
+            self::$isMutable = false;
+        } elseif (self::$isParams) {
+            self::$isMutable = true;
         } else {
-            $this->mutable = $this->mutable;
+            self::$isMutable = $this->mutable;
         }
 
         $return = [
@@ -42,7 +45,7 @@ class PanelResource extends JsonResource
             'label' => $this->label,
             'tabKey' => $this->tabKey,
             'mutable' => $this->mutable,
-            'sections' => SectionResource::collection($this->sections),
+            'sections' => SectionResource::customCollection($this->sections, self::$isMutable, self::$identifiers),
             'highlight' => $this->highlight,
         ];
 
@@ -70,7 +73,7 @@ class PanelResource extends JsonResource
             $return['highlight'] = null;
         }
 
-        if ($this->mutable) {
+        if (self::$isMutable) {
             $return['selectionField'] = $this->selectionField;
             $return['mutableType'] = $this->mutableType;
             $return['tabName'] = $this->tabName;
@@ -90,8 +93,8 @@ class PanelResource extends JsonResource
             }
         }
 
-        if ($this->form) {
-            $this->mutable = true;
+        if (self::$isForm) {
+            self::$isMutable = true;
         }
 
         return $return;

@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Core\Entity;
 use App\Models\Core\EntityConnection;
-use Illuminate\Database\Eloquent\Collection;
 
 class EntityService
 {
@@ -52,7 +51,7 @@ class EntityService
             }
 
             foreach ($entities as $entity) {
-                
+
             }
         }
 

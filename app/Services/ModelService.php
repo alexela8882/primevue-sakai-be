@@ -82,7 +82,7 @@ class ModelService
                 }
             } elseif ($field->fieldType->name == 'boolean') {
                 $value = $base->{$field->name} ?? false;
-            } 
+            }
 
             // TO BE RESOLVED BY CHARISSE
             // elseif ($field->rusType) {
@@ -97,8 +97,8 @@ class ModelService
             //     if ($value === null) {
             //         $value = FormulaParser::parseField($field, $base, true); // TO BE RESOLVED BY CHARISSE
             //     }
-            // } 
-            
+            // }
+
             else {
                 $value = $base->{$field->name};
             }
