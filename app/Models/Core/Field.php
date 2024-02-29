@@ -27,7 +27,7 @@ class Field extends Base
 
     public function rules()
     {
-        return $this->hasMany(Rule::class);
+        return $this->embedsMany(Rule::class);
     }
 
     public function hasMultipleValues()

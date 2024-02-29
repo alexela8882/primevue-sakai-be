@@ -14,15 +14,13 @@ use Illuminate\Support\Facades\App;
 
 class FieldResource extends JsonResource
 {
-    protected static $fields;
+    private static $pickLists;
 
-    protected static $pickLists;
-
-    public static function information($fields, $pickLists)
+    public static function customCollection($resource, ?array $pickLists = null)
     {
-        static::$fields = $fields;
+        self::$pickLists = $pickLists;
 
-        static::$pickLists = $pickLists;
+        return parent::collection($resource);
     }
 
     public function toArray(Request $request): array
@@ -55,7 +53,7 @@ class FieldResource extends JsonResource
             $aggregateField = Entity::query()
                 ->where('name', $this->rusEntity)
                 ->with([
-                    'fields' => fn ($query) => $this->aggregateField,
+                    'fields' => fn ($query) => $query->where('name', $this->aggregateField),
                 ])
                 ->first()
                 ->fields
@@ -66,19 +64,14 @@ class FieldResource extends JsonResource
             }
         }
 
-        $data['rules'] = $this->rules->pluck(['name', 'value', 'event']);
-
-        // $data['testGroupName'] = $this->testGroupName ?? null; // WHAT IS THIS? @cha
+        $data['rules'] = $this->rules->map(fn (Rule $rule) => [$rule->name => $rule->value])->collapse();
 
         if (empty($this->category_ids)) {
             $data['category_ids'] = [];
         } else {
             $productCategories = ProductCategory::query()
                 ->whereIn('_id', $this->category_ids)
-                ->select([
-                    'name',
-                ])
-                ->get();
+                ->get(['name']);
 
             $data['category_ids'] = $productCategories;
         }

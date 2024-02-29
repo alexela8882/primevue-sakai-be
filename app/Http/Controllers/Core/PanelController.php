@@ -20,6 +20,6 @@ class PanelController extends Controller
 
         $panels = $this->moduleDataCollector->panels;
 
-        return PanelResource::collection($panels);
+        return PanelResource::customCollection($panels);
     }
 }
