@@ -31,17 +31,25 @@ class DatabaseSeeder extends Seeder
         //     'app_theme_scale' => '14',
         // ]);
 
-        $this->changeRelationUserModelClass();
+        $this->changeRelationUserModelClass(false);
         $this->renameConnectionIdToConnectionIdsInEntityCollections();
     }
 
-    public function changeRelationUserModelClass()
+    public function changeRelationUserModelClass($isForV2 = true)
     {
-        Relation::query()
-            ->where('class', 'App\User')
-            ->each(fn (Relation $relation) => $relation->updateQuietly(['class' => 'App\Models\User']));
+        if ($isForV2) {
+            Relation::query()
+                ->where('class', 'App\User')
+                ->each(fn (Relation $relation) => $relation->updateQuietly(['class' => 'App\Models\User']));
 
-        dump("Changed all relations with class of 'App\User\ to 'App\Models\User.");
+            dump("Changed all relations with class of 'App\User' to 'App\Models\User'.");
+        } else {
+            Relation::query()
+                ->where('class', 'App\Models\User')
+                ->each(fn (Relation $relation) => $relation->updateQuietly(['class' => 'App\User']));
+
+            dump("Changed all relations with class of 'App\Models\User' to 'App\User'.");
+        }
     }
 
     public function renameConnectionIdToConnectionIdsInEntityCollections()

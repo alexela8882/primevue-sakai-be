@@ -9,7 +9,7 @@ class PicklistService
 {
     protected $operators;
 
-    public function getList($listName, $throwErrorIfNotExisting = false, $itemsWithListNameAsKey = false, $checkIfActive = true)
+    public static function getList($listName, $throwErrorIfNotExisting = false, $itemsWithListNameAsKey = false, $checkIfActive = true)
     {
         if (is_array($listName)) {
             $picklists = Picklist::whereIn('name', $listName)->get();
@@ -27,6 +27,7 @@ class PicklistService
             }
 
             $items = [];
+
             foreach ($picklists as $picklist) {
                 if ($checkIfActive) {
                     $items[$picklist->name] = makeObject([
@@ -214,7 +215,7 @@ class PicklistService
         return $pickList;
     }
 
-    public function getPicklistsFromFields(Collection $fields)
+    public static function getPicklistsFromFields(Collection $fields)
     {
         $picklistNames = [];
 
@@ -225,7 +226,7 @@ class PicklistService
         }
 
         if ($picklistNames) {
-            $picklistArrays = $this->getList($picklistNames, true, true, false);
+            $picklistArrays = self::getList($picklistNames, true, true, false);
 
             $picklists = [];
 

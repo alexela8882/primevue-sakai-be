@@ -11,6 +11,7 @@ use App\Http\Resources\ModelCollection;
 use App\Models\Company\Branch;
 use App\Models\Core\Entity;
 use App\Models\Core\Field;
+use App\Models\Core\ListItem;
 use App\Models\Core\Panel;
 use App\Models\Core\Picklist;
 use App\Models\Core\ViewFilter;
@@ -19,6 +20,7 @@ use App\Models\Model\Base;
 use App\Models\Module\Module;
 use App\Models\User;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -102,7 +104,7 @@ class ModuleDataCollector
         if ($entity instanceof Entity) {
             $this->fields = $entity->fields;
 
-            $this->pickLists = (new PicklistService)->getPicklistsFromFields($this->fields);
+            $this->pickLists = PicklistService::getPicklistsFromFields($this->fields);
         } else {
             throw new Exception("Error. Unable to find the main entity of '{$this->module->name}'");
         }
@@ -185,15 +187,13 @@ class ModuleDataCollector
 
     public function getIndex(Request $request)
     {
+        $query = $this->model->query()->where('deleted_at', null);
+
         $this->setFields();
 
         $this->setViewFilters($request);
 
         $this->setPanels();
-
-        $model = $this->model->query()->where('deleted_at', null);
-
-        // dd($this->currentViewFilter->filterQuery->query);
 
         if ($this->module->hasViewFilter && $this->currentViewFilter->filterQuery) {
             $filterQuery = $this->currentViewFilter->filterQuery->query;
@@ -203,29 +203,25 @@ class ModuleDataCollector
             $query = $this->dataQueryBuilder->selectFrom($this->getCurrentViewFilterFieldNamesForPagination(), $this->entity->name, true);
 
             $query = $query->filterGet($filterQuery);
-
-            $query = $query;
-        } else {
-            $query = $model::query();
         }
 
-        $field = $this->module->entity->fields->where('name', 'branch_id')->count();
+        $query = $this->getQueryBasedOnHandledBranches($query);
 
-        if ($field) {
-            $query = $query->whereIn('branch_id', (array) $this->user->handled_branch_ids);
-        }
+        $query = $this->getQueryBasedOnHeaderFilters($query, $request);
 
-        $page = $request->input('page', 1);
+        $query = $this->getQueryBasedOnSearch($query, $request);
 
-        $pageLength = $request->input('limit', 0);
+        $query = $this->getQueryBasedOnCustomFilters($query, $request);
 
-        $query = $query->paginate($pageLength, $this->getCurrentViewFilterFieldNamesForPagination(), 'page', $page);
+        $query = $this->getQueryBasedOnCurrentViewFilterSort($query);
 
-        return (new ModelCollection(
-            $query,
-            $this->currentViewFilterFields,
-            $this->pickLists,
-        ))
+        // dd($query->toMql());
+
+        $query = $query->orderBy('name', 'ASC');
+
+        $query = $query->paginate($request->input('limit', 1), $this->getCurrentViewFilterFieldNamesForPagination(), 'page', $request->input('page', 0));
+
+        return (new ModelCollection($query, $this->currentViewFilterFields, $this->pickLists))
             ->additional([
                 'fields' => FieldResource::customCollection($this->fields),
                 'panels' => PanelResource::customCollection($this->panels),
@@ -282,15 +278,17 @@ class ModuleDataCollector
 
             if ($mainOnly === false && $hasMutable) {
                 $this->executeMutableDataFromRequest($request, $model);
-            } elseif (count($formulaFields) !== 0) {
-                // FOR CHA
-                FormulaParser::setEntity($this->module->main);
-
-                foreach ($formulaFields as $formulaField) {
-                    $value = FormulaParser::parseField($formulaField, $model, true);
-                    $model->update([$formulaField->name => $value]);
-                }
             }
+
+            // elseif (count($formulaFields) !== 0) {
+            //     // FOR CHARISSE
+            //     FormulaParser::setEntity($this->module->main);
+
+            //     foreach ($formulaFields as $formulaField) {
+            //         $value = FormulaParser::parseField($formulaField, $model, true);
+            //         $model->update([$formulaField->name => $value]);
+            //     }
+            // }
         } catch (Exception $exception) {
             if ($mainOnly === false) {
                 $this->deleteMutableChanges();
@@ -306,6 +304,7 @@ class ModuleDataCollector
         return $model;
     }
 
+    // getConnectedCollectionData v1
     public function getShow(Base $base, Request $request, bool $isItemOnly = false, bool $isConnectedOnly = false, array $additional = [])
     {
         $data = [];
@@ -328,6 +327,86 @@ class ModuleDataCollector
 
             return new ModelResource($base);
         }
+    }
+
+    public function getQueryBasedOnHandledBranches($query)
+    {
+        // Fetch data based on user's handled branches
+        // No fetching need if ignorePermission of the currentViewFilter is true
+
+        if ($this->currentViewFilter->ignorePermission === false) {
+            $hasBranchField = $this->fields->contains('name', 'branch_id');
+
+            if ($hasBranchField) {
+                return $query->whereIn('branch_id', $this->user->handled_branch_ids);
+            }
+        }
+
+        return $query;
+    }
+
+    public function getQueryBasedOnSearch($query, Request $request)
+    {
+        if ($request->filled('search')) {
+            $searchFields = (array) $request->input('searchFields');
+
+            // Must have at least 1 search field to run this query below
+            $query->where(function (Builder $query) use ($searchFields, $request) {
+                foreach ($searchFields as $searchField) {
+                    $field = $this->fields->firstWhere('_id', $searchField);
+
+                    if ($field->fieldType->name === 'lookupModel') {
+
+                    } elseif ($field->fieldType->name === 'picklist') {
+                        $items = Picklist::query()
+                            ->where('name', $field->listName)
+                            ->with('listItems')
+                            ->first()
+                            ->listItems
+                            ->filter(fn (ListItem $listItem) => Str::contains($listItem->value, $request->input('search'), true))
+                            ->pluck('_id');
+
+                        if ($items->isNotEmpty()) {
+                            $query->orWhereIn($field->name, $items);
+                        }
+                    } elseif ($field->fieldType->name === 'boolean') {
+                        // need to discuss this first with team
+                        // e.g. products index where Status at top
+                    } else {
+                        $query->orWhere($field->name, 'like', "%{$request->input('search')}%");
+                    }
+                }
+            });
+        }
+
+        return $query;
+    }
+
+    public function getQueryBasedOnHeaderFilters($query, Request $request)
+    {
+        if ($request->filled('header_filters')) {
+            $headerFilters = $request->input('header-filters');
+
+            if (is_array($headerFilters) && array_depth($headerFilters) > 2) {
+                foreach ($headerFilters as $headerFilter) {
+                    if (array_key_exists('field', $headerFilter) && array_key_exists('values', $headerFilter)) {
+                        $query->whereIn($headerFilter['field'], $headerFilter['values']);
+                    }
+                }
+            }
+        }
+
+        return $query;
+    }
+
+    public function getQueryBasedOnCustomFilters($query, Request $request)
+    {
+        return $query;
+    }
+
+    public function getQueryBasedOnCurrentViewFilterSort($query)
+    {
+        return $query;
     }
 
     public function getDataForSaving(Request $request, mixed $model = null, bool $quickAdd = false, bool $isCreate = false)
