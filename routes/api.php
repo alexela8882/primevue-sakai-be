@@ -4,6 +4,7 @@ use App\Http\Controllers\API\CountryController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\UserConfigController;
+use App\Http\Controllers\Company\CampaignController;
 use App\Http\Controllers\Core\FieldController;
 use App\Http\Controllers\Core\ModuleController;
 use App\Http\Controllers\Core\PanelController;
@@ -31,6 +32,32 @@ Route::post('saml-login', [RegisterController::class, 'samlLogin']);
 Route::get('passwordless-login', [RegisterController::class, 'passwordLessLogin'])->middleware(['web']);
 Route::get('logout', [RegisterController::class, 'logout'])->middleware(['web']);
 
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+Route::controller(UserController::class)
+    ->prefix('users')
+    ->middleware('auth:api')
+    ->group(function () {
+        Route::get('{id}/get', 'get');
+        Route::get('/', 'all');
+        Route::post('/store', 'store');
+        Route::put('{id}/update', 'update');
+        Route::delete('{id}/delete', 'delete');
+    });
+
+Route::controller(ModuleController::class)
+    ->middleware('auth:api')
+    ->group(function () {
+        Route::resource('modules', ModuleController::class)->only('index');
+    });
+
+Route::controller(LeadController::class)
+    ->middleware('auth:api')
+    ->group(function () {
+        Route::apiResource('modules/leads', LeadController::class);
+    });
 Route::middleware('auth:api')->group(function () {
     Route::apiResource('modules/accounts', AccountController::class);
 
@@ -44,15 +71,47 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResource('modules', ModuleController::class);
 
+    Route::controller(SalesOpportunityController::class)
+        ->middleware('auth:api')
+        ->group(function () {
+            Route::apiResource('modules/salesopportunities', SalesOpportunityController::class);
+        });
+
+    Route::controller(UserConfigController::class)
+        ->prefix('user-configs')
+        ->middleware('auth:api')
+        ->group(function () {
+            Route::get('get-app-theme', 'getAppTheme');
+            Route::post('change-app-theme', 'changeAppTheme');
+        });
+
+    Route::controller(CountryController::class)
+        ->prefix('countries')
+        ->middleware('auth:api')
+        ->group(function () {
+            Route::get('/', 'all');
+        });
+
+    Route::controller(BranchController::class)
+        ->prefix('branches')
+        ->middleware('auth:api')
+        ->group(function () {
+            Route::get('/', 'all');
+            Route::post('/store', 'store');
+            Route::put('{id}/update', 'update');
+            Route::delete('{id}/delete', 'delete');
+        });
     Route::apiResource('modules/salesopportunities', SalesOpportunityController::class);
 
     Route::get('/getModulePanels', [PanelController::class, 'getModulePanels']);
 
-    Route::post('/picklist', [PicklistController::class, 'index']);
+    Route::post('/picklist', [PicklistController::class, 'getLists']);
 
     Route::get('/user', [UserController::class, 'getUser']);
 
     Route::apiResource('viewFilters', ViewFilterController::class);
+
+    Route::apiResource('campaigns', CampaignController::class);
 });
 
 // Route::controller(UserController::class)

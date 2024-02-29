@@ -3,6 +3,7 @@
 namespace App\Models\Core;
 
 use App\Models\Model\Base;
+use App\Models\Module\Module;
 use Illuminate\Support\Facades\App;
 
 class Entity extends Base
@@ -22,6 +23,11 @@ class Entity extends Base
     public function mainModule()
     {
         return $this->hasOne(Module::class, 'mainEntity', '_id');
+    }
+
+    public function connection()
+    {
+        return $this->hasOne(EntityConnection::class, 'src_entity_id', '_id');
     }
 
     public function getModel()

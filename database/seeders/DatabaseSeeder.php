@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Core\Entity;
 use App\Models\Core\Relation;
 use App\Models\User;
 use App\Models\UserConfig;
@@ -31,15 +32,26 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->changeRelationUserModelClass();
+        $this->renameConnectionIdToConnectionIdsInEntityCollections();
     }
 
     public function changeRelationUserModelClass()
     {
         Relation::query()
             ->where('class', 'App\User')
-            ->get()
-            ->each(fn (Relation $relation) => $relation->update(['class' => 'App\Models\User']));
+            ->each(fn (Relation $relation) => $relation->updateQuietly(['class' => 'App\Models\User']));
 
         dump("Changed all relations with class of 'App\User\ to 'App\Models\User.");
+    }
+
+    public function renameConnectionIdToConnectionIdsInEntityCollections()
+    {
+        Entity::each(function (Entity $entity) {
+            $entity->updateQuietly([
+                '$rename' => ['connection_id' => 'connection_ids'],
+            ]);
+        });
+
+        dump("Renamed all entity collections' connection_id field to connection_ids.");
     }
 }
