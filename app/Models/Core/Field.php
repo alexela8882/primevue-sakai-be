@@ -41,4 +41,9 @@ class Field extends Base
         return $type == 'lookupModel' && $this->relation->method == 'belongsToMany' ||
             $type == 'picklist' && $this->rules()->whereIn('name', ['ms_dropdown', 'ms_list_view', 'checkbox_inline', 'checkbox', 'tab_multi_select', 'ms_pop_up', 'checkbox_inline'])->count();
     }
+
+    public function isPopup()
+    {
+        return $this->rules()->whereIn('name', ['ss_pop_up', 'ms_pop_up'])->count() ? true : false;
+    }
 }
