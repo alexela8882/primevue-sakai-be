@@ -46,10 +46,10 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResources([
         'campaigns' =>  CampaignController::class,
         'countries' =>  CountryController::class,
-        'modules' => ModuleController::class,
         'modules/accounts' =>  AccountController::class,
         'modules/leads' => LeadController::class,
         'modules/salesopportunities' =>  SalesOpportunityController::class,
+        'modules' => ModuleController::class, 
         'viewFilters' => ViewFilterController::class
     ]);
 });
