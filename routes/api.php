@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\CountryController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\UserConfigController;
 use App\Http\Controllers\Core\FieldController;
 use App\Http\Controllers\Core\ModuleController;
 use App\Http\Controllers\Core\PanelController;
@@ -65,13 +66,13 @@ Route::middleware('auth:api')->group(function () {
 //         Route::delete('{id}/delete', 'delete');
 //     });
 
-// Route::controller(UserConfigController::class)
-//     ->prefix('user-configs')
-//     ->middleware('auth:api')
-//     ->group(function () {
-//         Route::get('get-app-theme', 'getAppTheme');
-//         Route::post('change-app-theme', 'changeAppTheme');
-//     });
+Route::controller(UserConfigController::class)
+    ->prefix('user-configs')
+    ->middleware('auth:api')
+    ->group(function () {
+        Route::get('get-app-theme', 'getAppTheme');
+        Route::post('change-app-theme', 'changeAppTheme');
+    });
 
 // // SAML2 Auth
 // Route::controller(CustomSaml2Controller::class)
