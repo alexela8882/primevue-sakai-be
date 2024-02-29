@@ -34,4 +34,13 @@ class Entity extends Base
     {
         return App::make($this->attributes['model_class']);
     }
+
+    public function deepConnectedEntities($mutableOnly = false, $depthLimit = null)
+    {
+        if ($this->entityConnection) {
+            return $this->entityConnection->deepEntities($mutableOnly, $depthLimit);
+        }
+
+        return collect();
+    }
 }

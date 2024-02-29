@@ -12,6 +12,7 @@ use App\Models\Company\Branch;
 use App\Models\Core\Entity;
 use App\Models\Core\Field;
 use App\Models\Core\Panel;
+use App\Models\Core\Picklist;
 use App\Models\Core\ViewFilter;
 use App\Models\Customer\SalesQuote;
 use App\Models\Model\Base;
@@ -20,6 +21,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -291,7 +293,14 @@ class ModuleDataCollector
             }
         } catch (Exception $exception) {
             if ($mainOnly === false) {
+                $this->deleteMutableChanges();
             }
+
+            if ($model) {
+                $model->delete;
+            }
+
+            throw $exception;
         }
 
         return $model;
@@ -405,7 +414,7 @@ class ModuleDataCollector
                         $data[$field->name] = date('y').'-'.sprintf('%04s', $count + 1);
                     }
                 } elseif ($field->uniqueName === 'rpworkorder_rp_no') {
-                    $items = $this->pickListRepository->getModel()->whereIn('name', ['rp_type', 'rp_form_types'])->get()->map(function ($list) {
+                    $items = Picklist::whereIn('name', ['rp_type', 'rp_form_types'])->get()->map(function ($list) {
                         return $list->listItems->map(function ($item) use ($list) {
                             $explodedValue = explode(' ', $item->value);
                             $item->value = $list->name == 'rp_type'
@@ -455,6 +464,35 @@ class ModuleDataCollector
         return [$data, $lookupData, $formulaFields];
     }
 
+    protected function deleteMutableChanges($upsert = false)
+    {
+        if ($this->mutableEntityNames) {
+            foreach ($this->mutableEntityNames as $mutableEntityName) {
+                $items = $this->mutableData[$mutableEntityName];
+                if (count($items)) {
+                    foreach ($items as $item) {
+                        $item->delete();
+                    }
+                }
+                if ($upsert) {
+                    foreach ($this->mutableEntityNames as $mutableEntityName) {
+                        $items = $this->revertibleMutableData[$mutableEntityName];
+                        $entity = Entity::where('name', $mutableEntityName)->first();
+                        $entityModel = $entity->getModel();
+                        $entityModel::unguard();
+
+                        foreach ($items as $item) {
+                            $entityModel = $entityModel->find($item['_id']);
+                            $entityModel->update($item);
+                        }
+
+                        $entityModel::reguard();
+                    }
+                }
+            }
+        }
+    }
+
     public function executeMutableDataFromRequest(Request $request, &$model, bool $isUpsert = false, bool $isQuickAdd = false)
     {
         $mutables = $request->input('mutables');
@@ -478,7 +516,7 @@ class ModuleDataCollector
             $this->revertibleMutableData[$mutableEntityName] = [];
         }
 
-        $mutableEntities = (new EntityService)->deepConnectedEntities($this->entity, true, 1)->whereIn('name', $this->mutableEntityNames);
+        $mutableEntities = $this->entity->deepConnectedEntities(true, 1)->whereIn('name', $this->mutableEntityNames);
 
         $this->createMutable($model, $this->entity, $mutables, $mutableEntities, 1, $isUpsert, $isQuickAdd);
 
@@ -486,5 +524,318 @@ class ModuleDataCollector
             'created' => $this->mutableData,
             'updated' => $this->revertibleMutableData,
         ];
+    }
+
+    protected function isMutableFilter(Field $field, bool $isQuickAdd = false)
+    {
+        $result = ! in_array($field->name, ['created_at', 'updated_at', 'created_by', 'updated_by', 'deleted_at']);
+
+        if ($isQuickAdd) {
+            $result = $result && $field->rules->whereIn('name', ['required', 'required_if', 'required_with'])->count() > 1;
+        }
+
+        return $result;
+    }
+
+    protected function resolveRow($row, $fields)
+    {
+        $xx = $fields->pluck('name')->toArray();
+        $xx = array_diff(array_keys($row), $xx);
+
+        foreach ($xx as $key) {
+            unset($row[$key]);
+        }
+
+        $row['__state'] = 'pending';
+
+        return $row;
+    }
+
+    protected function getMainDataFromRowMutable($row, $fields, $model, $quickAdd, $entity)
+    {
+        $lookupData = [];
+        $lookupModels = [];
+
+        foreach ($fields as $field) {
+            if (array_key_exists($field->name, $row)) {
+                if ($field->fieldType->name == 'lookupModel') {
+                    $result = $this->resolveExecuteLookupField($row, $model, $row[$field->name], $entity, $field, $lookupModels);
+                    if ($result === false) {
+                        continue;
+                    } elseif (is_array($result)) {
+                        $lookupData[] = $result;
+
+                        continue;
+                    }
+                }
+            }
+        }
+
+        return $lookupData;
+    }
+
+    protected function resolveExecuteLookupField($request, $model, &$input, $entity, $field, &$lookupModels)
+    {
+        $isRequired = $field->rules->where('name', 'required')->first();
+
+        $input = (array) (($input == '') ? null : $input);
+
+        $relation = $field->relation;
+
+        $query = $relation->relatedEntity->getModel();
+
+        // if lookup is a controlling field, store model
+        if ($field->controls) {
+            $lookupModels[$field->name] = $query;
+        }
+
+        $itemIds = $query->whereIn('_id', $input)->pluck('_id')->toArray();
+
+        if (count($diff = array_diff($input, $itemIds)) && $isRequired) {
+            throw new \Exception('Error. Invalid ids for field '.$field->name.': ["'.implode('", "', $diff).'"]');
+        }
+
+        if ($field->uniqueName != 'serviceschedule_branch_id') {
+            $existingItems = $field->relation->relatedEntity->getModel()->whereIn('_id', $input)->get();
+            $unknownItems = collect($input)->diff($existingItems->pluck('_id'));
+
+            if ($unknownItems->isNotEmpty()) {
+                throw new \Exception('Error. The following items for field "'.$field->name.'" are unidentified: '.implode(',', $unknownItems->toArray()));
+            }
+        }
+
+        $arrReq = is_array($request) ? $request : $request->all();
+
+        // if lookup has a controlling field
+        if (isset($field->rules['filtered_by'])) {
+            $cFieldName = $field->rules['filtered_by'];
+
+            if (! isset($lookupModels[$cFieldName])) {
+                $cField = $entity->fields->where('name', $cFieldName)->first();
+
+                if (! $cField) {
+                    throw new \Exception('Error. Unrecognized controlling field '.$cFieldName);
+                }
+            }
+
+            $cvalue = $request['$cFieldName'];
+
+            $unknownItems = $existingItems->whereNotIn($field->filterSourceField, (array) $cvalue)->get();
+
+            if ($unknownItems->isNotEmpty()) {
+                throw new \Exception('Error.  The following items for field "'.$field->name.'" are incompatible with controlling field: '.implode(',', $unknownItems->toArray()));
+            }
+        }
+
+        $isEmpty = ($input == null || $input == '' || is_array($input) && ! count($input));
+
+        if ($isEmpty) {
+            if ($isRequired) {
+                throw new \Exception('Field '.$field->name.' is required');
+            } elseif ($model || array_key_exists($field->name, $arrReq)) {
+                $input = null;
+            } else {
+                return false;
+            }
+        }
+
+        if ($field->hasMultipleValues()) {
+            return [
+                'entity' => $field->relation->relatedEntity->model_class,
+                'method' => $field->relation->method,
+                'fkey' => $field->relation->foreign_key,
+                'lkey' => $field->relation->local_key,
+                'data' => $input,
+            ];
+        }
+
+        return true;
+    }
+
+    public function compute($model, $rus, $formula)
+    {
+        $update = [];
+
+        if (count($rus)) {
+            foreach ($rus as $rusField) {
+                $v = $model->{$rusField->name} ?? null;
+
+                $value = RusResolver::resolve($model, $rusField);
+
+                $update[$rusField->name] = $value;
+            }
+
+            //   if($model->branch_id == '5badf748678f7111186ba275'){
+            //     dump($update);
+            //   }
+
+            $model->update($update);
+        }
+
+        $model->save();
+
+        if (count($formula)) {
+            foreach ($formula as $formulaField) {
+                $value = FormulaParser::parseField($formulaField, $model, true);
+                $model->update([$formulaField->name => $value]);
+            }
+        }
+    }
+
+    protected function createMutable($model, $currentEntity, $requestMutables, $mutableEntities, $level, bool $isUpsert = false, $isQuickAdd = false)
+    {
+        foreach ($mutableEntities as $mutableEntity) {
+            $fields = $mutableEntity->fields->filter(fn (Field $field) => $this->isMutableFilter($field, $isQuickAdd));
+
+            $repository = $mutableEntity->getRepository();
+
+            $mutableList = $requestMutables["mutable_{$mutableEntity->name}"];
+
+            if (empty($mutableList)) {
+                $panel = Panel::query()
+                    ->where('entity_id', $mutableEntity->_id)
+                    ->where('controllerMethod', "{$this->module->name}@show")
+                    ->where('mutable', true)
+                    ->first();
+
+                if ($panel->required) {
+                    throw new Exception("Error. Missing data for required mutable {$mutableEntity->name}");
+                }
+            }
+
+            // FOR CHARISSE
+            if ($mutableEntity->name == 'SalesOpptItem') {
+                RusResolver::setEntity($entity);
+                FormulaParser::setEntity($entity);
+                $fields = $entity->fields()->get();
+                [$formula, $rus] = $this->getRusAndFormula($fields);
+            }
+
+            foreach ($mutableList as $key => $mutableRow) {
+                $mutableRow = (array) $mutableRow;
+
+                if ($level > 1) {
+                    if (! array_key_exists("{$currentEntity->name}_key", $mutableRow)) {
+                        throw new Exception("Error. Missing parent entity key {$currentEntity->name}_key in mutable_{$mutableEntity->name}");
+                    }
+
+                    $parentEntityKey = $mutableRow["{$currentEntity->name}_key"];
+
+                    if ($isUpsert && array_key_exists('_id', $mutableRow)) {
+                        if (array_key_exists($parentEntityKey, $this->revertibleMutableData[$currentEntity->name])) {
+                            $model = $this->revertibleMutableData[$currentEntity->name][$parentEntityKey];
+                        } elseif (array_key_exists($parentEntityKey, $this->mutableData[$currentEntity->name])) {
+                            $model = $this->mutableData[$currentEntity->name][$parentEntityKey];
+                        } else {
+                            throw new Exception("Missing key {$parentEntityKey}");
+                        }
+                    } else {
+                        if (! array_key_exists($parentEntityKey, $this->mutableData[$currentEntity->name])) {
+                            throw new Exception("Missing key {$parentEntityKey}");
+                        }
+
+                        $model = $this->mutableData[$currentEntity->name][$parentEntityKey];
+                    }
+                }
+
+                $newData = $this->resolveRow($mutableRow, $fields);
+
+                $ldata = $this->getMainDataFromRowMutable($mutableRow, $fields, null, false, $mutableEntity);
+
+                if (! array_key_exists(snake_case($currentEntity->name).'_id', $newData)) {
+                    $newData[snake_case($currentEntity->name).'_id'] = $model['_id'];
+                }
+
+                if ($isUpsert && array_key_exists('_id', $mutableRow)) {
+                    $item = $repository->find($mutableRow['_id']);
+
+                    if (array_key_exists(snake_case($currentEntity->name).'_id', $item->toArray()) && $item->toArray()[snake_case($currentEntity->name).'_id']) {
+                        $newData[snake_case($currentEntity->name).'_id'] = $item->toArray()[snake_case($currentEntity->name).'_id'];
+                    }
+
+                    $this->revertibleMutableData[$mutableEntity->name][$key] = $item->toArray();
+
+                    foreach ($ldata as $lookup) {
+                        $query = $item->dynamicRelationship($lookup['method'], $lookup['entity'], $lookup['fkey'], $lookup['lkey'], null, true);
+                        if ($lookup['method'] == 'belongsToMany') {
+                            if ($lookup['data']) {
+                                $item->update([$lookup['lkey'] = $lookup['data']]);
+                            } else {
+                                $query->detach();
+                            }
+                        } elseif ($lookup['data']) {
+                            $query->associate($lookup['data']);
+                        } else {
+                            $query->dissociate();
+                        }
+                    }
+
+                    $item->update($newData);
+                } else {
+                    $item = $repository->create($newData);
+                    $item->update(['oid' => $item->_id]);
+                    foreach ($ldata as $lookup) {
+                        $query = $item->dynamicRelationship($lookup['method'], $lookup['entity'], $lookup['fkey'], $lookup['lkey'], null, true);
+
+                        if ($lookup['method'] == 'belongsToMany') {
+                            if ($lookup['data']) {
+
+                                if ($item->{$lookup['lkey']}) {
+                                    if (is_string($item->{$lookup['lkey']})) {
+                                        $item->update([$lookup['lkey'] => (array) $item->{$lookup['lkey']}]);
+                                    }
+                                    $query->sync($lookup['data']);
+                                } else {
+                                    $query->attach($lookup['data']);
+                                }
+                            } else {
+                                $query->detach();
+                            }
+                        } elseif ($lookup['data']) {
+                            $query->associate($lookup['data']);
+                        }
+                    }
+
+                    $this->mutableData[$mutableEntity->name][$key] = clone $item;
+                }
+
+                if ($mutableEntity->name == 'SalesOpptItem') {
+                    $this->compute($item, $rus, $formula);
+                }
+            }
+            $deepMutableEntities = $mutableEntity->deepConnectedEntities(true, 1)->whereIn('name', $this->mutableEntityNames);
+
+            if ($deepMutableEntities->isNotEmpty()) {
+                $this->createMutable($model, $mutableEntity, $requestMutables, $deepMutableEntities, $level + 1, $isUpsert, $isQuickAdd);
+            }
+        }
+    }
+
+    public function getRusAndFormula($fields, $query = null)
+    {
+        $formulaFields = [];
+        $rusField = [];
+
+        foreach ($fields as $field) {
+            if ($field->fieldType->name == 'formula') {
+                $formulaFields[] = $field;
+
+                continue;
+            }
+
+            if ($field->fieldType->name == 'rollUpSummary') {
+                if ($query) {
+                    if ($field->rusEntity == $query) {
+                        $rusField[] = $field;
+                    }
+                } else {
+                    $rusField[] = $field;
+                }
+
+                continue;
+            }
+        }
+
+        return [$formulaFields, $rusField];
     }
 }
