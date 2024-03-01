@@ -356,7 +356,6 @@ class ModuleDataCollector
                     $field = $this->fields->firstWhere('_id', $searchField);
 
                     if ($field->fieldType->name === 'lookupModel') {
-
                     } elseif ($field->fieldType->name === 'picklist') {
                         $items = Picklist::query()
                             ->where('name', $field->listName)
@@ -411,8 +410,13 @@ class ModuleDataCollector
 
     public function getDataForSaving(Request $request, mixed $model = null, bool $quickAdd = false, bool $isCreate = false)
     {
+        // $isCreate is true = for saving
+        // $isCreate is false = for updating
+
         $data = [];
+
         $lookupData = [];
+
         $formulaFields = [];
 
         $this->setFields();
@@ -423,30 +427,31 @@ class ModuleDataCollector
             $fields = $this->fields;
         }
 
-        if ($quickAdd === false && $isCreate === false) {
-            if ($this->user instanceof User) {
-                $data['updated_by'] = $this->user->_id;
-            }
+        if (! $quickAdd && ! $isCreate) {
+            $data['updated_by'] = $this->user?->_id;
         }
 
         foreach ($fields as $field) {
-            $input = $request->input($field->name);
-
-            if (
-                ($request->missing($field->name) && $field->fieldType->name != 'autonumber' && $field->fieldType?->name != 'formula') ||
-                in_array($field->name, ['created_at', 'created_by', 'updated_at', 'updated_by', 'deleted_at', 'deleted_by'])
-            ) {
-                continue;
-            } elseif ($field->fieldType->name === 'autonumber' && $isCreate === false) {
+            if ($request->missing($field->name)) {
                 continue;
             }
+
+            if ($request->fieldType->name === 'autonumber' && ! $isCreate) {
+                continue;
+            }
+
+            if (in_array($field->name, ['created_at', 'created_by', 'updated_at', 'updated_by', 'deleted_at', 'deleted_by'])) {
+                continue;
+            }
+
+            $input = $request->input($field->name, []);
 
             if ($field->fieldType->name === 'lookupModel') {
                 $returnedResult = $this->fieldService->resolveExecuteLookupField($request, $field, null);
 
                 if ($returnedResult === false) {
                     continue;
-                } else {
+                } elseif(is_array($returnedResult)) {
                     $lookupData[] = $returnedResult;
 
                     continue;
@@ -463,13 +468,14 @@ class ModuleDataCollector
 
             if ($this->fieldService->hasMultipleValues($field) || $field->fieldType->name === 'list' || $field->fieldType->name === 'chipbox') {
                 $data[$field->name] = [$input];
-            } elseif ($field->fieldType->name === 'autonumber' && $isCreate === true) {
+            } elseif ($field->fieldType->name === 'autonumber' && $isCreate) {
                 // TO BE CLEANED LATER
                 if ($field->uniqueName == 'salesquote_quote_no') {
                     $branch_id = $request->input('branch_id');
                     $countryCode = Branch::find($branch_id);
                     $countryCode = $countryCode->quote_no_prefix ?? false ? $countryCode->quote_no_prefix : $countryCode->country->alpha2Code;
                     $s = $this->module->main->getModel()->where('quoteNo', 'like', $countryCode.'-'.date('y').'%')->count();
+
                     do {
                         $s += 1;
                         $code = $countryCode.'-'.date('y').sprintf('%05s', $s);
