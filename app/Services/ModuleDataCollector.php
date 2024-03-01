@@ -44,6 +44,8 @@ class ModuleDataCollector
 
     public Collection $panels;
 
+    private $staticData; // for Service Jobs. See addStaticConnected function in v1 and find this function for more info
+
     private $currentViewFilter;
 
     public $pickLists;
@@ -221,12 +223,17 @@ class ModuleDataCollector
 
         $query = $query->paginate($request->input('limit', 1), $this->getCurrentViewFilterFieldNamesForPagination(), 'page', $request->input('page', 0));
 
-        return (new ModelCollection($query, $this->currentViewFilterFields, $this->pickLists))
-            ->additional([
+        $modelCollection = new ModelCollection($query, $this->currentViewFilterFields, $this->pickLists);
+
+        if ($request->missing('listOnly')) {
+            $modelCollection->additional([
                 'fields' => FieldResource::customCollection($this->fields),
                 'panels' => PanelResource::customCollection($this->panels),
                 'viewFilters' => ViewFilterResource::collection($this->viewFilters),
             ]);
+        }
+
+        return $modelCollection;
     }
 
     public function postStore(Request $request, bool $mainOnly = false)
@@ -308,24 +315,32 @@ class ModuleDataCollector
     public function getShow(Base $base, Request $request, bool $isItemOnly = false, bool $isConnectedOnly = false, array $additional = [])
     {
         $data = [];
+
         $deepMutables = [];
+
         $connectedEntitiesList = collect();
 
         $this->setFields();
 
-        if ($isItemOnly === false && $request->exists('itemonly')) {
+        if (! $isItemOnly && $request->exists('itemonly')) {
             $isItemOnly = true;
         }
 
-        if ($isItemOnly === false) {
+        if (! $isItemOnly) {
         }
 
-        if ($request->exists('connectedonly') || $request->exists('cname') || $isConnectedOnly === true) {
+        if ($request->exists('connectedonly') || $request->exists('cname') || $isConnectedOnly) {
             $data = ['connected' => $connectedEntitiesList];
         } else {
-            ModelResource::information($this->fields, $this->pickLists);
+            if (! $isItemOnly) {
+                if ($this->staticData) { // For Service Job
+                    $connectedEntitiesList = $connectedEntitiesList->merge($this->staticData);
+                }
 
-            return new ModelResource($base);
+                $data['connected'] = $connectedEntitiesList;
+            }
+
+            return new ModelResource($base, $this->fields, $this->pickLists);
         }
     }
 
@@ -451,7 +466,7 @@ class ModuleDataCollector
 
                 if ($returnedResult === false) {
                     continue;
-                } elseif(is_array($returnedResult)) {
+                } elseif (is_array($returnedResult)) {
                     $lookupData[] = $returnedResult;
 
                     continue;

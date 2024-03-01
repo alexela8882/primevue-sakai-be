@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Core;
 
 use App\Services\ModelService;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,22 +15,17 @@ class ModelResource extends JsonResource
 
     protected static $pickLists;
 
-    public function __construct($resource)
+    public function __construct($resource, Collection $fields, array $pickLists)
     {
         parent::__construct($resource);
 
         $this->resource = $resource;
 
-        $this->modelService = new ModelService;
-    }
-
-    public static function information($fields, $pickLists, $wrap = 'data')
-    {
         static::$fields = $fields;
 
         static::$pickLists = $pickLists;
 
-        static::$wrap = $wrap;
+        $this->modelService = new ModelService;
     }
 
     public function toArray(Request $request): array
