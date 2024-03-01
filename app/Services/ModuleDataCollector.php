@@ -240,73 +240,73 @@ class ModuleDataCollector
     {
         $model = null;
 
-        try {
-            // This is for FE's tracking wherein they will create a unique indentifier,
-            // and see if this entity's model's uid already exists or not yet.
-            // If it is already existing, then we will just return the model
-            // to let FE know that it already exist.
-            if ($request->filled('uid')) {
-                $uniqueIdForFE = $this->model->where('uid', $request->input('uid'))->first();
+        // try {
+        // This is for FE's tracking wherein they will create a unique indentifier,
+        // and see if this entity's model's uid already exists or not yet.
+        // If it is already existing, then we will just return the model
+        // to let FE know that it already exist.
+        if ($request->filled('uid')) {
+            $uniqueIdForFE = $this->model->where('uid', $request->input('uid'))->first();
 
-                if ($uniqueIdForFE) {
-                    return $uniqueIdForFE;
-                }
+            if ($uniqueIdForFE) {
+                return $uniqueIdForFE;
             }
-
-            [$data, $lookupData, $formulaFields] = $this->getDataForSaving($request, null, false, true);
-
-            // If uid is not yet present, then we will add this uid value for saving.
-            if ($request->filled('uid')) {
-                $data['uid'] = $request->input('uid');
-            }
-
-            // Adding fullName attribute to the following entities for saving.
-            if (in_array($this->entity->name, ['Contact', 'Employee', 'User', 'EscoVenturesContact'])) {
-                $data['fullName'] = Str::squish("{$request->input('firstName')} {$request->input('lastName')}");
-            }
-
-            $model = $this->model->create($data);
-
-            foreach ($lookupData as $lookup) {
-                $query = $model->dynamicRelationship($lookup['method'], $lookup['entity'], $lookup['fkey'], $lookup['lkey'], null, true);
-
-                if ($lookup['method'] === 'belongsToMany' && $lookup['data']) {
-                    $query->sync($lookup['data']);
-                } else {
-                    $query->associate($lookup['data']);
-                }
-            }
-
-            if ($this->entity->name === 'SalesOpportunity') {
-                $model->quotations->each(fn (SalesQuote $salesQuote) => $salesQuote->updateQuietly(['sales_type_id' => $model->sales_type_id]));
-            }
-
-            $hasMutable = (new EntityService)->hasMutable($this->entity);
-
-            if ($mainOnly === false && $hasMutable) {
-                $this->executeMutableDataFromRequest($request, $model);
-            }
-
-            // elseif (count($formulaFields) !== 0) {
-            //     // FOR CHARISSE
-            //     FormulaParser::setEntity($this->module->main);
-
-            //     foreach ($formulaFields as $formulaField) {
-            //         $value = FormulaParser::parseField($formulaField, $model, true);
-            //         $model->update([$formulaField->name => $value]);
-            //     }
-            // }
-        } catch (Exception $exception) {
-            if ($mainOnly === false) {
-                $this->deleteMutableChanges();
-            }
-
-            if ($model) {
-                $model->delete;
-            }
-
-            throw $exception;
         }
+
+        [$data, $lookupData, $formulaFields] = $this->getDataForSaving($request, null, false, true);
+
+        // If uid is not yet present, then we will add this uid value for saving.
+        if ($request->filled('uid')) {
+            $data['uid'] = $request->input('uid');
+        }
+
+        // Adding fullName attribute to the following entities for saving.
+        if (in_array($this->entity->name, ['Contact', 'Employee', 'User', 'EscoVenturesContact'])) {
+            $data['fullName'] = Str::squish("{$request->input('firstName')} {$request->input('lastName')}");
+        }
+
+        $model = $this->model->create($data);
+
+        foreach ($lookupData as $lookup) {
+            $query = $model->dynamicRelationship($lookup['method'], $lookup['entity'], $lookup['fkey'], $lookup['lkey'], null, true);
+
+            if ($lookup['method'] === 'belongsToMany' && $lookup['data']) {
+                $query->sync($lookup['data']);
+            } else {
+                $query->associate($lookup['data']);
+            }
+        }
+
+        if ($this->entity->name === 'SalesOpportunity') {
+            $model->quotations->each(fn (SalesQuote $salesQuote) => $salesQuote->updateQuietly(['sales_type_id' => $model->sales_type_id]));
+        }
+
+        $hasMutable = (new EntityService)->hasMutable($this->entity);
+
+        if ($mainOnly === false && $hasMutable) {
+            $this->executeMutableDataFromRequest($request, $model);
+        }
+
+        // elseif (count($formulaFields) !== 0) {
+        //     // FOR CHARISSE
+        //     FormulaParser::setEntity($this->module->main);
+
+        //     foreach ($formulaFields as $formulaField) {
+        //         $value = FormulaParser::parseField($formulaField, $model, true);
+        //         $model->update([$formulaField->name => $value]);
+        //     }
+        // }
+        // } catch (Exception $exception) {
+        //     if ($mainOnly === false) {
+        //         $this->deleteMutableChanges();
+        //     }
+
+        //     if ($model) {
+        //         $model->delete;
+        //     }
+
+        //     throw $exception;
+        // }
 
         return $model;
     }
@@ -340,15 +340,26 @@ class ModuleDataCollector
                 $data['connected'] = $connectedEntitiesList;
             }
 
-            return new ModelResource($base, $this->fields, $this->pickLists);
+            $modelResource = new ModelResource($base, $this->fields, $this->pickLists);
+
+            if ($request->exists('withModulePanels')) {
+                $this->setPanels();
+
+                $modelResource->additional([
+                    'panels' => PanelResource::customCollection($this->panels),
+                ]);
+            }
+
+            return $modelResource;
         }
     }
 
     public function getRelatedList()
     {
-        $this->entity->connection?->entities
+        dd($this->entity);
+        $this->entity->entityConnection?->entities
             ->map(function (Entity $entity) {
-                dd($entity);
+                dd($entity->relationLoaded('fields'));
                 $entity->fields
                     ->filter(fn (Field $field) => $field->fieldType->name === 'lookupModel')
                     ->filter(fn (Field $field) => dd($field->relationLoaded('relation')));
@@ -443,6 +454,8 @@ class ModuleDataCollector
 
         $lookupData = [];
 
+        $lookupModels = [];
+
         $formulaFields = [];
 
         $this->setFields();
@@ -462,7 +475,7 @@ class ModuleDataCollector
                 continue;
             }
 
-            if ($request->fieldType->name === 'autonumber' && ! $isCreate) {
+            if ($field->fieldType->name === 'autonumber' && ! $isCreate) {
                 continue;
             }
 
@@ -473,7 +486,7 @@ class ModuleDataCollector
             $input = $request->input($field->name, []);
 
             if ($field->fieldType->name === 'lookupModel') {
-                $returnedResult = $this->fieldService->resolveExecuteLookupField($request, $field, null);
+                $returnedResult = $this->fieldService->resolveExecuteLookupField($request, $model, $input, $this->entity, $field, $lookupModels);
 
                 if ($returnedResult === false) {
                     continue;
@@ -575,7 +588,7 @@ class ModuleDataCollector
         return [$data, $lookupData, $formulaFields];
     }
 
-    protected function deleteMutableChanges($upsert = false)
+    private function deleteMutableChanges($upsert = false)
     {
         if ($this->mutableEntityNames) {
             foreach ($this->mutableEntityNames as $mutableEntityName) {
