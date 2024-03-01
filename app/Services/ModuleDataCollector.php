@@ -344,6 +344,17 @@ class ModuleDataCollector
         }
     }
 
+    public function getRelatedList()
+    {
+        $this->entity->connection?->entities
+            ->map(function (Entity $entity) {
+                dd($entity);
+                $entity->fields
+                    ->filter(fn (Field $field) => $field->fieldType->name === 'lookupModel')
+                    ->filter(fn (Field $field) => dd($field->relationLoaded('relation')));
+            });
+    }
+
     public function getQueryBasedOnHandledBranches($query)
     {
         // Fetch data based on user's handled branches

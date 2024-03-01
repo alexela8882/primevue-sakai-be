@@ -43,6 +43,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/user', [UserController::class, 'getUser']);
 
+    Route::get('/getShowRelatedList/{identifier}', [ModuleController::class, 'getShowRelatedList']);
+
     Route::apiResources([
         'campaigns' => CampaignController::class,
         'countries' => CountryController::class,
