@@ -145,6 +145,16 @@ if (! function_exists('generateSelectableCollectionFields')) {
         }
     }
 
+    if (! function_exists('returnErrorMessage')) {
+        function returnErrorMessage($message, $code)
+        {
+            return [
+                'message' => 'Error. '.$message,
+                'status_code' => 422,
+            ];
+        }
+    }
+
     if (! function_exists('picklist_items')) {
         function picklist_items($listName, $idsOnly = false, $withValues = false, $listMustExist = false)
         {

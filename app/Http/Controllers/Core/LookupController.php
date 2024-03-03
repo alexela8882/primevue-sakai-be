@@ -38,7 +38,7 @@ class LookupController extends Controller
 
         $this->queryBuilder = $dqBuilder;
 
-        $this->user = Auth::guard('api')->user() ?? User::find('5bf45d4a678f714eac558ba3');
+        $this->user = Auth::guard('api')->user();
         $this->queryBuilder->setUser($this->user);
     }
 
