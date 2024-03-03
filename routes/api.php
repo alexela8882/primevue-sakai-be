@@ -33,6 +33,8 @@ Route::get('passwordless-login', [RegisterController::class, 'passwordLessLogin'
 Route::get('logout', [RegisterController::class, 'logout'])->middleware(['web']);
 
 Route::middleware('auth:api')->group(function () {
+    Route::post('/postMergeDuplicateAccounts', [AccountController::class, 'postMergeDuplicateAccounts']);
+
     Route::get('/getModuleFields', [FieldController::class, 'getModuleFields']);
 
     Route::get('/getMenuNavigation', [FolderController::class, 'getMenuNavigation']);

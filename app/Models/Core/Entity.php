@@ -20,6 +20,11 @@ class Entity extends Base
         return $this->hasMany(Panel::class, 'entity_id', '_id');
     }
 
+    public function relations()
+    {
+        return $this->hasMany(Relation::class, 'entity_id');
+    }
+
     public function mainModule()
     {
         return $this->hasOne(Module::class, 'mainEntity', '_id');

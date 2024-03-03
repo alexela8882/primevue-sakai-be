@@ -34,7 +34,7 @@ class ModuleDataCollector
 
     private Module $module;
 
-    private Entity $entity;
+    public Entity $entity;
 
     private Base $model;
 
@@ -171,6 +171,11 @@ class ModuleDataCollector
         return $this;
     }
 
+    public function getCurrentViewFilterFieldNamesForPagination()
+    {
+        return $this->currentViewFilterFields->map(fn (Field $field) => $field->name)->toArray();
+    }
+
     public function setPanels()
     {
         $this->panels = Panel::query()
@@ -182,11 +187,8 @@ class ModuleDataCollector
         return $this;
     }
 
-    public function getCurrentViewFilterFieldNamesForPagination()
-    {
-        return $this->currentViewFilterFields->map(fn (Field $field) => $field->name)->toArray();
-    }
-
+    // Function: getMainCollectionData
+    // Uses: API
     public function getIndex(Request $request)
     {
         $query = $this->model->query()->where('deleted_at', null);
@@ -236,82 +238,85 @@ class ModuleDataCollector
         return $modelCollection;
     }
 
+    // Function: save
+    // Uses: API
     public function postStore(Request $request, bool $mainOnly = false)
     {
         $model = null;
 
-        // try {
-        // This is for FE's tracking wherein they will create a unique indentifier,
-        // and see if this entity's model's uid already exists or not yet.
-        // If it is already existing, then we will just return the model
-        // to let FE know that it already exist.
-        if ($request->filled('uid')) {
-            $uniqueIdForFE = $this->model->where('uid', $request->input('uid'))->first();
+        try {
+            // This is for FE's tracking wherein they will create a unique indentifier,
+            // and see if this entity's model's uid already exists or not yet.
+            // If it is already existing, then we will just return the model
+            // to let FE know that it already exist.
+            if ($request->filled('uid')) {
+                $uniqueIdForFE = $this->model->where('uid', $request->input('uid'))->first();
 
-            if ($uniqueIdForFE) {
-                return $uniqueIdForFE;
+                if ($uniqueIdForFE) {
+                    return $uniqueIdForFE;
+                }
             }
-        }
 
-        [$data, $lookupData, $formulaFields] = $this->getDataForSaving($request, null, false, true);
+            [$data, $lookupData, $formulaFields] = $this->getDataForSaving($request, null, false, true);
 
-        // If uid is not yet present, then we will add this uid value for saving.
-        if ($request->filled('uid')) {
-            $data['uid'] = $request->input('uid');
-        }
-
-        // Adding fullName attribute to the following entities for saving.
-        if (in_array($this->entity->name, ['Contact', 'Employee', 'User', 'EscoVenturesContact'])) {
-            $data['fullName'] = Str::squish("{$request->input('firstName')} {$request->input('lastName')}");
-        }
-
-        $model = $this->model->create($data);
-
-        foreach ($lookupData as $lookup) {
-            $query = $model->dynamicRelationship($lookup['method'], $lookup['entity'], $lookup['fkey'], $lookup['lkey'], null, true);
-
-            if ($lookup['method'] === 'belongsToMany' && $lookup['data']) {
-                $query->sync($lookup['data']);
-            } else {
-                $query->associate($lookup['data']);
+            // If uid is not yet present, then we will add this uid value for saving.
+            if ($request->filled('uid')) {
+                $data['uid'] = $request->input('uid');
             }
+
+            // Adding fullName attribute to the following entities for saving.
+            if (in_array($this->entity->name, ['Contact', 'Employee', 'User', 'EscoVenturesContact'])) {
+                $data['fullName'] = Str::squish("{$request->input('firstName')} {$request->input('lastName')}");
+            }
+
+            $model = $this->model->create($data);
+
+            foreach ($lookupData as $lookup) {
+                $query = $model->dynamicRelationship($lookup['method'], $lookup['entity'], $lookup['fkey'], $lookup['lkey'], null, true);
+
+                if ($lookup['method'] === 'belongsToMany' && $lookup['data']) {
+                    $query->sync($lookup['data']);
+                } else {
+                    $query->associate($lookup['data']);
+                }
+            }
+
+            if ($this->entity->name === 'SalesOpportunity') {
+                $model->quotations->each(fn (SalesQuote $salesQuote) => $salesQuote->updateQuietly(['sales_type_id' => $model->sales_type_id]));
+            }
+
+            $hasMutable = (new EntityService)->hasMutable($this->entity);
+
+            if ($mainOnly === false && $hasMutable) {
+                $this->executeMutableDataFromRequest($request, $model);
+            }
+
+            // elseif (count($formulaFields) !== 0) {
+            //     // FOR CHARISSE
+            //     FormulaParser::setEntity($this->module->main);
+
+            //     foreach ($formulaFields as $formulaField) {
+            //         $value = FormulaParser::parseField($formulaField, $model, true);
+            //         $model->update([$formulaField->name => $value]);
+            //     }
+            // }
+        } catch (Exception $exception) {
+            if ($mainOnly === false) {
+                $this->deleteMutableChanges();
+            }
+
+            if ($model) {
+                $model->delete;
+            }
+
+            throw $exception;
         }
-
-        if ($this->entity->name === 'SalesOpportunity') {
-            $model->quotations->each(fn (SalesQuote $salesQuote) => $salesQuote->updateQuietly(['sales_type_id' => $model->sales_type_id]));
-        }
-
-        $hasMutable = (new EntityService)->hasMutable($this->entity);
-
-        if ($mainOnly === false && $hasMutable) {
-            $this->executeMutableDataFromRequest($request, $model);
-        }
-
-        // elseif (count($formulaFields) !== 0) {
-        //     // FOR CHARISSE
-        //     FormulaParser::setEntity($this->module->main);
-
-        //     foreach ($formulaFields as $formulaField) {
-        //         $value = FormulaParser::parseField($formulaField, $model, true);
-        //         $model->update([$formulaField->name => $value]);
-        //     }
-        // }
-        // } catch (Exception $exception) {
-        //     if ($mainOnly === false) {
-        //         $this->deleteMutableChanges();
-        //     }
-
-        //     if ($model) {
-        //         $model->delete;
-        //     }
-
-        //     throw $exception;
-        // }
 
         return $model;
     }
 
-    // getConnectedCollectionData v1
+    // Function: getConnectedCollectionData
+    // Uses: API
     public function getShow(Base $base, Request $request, bool $isItemOnly = false, bool $isConnectedOnly = false, array $additional = [])
     {
         $data = [];
@@ -352,6 +357,13 @@ class ModuleDataCollector
 
             return $modelResource;
         }
+    }
+
+    // Function: update
+    // Uses: API
+    public function patchUpdate()
+    {
+
     }
 
     public function getRelatedList()
