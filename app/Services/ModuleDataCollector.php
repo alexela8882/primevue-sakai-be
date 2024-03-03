@@ -363,7 +363,7 @@ class ModuleDataCollector
     // Uses: API
     public function patchUpdate()
     {
-
+        return true;
     }
 
     public function getRelatedList()
@@ -376,6 +376,47 @@ class ModuleDataCollector
                     ->filter(fn (Field $field) => $field->fieldType->name === 'lookupModel')
                     ->filter(fn (Field $field) => dd($field->relationLoaded('relation')));
             });
+    }
+
+    public function postMergeDuplicate(string $identifierToBeSaved, Request $request)
+    {
+        $identifiersToBeRemoved = $request->input('identifiers-to-be-removed');
+
+        $relations = $this->entity->load(['relations', 'relations.field', 'relations.field.entity'])->relations;
+
+        foreach ($relations as $relation) {
+            $field = $relation->field;
+
+            if ($field instanceof Field) {
+                if ($relation->method === 'belongsToMany') {
+                    $field
+                        ->entity
+                        ->getModel()
+                        ->whereIn($field->name, $identifiersToBeRemoved)
+                        ->each(function (Base $model) use ($relation, $identifierToBeSaved, $identifiersToBeRemoved) {
+                            $query = $model->dynamicRelationship('belongsToMany', $relation->class, $relation->foreign_key, $relation->local_key, null, true);
+
+                            $query->detach($identifiersToBeRemoved);
+
+                            $query->attach([$identifierToBeSaved]);
+                        });
+                } else {
+                    $field
+                        ->entity
+                        ->getModel()
+                        ->whereIn($field->name, $identifiersToBeRemoved)
+                        ->update([$field->name => $identifierToBeSaved]);
+                }
+            }
+        }
+
+        $model = $this->entity->getModel()->where('_id', $identifierToBeSaved)->first();
+
+        $model->update(['mergedwith' => array_merge($model->mergedwith ?? [], $identifiersToBeRemoved)]);
+
+        $this->entity->getModel()->whereIn('_id', $identifiersToBeRemoved)->delete();
+
+        return $this->patchUpdate($identifierToBeSaved, $request);
     }
 
     public function getQueryBasedOnHandledBranches($query)
