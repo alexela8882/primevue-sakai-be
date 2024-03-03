@@ -45,6 +45,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/lookup', [LookupController::class, 'getLookup']);
 
+    Route::get('/getShowRelatedList/{identifier}', [ModuleController::class, 'getShowRelatedList']);
+
     Route::apiResources([
         'campaigns' => CampaignController::class,
         'countries' => CountryController::class,
@@ -55,3 +57,11 @@ Route::middleware('auth:api')->group(function () {
         'viewFilters' => ViewFilterController::class,
     ]);
 });
+
+Route::controller(UserConfigController::class)
+    ->prefix('user-configs')
+    ->middleware('auth:api')
+    ->group(function () {
+        Route::get('get-app-theme', 'getAppTheme');
+        Route::post('change-app-theme', 'changeAppTheme');
+    });
