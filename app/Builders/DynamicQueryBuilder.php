@@ -3,6 +3,7 @@
 namespace App\Builders;
 
 use App\Models\Core\Field;
+use App\Services\FieldService;
 use App\Traits\QueryTrait;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Input;
@@ -347,7 +348,7 @@ class DynamicQueryBuilder
             throw new \Exception('Error. The field named '.$fieldName.' is not found in entity '.$entity->name);
         }
         $result = $entity->getModel()->where($fieldName, $value)->pluck('_id');
-        if ($field->hasMultipleValues()) {
+        if ((new FieldService)->hasMultipleValues($field)) {
             return $result->get();
         } else {
             return $result->first();
@@ -372,7 +373,7 @@ class DynamicQueryBuilder
 
             $rEntity = $entityField->relation->relatedEntity;
 
-            $operator = ($entityField->hasMultipleValues() || $prevEntity->name != $rEntity->name) ? 'in' : '=';
+            $operator = ((new FieldService)->hasMultipleValues($entityField) || $prevEntity->name != $rEntity->name) ? 'in' : '=';
 
             //            dd($prevEntity->name . '::' . $entityField->name, $operator, $rEntity->name . '::_id' );
 
@@ -477,7 +478,7 @@ class DynamicQueryBuilder
         if (strpos($query, 'function(') === false && $this->isField($valueOrField)) {
             $this->pushWhere($className1, $operand1['field']['name'], $query, $operator, $className2, $operand2['field']['name']);
         } else {
-            if (! $operand1['field']->hasMultipleValues()) {
+            if (! (new FieldService)->hasMultipleValues($operand1['field'])) {
                 if (! starts_with($valueOrField, '[')) {
                     if (is_bool($valueOrField)) {
                         $query .= ''.(($valueOrField) ? 'true' : 'else').')';
@@ -539,7 +540,7 @@ class DynamicQueryBuilder
         //if($field->hasMultipleValues()) {
         //    dd($fieldName, $operator, $otherField, $this->isField($otherField));
         //}
-        if (is_object($field) && $field->hasMultipleValues() && $otherField) {
+        if (is_object($field) && (new FieldService)->hasMultipleValues($field) && $otherField) {
             $prepend = '(';
             if (! $this->isField($otherField) && ! starts_with($otherField, '[')) {
                 $otherField = '["'.$otherField.'"]';

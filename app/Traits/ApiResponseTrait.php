@@ -128,7 +128,7 @@ trait ApiResponseTrait
     {
         \Auth::shouldUse('api');
         if (\Auth::guest() && env('APP_ENV') == 'local') {
-            return \App\User::where($key, $user ?: env('DEV_USER', 'christia.l@escolifesciences.com'))->first();
+            return \App\Models\User::where($key, $user ?: env('DEV_USER', 'christia.l@escolifesciences.com'))->first();
         } else {
             return \Auth::guard('api')->user();
         }

@@ -2,10 +2,10 @@
 
 use App\Http\Controllers\API\CountryController;
 use App\Http\Controllers\API\RegisterController;
-use App\Http\Controllers\API\UserConfigController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\Company\CampaignController;
 use App\Http\Controllers\Core\FieldController;
+use App\Http\Controllers\Core\LookupController;
 use App\Http\Controllers\Core\ModuleController;
 use App\Http\Controllers\Core\PanelController;
 use App\Http\Controllers\Core\PicklistController;
@@ -42,6 +42,8 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/picklist', [PicklistController::class, 'getLists']);
 
     Route::get('/user', [UserController::class, 'getUser']);
+
+    Route::post('/lookup', [LookupController::class, 'getLookup']);
 
     Route::get('/getShowRelatedList/{identifier}', [ModuleController::class, 'getShowRelatedList']);
 
