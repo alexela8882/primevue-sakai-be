@@ -77,81 +77,75 @@ class FieldService
         return false;
     }
 
-    public function resolveExecuteLookupField(Request $request, Field $field, mixed $model)
+    public function resolveExecuteLookupField(Request $request, $model, &$input, $entity, Field $field, &$lookupModels)
     {
-        $lookupModels = [];
+        $isRequired = $field->rules->firstWhere('name', 'required');
 
-        $isRequired = $field->rules->where('name', 'required')->first();
-
-        $input = (array) $request->input($field->name);
+        if ($input == '') {
+            $input = (array) null;
+        } else {
+            $input = (array) $input;
+        }
 
         $relation = $field->relation;
 
-        $model = App::make($relation->entity->model_class);
+        $query = App::make($relation->entity->model_class);
 
         // if lookup is a controlling field, store model
         if ($field->controls) {
-            $lookupModels[$field->name] = $model;
+            $lookupModels[$field->name] = $query;
         }
 
-        $items = $model->whereIn('_id', $input)->get();
+        $invalidIdentifiers = collect($input)->diff($query->whereIn('_id', $input)->pluck('_id'));
 
-        $itemsDiff = collect($input)->diff($items->pluck('_id'));
-
-        if ($itemsDiff->isNotEmpty() && $isRequired) {
-            throw new Exception("Error. Invalid IDs for field {$field->name}: {$itemsDiff->implode(', ')}");
+        if ($invalidIdentifiers->isNotEmpty() && $isRequired) {
+            throw new Exception("Error. Invalid IDs for {$field->name}: {$invalidIdentifiers->implode(', ')}");
         }
 
-        if ($field->uniqueName !== 'serviceschedule_branch_id') {
-            if ($itemsDiff->isNotEmpty()) {
-                throw new Exception("Error. The following items for field \"{$field->name}\" are unidentified: {$itemsDiff->implode(', ')}");
+        if ($field->uniqueName != 'serviceschedule_branch_id') {
+            $existingItems = $query->whereIn('_id', $input)->get();
+            $unknownItems = collect($input)->diff($existingItems->pluck('_id'));
+
+            if ($unknownItems->isNotEmpty()) {
+                throw new Exception("Error. The following items for field {$field->name} are unidentified: {$unknownItems->implode(', ')}");
             }
         }
+
+        $arrReq = is_array($request) ? $request : $request->all();
 
         // if lookup has a controlling field
         if (isset($field->rules['filtered_by'])) {
-            $controllingFieldName = $field->rules['filtered_by'];
-
-            if (! isset($lookupModels[$controllingFieldName])) {
-                $controllingField = $field->entity->fields->where('name', $controllingFieldName)->first();
-
-                if (! $controllingField) {
-                    throw new Exception("Error. Unrecognized controlling field name: {$controllingFieldName}");
+            $cFieldName = $field->rules['filtered_by'];
+            if (! isset($lookupModels[$cFieldName])) {
+                $cField = $entity->fields->where('name', $cFieldName)->first();
+                if (! $cField) {
+                    throw new \Exception('Error. Unrecognized controlling field '.$cFieldName);
                 }
             }
 
-            $controllingFieldvalue = $request->input('$cFieldName');
+            $cvalue = $request['$cFieldName'];
 
-            $unknownItems = $items->whereNotIn($field->filterSourceField, (array) $controllingFieldvalue);
-
+            $unknownItems = $existingItems->whereNotIn($field->filterSourceField, (array) $cvalue)->get();
             if ($unknownItems->isNotEmpty()) {
-                throw new Exception("Error.  The following items for field {$field->name} are incompatible with controlling field: {$unknownItems->implode(', ')}");
+                throw new \Exception('Error.  The following items for field "'.$field->name.'" are incompatible with controlling field: '.implode(',', $unknownItems->toArray()));
             }
         }
 
-        $isEmpty = $request->filled($field->name);
-
-        if (is_array($request->input($field->name))) {
-            if (empty($request->input($field->name))) {
-                $isEmpty = false;
-            }
-        }
+        $isEmpty = ($input == null || $input == '' || is_array($input) && ! count($input));
 
         if ($isEmpty) {
             if ($isRequired) {
-                throw new Exception("Field {$field->name} is required.");
-            } elseif ($model || ! $request->missing($field->name)) {
+                throw new \Exception('Field '.$field->name.' is required');
+            } elseif ($model || array_key_exists($field->name, $arrReq)) {
                 $input = null;
             } else {
                 return false;
             }
         }
 
-        $hasMultipleValues = (new FieldService)->hasMultipleValues($field);
-
-        if ($hasMultipleValues) {
+        if ($field->hasMultipleValues()) {
             return [
-                'entity' => $field->relation->relatedEntity->model_class,
+                'entity' => $field->relation->entity->model_class,
                 'method' => $field->relation->method,
                 'fkey' => $field->relation->foreign_key,
                 'lkey' => $field->relation->local_key,
@@ -160,5 +154,10 @@ class FieldService
         }
 
         return true;
+    }
+
+    public function isPopup(Field $field)
+    {
+        return $field->rules()->whereIn('name', ['ss_pop_up', 'ms_pop_up'])->count() ? true : false;
     }
 }

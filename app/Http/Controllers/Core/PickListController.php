@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Core\PicklistResource;
 use App\Models\Core\Entity;
 use App\Models\Core\Picklist;
+use App\Services\PicklistService;
 use Illuminate\Http\Request;
 
 class PickListController extends Controller
@@ -24,7 +25,7 @@ class PickListController extends Controller
     {
         $listName = $request->get('listName');
 
-        return $this->picklist->getList($listName, true, true);
+        return (new PicklistService)->getList($listName, true, true);
     }
 
     public function index()

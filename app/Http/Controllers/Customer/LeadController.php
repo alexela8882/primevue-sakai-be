@@ -22,6 +22,8 @@ class LeadController extends Controller
     public function store(Request $request)
     {
         $lead = $this->moduleDataCollector->postStore($request);
+
+        return $lead?->_id;
     }
 
     public function show(Lead $lead, Request $request)

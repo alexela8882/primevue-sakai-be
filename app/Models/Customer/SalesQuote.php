@@ -28,4 +28,9 @@ class SalesQuote extends Base
     {
         return $this->belongsTo(Contact::class, 'salesperson_in_charge_id', '_id');
     }
+
+    public function items()
+    {
+        return $this->hasMany('App\Models\Customer\SalesOpptItem', 'sales_quote_id', '_id');
+    }
 }
