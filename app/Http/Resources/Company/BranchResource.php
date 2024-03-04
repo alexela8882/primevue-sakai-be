@@ -3,7 +3,6 @@
 namespace App\Http\Resources\Company;
 
 use App\Http\Resources\Core\CountryResource;
-use App\Models\Core\Picklist;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,10 +17,7 @@ class BranchResource extends JsonResource
     {
 
         $x = $this->timezone_id;
-        if ($x) {
-            $picklists = new Picklist();
-        }
-        $x = $picklists->getItemById('timezone', $x)->toArray()['value'];
+        $x = picklist_id('timezone', $x)->toArray()['value'];
 
         return [
             '_id' => $this->_id,
