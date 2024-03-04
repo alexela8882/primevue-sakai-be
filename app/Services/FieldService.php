@@ -155,4 +155,9 @@ class FieldService
 
         return true;
     }
+
+    public function isPopup(Field $field)
+    {
+        return $field->rules()->whereIn('name', ['ss_pop_up', 'ms_pop_up'])->count() ? true : false;
+    }
 }

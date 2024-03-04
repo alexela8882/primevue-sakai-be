@@ -2,17 +2,19 @@
 
 use App\Http\Controllers\API\CountryController;
 use App\Http\Controllers\API\RegisterController;
-use App\Http\Controllers\API\UserConfigController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\Company\CampaignController;
 use App\Http\Controllers\Core\FieldController;
+use App\Http\Controllers\Core\LookupController;
 use App\Http\Controllers\Core\ModuleController;
 use App\Http\Controllers\Core\PanelController;
 use App\Http\Controllers\Core\PicklistController;
+use App\Http\Controllers\Core\QuotationTemplateController;
 use App\Http\Controllers\Core\ViewFilterController;
 use App\Http\Controllers\Customer\AccountController;
 use App\Http\Controllers\Customer\LeadController;
 use App\Http\Controllers\Customer\SalesOpportunityController;
+use App\Http\Controllers\Customer\SalesQuotationController;
 use App\Http\Controllers\Folder\FolderController;
 use Illuminate\Support\Facades\Route;
 
@@ -45,7 +47,25 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/user', [UserController::class, 'getUser']);
 
+    Route::post('/lookup', [LookupController::class, 'getLookup']);
+
     Route::get('/getShowRelatedList/{identifier}', [ModuleController::class, 'getShowRelatedList']);
+
+    Route::patch('/modules/salesquotes/upsert/{id}', [SalesQuotationController::class, 'upsert']);
+
+    Route::get('/modules/salesopportunities/getsjinfo/{id}', [SalesOpportunityController::class, 'getItemsWithSJ']);
+
+    Route::get('/modules/salesopportunities/getactiveitems/{id}', [SalesOpportunityController::class, 'getActiveItems']);
+
+    Route::get('/modules/salesopportunities/getAccountIds/{id}', [SalesOpportunityController::class, 'getAccountIds']);
+
+    Route::post('/modules/salesopportunities/convert/{leadid}', [SalesOpportunityController::class, 'convert']);
+
+    Route::post('/modules/salesopportunities/checkoppdetails/{id}', [SalesOpportunityController::class, 'checkDetails']);
+
+    Route::post('/modules/salesopportunities/transfer/{id}', [SalesOpportunityController::class, 'transferOpportunity']);
+
+    Route::patch('/modules/salesopportunities/upsert/{id}', [SalesOpportunityController::class, 'upsert']);
 
     Route::apiResources([
         'campaigns' => CampaignController::class,
@@ -53,8 +73,10 @@ Route::middleware('auth:api')->group(function () {
         'modules/accounts' => AccountController::class,
         'modules/leads' => LeadController::class,
         'modules/salesopportunities' => SalesOpportunityController::class,
+        'modules/salesquotes' => SalesQuotationController::class,
         'modules' => ModuleController::class,
         'viewFilters' => ViewFilterController::class,
+        'quotationtemplates' => QuotationTemplateController::class,
     ]);
 });
 

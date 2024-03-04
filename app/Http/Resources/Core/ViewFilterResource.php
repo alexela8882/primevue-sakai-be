@@ -17,7 +17,7 @@ class ViewFilterResource extends JsonResource
         return [
             '_id' => $this->_id,
             'query_id' => $this->query_id,
-            'sortField' => $this->created_at,
+            'sortField' => $this->sortField,
             'sortOrder' => $this->sortOrder,
             'filters' => $this->filters,
             'filterLogic' => $this->filterLogic,

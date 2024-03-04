@@ -17,63 +17,53 @@ class SalesOpportunity extends Base
 
     protected $connection = 'mongodb';
 
-    // public function account()
-    // {
-    //     return $this->belongsTo('App\Models\Customer\Account');
-    // }
+    public function account()
+    {
+        return $this->belongsTo('App\Models\Customer\Account');
+    }
 
-    // public function businessUnits()
-    // {
-    //     return $this->belongsToMany('App\Models\Company\BusinessUnit');
-    // }
+    public function businessUnits()
+    {
+        return $this->belongsToMany('App\Models\Company\BusinessUnit');
+    }
 
-    // public function products()
-    // {
-    //     return $this->hasMany('App\Models\Product\Product');
-    // }
+    public function tasks()
+    {
+        return $this->hasMany('App\Models\Customer\SalesOpportunity\Task');
+    }
 
-    // public function assignees()
-    // {
-    //     return $this->hasMany('App\User');
-    // }
+    public function events()
+    {
+        return $this->hasMany('App\Models\Customer\SalesOpportunity\Event');
+    }
 
-    // public function tasks()
-    // {
-    //     return $this->hasMany('App\Models\Customer\SalesOpportunity\Task');
-    // }
+    public function quotations()
+    {
+        return $this->hasMany('App\Models\Customer\SalesQuote');
+    }
 
-    // public function events()
-    // {
-    //     return $this->hasMany('App\Models\Customer\SalesOpportunity\Event');
-    // }
+    public function items()
+    {
+        return $this->hasMany('App\Models\Customer\SalesOpptItem', 'sales_opportunity_id', '_id');
+    }
 
-    // public function quotations()
-    // {
-    //     return $this->hasMany('App\Models\Customer\SalesQuote');
-    // }
+    public function owner()
+    {
+        return $this->belongsTo('App\User', 'owner_id');
+    }
 
-    // public function owner()
-    // {
-    //     return $this->belongsTo('App\User', 'owner_id');
-    // }
+    public function salesPersonInCharge()
+    {
+        return $this->belongsTo('App\Models\Customer\Contact', 'salesperson_in_charge_id');
+    }
 
-    // public function salesPersonInCharge()
-    // {
-    //     return $this->belongsTo('App\Models\Customer\Contact', 'salesperson_in_charge_id');
-    // }
+    public function branch()
+    {
+        return $this->belongsTo('App\Models\Company\Branch');
+    }
 
-    // public function branch()
-    // {
-    //     return $this->belongsTo('App\Models\Company\Branch');
-    // }
-
-    // public function opportunityStageHistories()
-    // {
-    //     return $this->hasMany('App\Models\Customer\OpportunityStageHistory', 'sales_opportunity_id', '_id');
-    // }
-
-    // public function lead()
-    // {
-    //     return $this->belongsTo(Lead::class);
-    // }
+    public function lead()
+    {
+        return $this->belongsTo('App\Models\Customer\Lead');
+    }
 }

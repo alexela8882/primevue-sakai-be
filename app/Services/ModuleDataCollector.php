@@ -65,7 +65,7 @@ class ModuleDataCollector
 
     public function setUser()
     {
-        $this->user = Auth::guard('api')->user() ?? User::find('5bf45d4a678f714eac558ba3');
+        $this->user = Auth::guard('api')->user();
 
         return $this;
     }

@@ -4,7 +4,6 @@ namespace App\Builders;
 
 use App\Models\Core\Entity;
 use App\Models\Core\Field;
-use App\Models\User;
 
 class EntityField
 {
@@ -13,7 +12,7 @@ class EntityField
     public function __construct()
     {
 
-        $this->user = \Auth::guard('api')->user() ?? User::find('5bf45d4a678f714eac558ba3');
+        $this->user = \Auth::guard('api')->user();
     }
 
     public function setUser($user)
