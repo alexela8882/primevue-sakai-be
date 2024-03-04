@@ -55,9 +55,9 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/modules/salesopportunities/getactiveitems/{id}', [SalesOpportunityController::class, 'getActiveItems']);
 
-    Route::get('/modules/salesopportunities/getAccountIds/{id}',[ SalesOpportunityController::class, 'getAccountIds']);
+    Route::get('/modules/salesopportunities/getAccountIds/{id}', [SalesOpportunityController::class, 'getAccountIds']);
 
-    Route::post('/modules/salesopportunities/convert/{leadid}',[ SalesOpportunityController::class, 'convert']);
+    Route::post('/modules/salesopportunities/convert/{leadid}', [SalesOpportunityController::class, 'convert']);
 
     Route::post('/modules/salesopportunities/checkoppdetails/{id}', [SalesOpportunityController::class, 'checkDetails']);
 

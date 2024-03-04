@@ -25,7 +25,7 @@ class CampaignController extends Controller
         }
     }
 
-	public function store(Request $request)
+    public function store(Request $request)
     {
         $campaign = $this->moduleDataCollector->postStore($request);
 
