@@ -17,7 +17,7 @@ class BranchResource extends JsonResource
     {
 
         $x = $this->timezone_id;
-        $x = picklist_id('timezone', $x)->toArray()['value'];
+        $x = picklist_id('timezone', $x);
 
         return [
             '_id' => $this->_id,
