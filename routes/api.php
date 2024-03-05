@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\CountryController;
 use App\Http\Controllers\API\RegisterController;
+use App\Http\Controllers\API\UserConfigController;
 use App\Http\Controllers\Account\UserController;
 use App\Http\Controllers\Company\CampaignController;
 use App\Http\Controllers\Core\FieldController;
@@ -35,6 +36,8 @@ Route::get('passwordless-login', [RegisterController::class, 'passwordLessLogin'
 Route::get('logout', [RegisterController::class, 'logout'])->middleware(['web']);
 
 Route::middleware('auth:api')->group(function () {
+    Route::post('/postMergeDuplicateAccounts', [AccountController::class, 'postMergeDuplicateAccounts']);
+
     Route::get('/getModuleFields', [FieldController::class, 'getModuleFields']);
 
     Route::get('/getMenuNavigation', [FolderController::class, 'getMenuNavigation']);

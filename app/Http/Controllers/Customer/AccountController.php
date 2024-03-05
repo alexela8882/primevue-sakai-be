@@ -21,11 +21,18 @@ class AccountController extends Controller
 
     public function store(Request $request)
     {
-        $lead = $this->moduleDataCollector->postStore($request);
+        $account = $this->moduleDataCollector->postStore($request);
+
+        return $account->_id;
     }
 
     public function show(Account $account, Request $request)
     {
         return $this->moduleDataCollector->getShow($account, $request);
+    }
+
+    public function postMergeDuplicateAccounts(string $identifier, Request $request)
+    {
+        return $this->moduleDataCollector->postMergeDuplicate($identifier, $request);
     }
 }
