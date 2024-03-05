@@ -13,7 +13,6 @@ use App\Services\ModuleDataCollector;
 use App\Services\SalesModuleService;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class SalesOpportunityController extends Controller
 {
@@ -26,8 +25,7 @@ class SalesOpportunityController extends Controller
     public function __construct(private ModuleDataCollector $moduleDataCollector)
     {
 
-        $this->user = Auth::guard('api')->user();
-        $this->mdc = $moduleDataCollector->setUser()->setModule('salesopportunities');
+        $this->mdc = $this->moduleDataCollector->setUser()->setModule('salesopportunities');
     }
 
     public function index(Request $request)

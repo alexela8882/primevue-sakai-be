@@ -16,7 +16,7 @@ class QuotationTemplateController extends Controller
 
     public function __construct()
     {
-        $this->user = Auth::guard('api')->user();
+        // $this->user = Auth::guard('api')->user();
     }
 
     public function index(Request $request)

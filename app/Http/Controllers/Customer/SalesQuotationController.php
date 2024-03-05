@@ -4,24 +4,20 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer\SalesQuote;
-use App\Services\SalesModuleService;
 use App\Services\ModuleDataCollector;
+use App\Services\SalesModuleService;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class SalesQuotationController extends Controller
 {
     use ApiResponseTrait;
 
-    private $mdc;
-
     private $user;
 
     public function __construct(private ModuleDataCollector $moduleDataCollector)
     {
-        $this->user = Auth::guard('api')->user();
-        $this->mdc = $moduleDataCollector->setUser()->setModule('salesquotes');
+        $this->moduleDataCollector->setUser()->setModule('salesquotes');
     }
 
     public function index(Request $request)

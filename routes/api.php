@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\CountryController;
 use App\Http\Controllers\API\RegisterController;
+use App\Http\Controllers\API\UserConfigController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\Company\CampaignController;
 use App\Http\Controllers\Core\FieldController;

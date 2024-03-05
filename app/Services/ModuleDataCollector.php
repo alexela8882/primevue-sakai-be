@@ -65,7 +65,15 @@ class ModuleDataCollector
 
     public function setUser()
     {
-        $this->user = Auth::guard('api')->user();
+        if (App::environment('local')) {
+            if (Auth::check()) {
+                $this->user = Auth::guard('api')->user();
+            } else {
+                $this->user = User::whereEmail('christia.l@escolifesciences.com')->first();
+            }
+        } else {
+            $this->user = Auth::guard('api')->user();
+        }
 
         return $this;
     }
