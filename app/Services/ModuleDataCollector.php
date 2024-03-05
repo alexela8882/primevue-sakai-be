@@ -66,7 +66,7 @@ class ModuleDataCollector
     public function setUser()
     {
         if (App::environment('local')) {
-            if (Auth::check()) {
+            if (Auth::guard('api')->check()) {
                 $this->user = Auth::guard('api')->user();
             } else {
                 $this->user = User::whereEmail('christia.l@escolifesciences.com')->first();
