@@ -25,6 +25,13 @@ class CampaignController extends Controller
         }
     }
 
+    public function store(Request $request)
+    {
+        $campaign = $this->moduleDataCollector->postStore($request);
+
+        return $campaign?->_id;
+    }
+
     public function show(Campaign $campaign, Request $request)
     {
         return $this->moduleDataCollector->getShow($campaign, $request);

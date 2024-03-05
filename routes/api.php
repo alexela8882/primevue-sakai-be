@@ -35,6 +35,8 @@ Route::get('passwordless-login', [RegisterController::class, 'passwordLessLogin'
 Route::get('logout', [RegisterController::class, 'logout'])->middleware(['web']);
 
 Route::middleware('auth:api')->group(function () {
+    Route::post('/postMergeDuplicateAccounts', [AccountController::class, 'postMergeDuplicateAccounts']);
+
     Route::get('/getModuleFields', [FieldController::class, 'getModuleFields']);
 
     Route::get('/getMenuNavigation', [FolderController::class, 'getMenuNavigation']);
@@ -55,9 +57,9 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/modules/salesopportunities/getactiveitems/{id}', [SalesOpportunityController::class, 'getActiveItems']);
 
-    Route::get('/modules/salesopportunities/getAccountIds/{id}',[ SalesOpportunityController::class, 'getAccountIds']);
+    Route::get('/modules/salesopportunities/getAccountIds/{id}', [SalesOpportunityController::class, 'getAccountIds']);
 
-    Route::post('/modules/salesopportunities/convert/{leadid}',[ SalesOpportunityController::class, 'convert']);
+    Route::post('/modules/salesopportunities/convert/{leadid}', [SalesOpportunityController::class, 'convert']);
 
     Route::post('/modules/salesopportunities/checkoppdetails/{id}', [SalesOpportunityController::class, 'checkDetails']);
 
