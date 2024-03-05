@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-	protected $user;
+    protected $user;
 
     public function __construct(private ModuleDataCollector $moduleDataCollector)
     {
@@ -19,13 +19,13 @@ class UserController extends Controller
 
         $this->user = auth('api')->user();
     }
-	
-	public function index(Request $request)
+
+    public function index(Request $request)
     {
         return $this->moduleDataCollector->getIndex($request);
     }
 
-	public function getUser(Request $request)
+    public function getUser(Request $request)
     {
 
         if ($request->headers->get('isApp')) {
@@ -50,12 +50,14 @@ class UserController extends Controller
         return UserResource::make(User::with(['branch', 'roles', 'handledBranches'])->find(auth()->user()->id));
     }
 
-	public function deactivateUser(User $user){
+    public function deactivateUser(User $user)
+    {
 
-		$user->active = false;
-		$user->deactivatedAt = Carbon::now();
-		$user->save();
-		return response()->json(['user' => $user], 200);
+        $user->active = false;
+        $user->deactivatedAt = Carbon::now();
+        $user->save();
 
-	}
+        return response()->json(['user' => $user], 200);
+
+    }
 }

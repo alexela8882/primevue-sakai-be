@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\Account\UserController;
 use App\Http\Controllers\API\CountryController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\UserConfigController;
-use App\Http\Controllers\Account\UserController;
 use App\Http\Controllers\Company\CampaignController;
 use App\Http\Controllers\Core\FieldController;
 use App\Http\Controllers\Core\LookupController;
@@ -48,7 +48,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/user', [UserController::class, 'getUser']);
 
-	Route::patch('/user/deactivate/{id}', [UserController::class, 'deactivateUser']);
+    Route::patch('/user/deactivate/{id}', [UserController::class, 'deactivateUser']);
 
     Route::post('/lookup', [LookupController::class, 'getLookup']);
 
@@ -77,7 +77,7 @@ Route::middleware('auth:api')->group(function () {
         'modules/leads' => LeadController::class,
         'modules/salesopportunities' => SalesOpportunityController::class,
         'modules/salesquotes' => SalesQuotationController::class,
-		'modules/users' => UserController::class,
+        'modules/users' => UserController::class,
         'modules' => ModuleController::class,
         'viewFilters' => ViewFilterController::class,
         'quotationtemplates' => QuotationTemplateController::class,
