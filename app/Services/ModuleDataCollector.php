@@ -134,7 +134,7 @@ class ModuleDataCollector
                     $this->currentViewFilter->update(['isDefault' => true]);
                 }
 
-                $viewFilters->where('_id', '!=', $activeViewFilter)->where('isDefault', true)->update(['isDefault' => false]);
+                $viewFilters->where('_id', '!=', $activeViewFilter)->where('isDefault', true)->each(fn (ViewFilter $viewFilter) => $viewFilter->update(['isDefault' => false]));
 
                 $viewFilters = $viewFilterQuery->get();
             }
