@@ -50,7 +50,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/lookup', [LookupController::class, 'getLookup']);
 
-    Route::get('/getShowRelatedList/{identifier}', [ModuleController::class, 'getShowRelatedList']);
+    Route::get('/getShowRelatedList', [ModuleController::class, 'getShowRelatedList']);
 
     Route::patch('/modules/salesquotes/upsert/{id}', [SalesQuotationController::class, 'upsert']);
 

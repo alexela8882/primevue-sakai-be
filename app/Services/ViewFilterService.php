@@ -5,11 +5,12 @@ namespace App\Services;
 use App\Models\Core\ViewFilter;
 use App\Models\Module\Module;
 use App\Models\User;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 
 class ViewFilterService
 {
-    public function getDefaultViewFilter(User $user, string $moduleName, bool $returnBoolean, Module $module): Collection
+    public static function getDefaultViewFilter(User $user, string $moduleName, bool $returnBoolean, Module $module): Collection
     {
         $viewFilters = ViewFilter::query()
             ->where(['moduleName' => $moduleName, 'owner' => $user->_id])
@@ -49,7 +50,7 @@ class ViewFilterService
         return $this->copyDefault($defaultViewFilters, $user->_id);
     }
 
-    protected function copyDefault(Collection $defaultViewFilters, $userId): Collection
+    private static function copyDefault(Collection $defaultViewFilters, $userId): Collection
     {
         $items = collect([]);
 
@@ -74,5 +75,44 @@ class ViewFilterService
         }
 
         return $items;
+    }
+
+    public static function getWidestScope(User $user, string|Module $module, $returnBoolean = false)
+    {
+        if (! $module instanceof Module) {
+            $module = Module::where('name', $module)->with('queries')->first();
+        } else {
+            $module->load('queries');
+        }
+
+        if ($module->hasViewFilter === true) {
+            $queries = $module->queries->pluck('_id');
+
+            $viewFilters = self::getDefaultViewFilter($user, $module->name, $returnBoolean, $module);
+
+            if ($returnBoolean && $viewFilters === false) {
+                return false;
+            }
+
+            if ($queries->isNotEmpty()) {
+                foreach ($queries as $query) {
+                    foreach ($viewFilters as $viewfilter) {
+                        if ($query === $viewfilter->query_id) {
+                            return $viewfilter;
+                        }
+                    }
+                }
+
+                throw new Exception('Error. No matching query for module and current user\'s view filters');
+            }
+
+            $nullQuery = $viewFilters->firstWhere('query_id', null);
+
+            if ($nullQuery) {
+                return $nullQuery;
+            }
+
+            return $viewFilters->first();
+        }
     }
 }

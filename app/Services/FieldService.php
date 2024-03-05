@@ -8,7 +8,6 @@ use App\Models\Core\FieldType;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\App;
 
 class FieldService
 {
@@ -89,7 +88,7 @@ class FieldService
 
         $relation = $field->relation;
 
-        $query = App::make($relation->entity->model_class);
+        $query = $relation->entity->getModel();
 
         // if lookup is a controlling field, store model
         if ($field->controls) {

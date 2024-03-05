@@ -1,6 +1,7 @@
 <?php
 
 use App\Services\PicklistService;
+use Illuminate\Support\Str;
 
 if (! function_exists('getCollectionRawFields')) {
     function getCollectionRawFields($collection)
@@ -195,5 +196,24 @@ if (! function_exists('array_depth')) {
         }
 
         return $max_depth;
+    }
+}
+
+if (! function_exists('idify')) {
+
+    function idify($name)
+    {
+
+        if (Str::endsWith($name, ['_id', '_ids'])) {
+            return $name;
+        }
+
+        if (Str::plural($name) == $name) {
+            $str = Str::snake(Str::singular($name)).'_ids';
+        } else {
+            $str = Str::snake($name).'_id';
+        }
+
+        return $str;
     }
 }

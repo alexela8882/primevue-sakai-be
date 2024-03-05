@@ -10,7 +10,6 @@ use App\Models\Product\ProductCategory;
 use App\Services\FieldService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\App;
 
 class FieldResource extends JsonResource
 {
@@ -38,7 +37,7 @@ class FieldResource extends JsonResource
 
             $entityFields = $entity->fields->whereIn('name', $lookupFieldReturnables);
 
-            $entityModel = App::make($entity->model_class);
+            $entityModel = $entity->getModel();
 
             if ($fieldService->hasMultipleValues($this)) {
                 $modelCollection = $entityModel->whereIn('_id', [$defaultValueRule->value])->get();

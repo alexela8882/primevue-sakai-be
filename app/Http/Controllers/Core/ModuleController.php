@@ -10,18 +10,15 @@ use Illuminate\Http\Request;
 
 class ModuleController extends Controller
 {
-    protected $user;
-
     public function __construct(private ModuleDataCollector $moduleDataCollector)
     {
-        $this->user = auth('api')->user();
+        $this->moduleDataCollector->setUser();
     }
 
     public function index()
     {
-        if ($this->user) {
-
-            if ($this->user->roles->contains('name', 'crm_admin')) {
+        if ($this->moduleDataCollector->user) {
+            if ($this->moduleDataCollector->user->roles->contains('name', 'crm_admin')) {
                 return ModuleResource::collection(Module::with('entity')->get());
             } else {
                 return response()->json([], 200);
@@ -31,12 +28,10 @@ class ModuleController extends Controller
         return redirect('/');
     }
 
-    public function getShowRelatedList(string $identifier, Request $request)
+    public function getShowRelatedList(Request $request)
     {
-        $request->validate([
-            'module-name' => 'required|string|exists:modules,name',
-        ]);
-
-        $this->moduleDataCollector->setUser()->setModule($request->input('module-name'))->getRelatedList($identifier);
+        return $this->moduleDataCollector
+            ->setModule($request->input('module-name'))
+            ->getShowRelatedList($request);
     }
 }

@@ -6,10 +6,12 @@ use App\Builders\DynamicQueryBuilder;
 use App\Http\Resources\Core\FieldResource;
 use App\Http\Resources\Core\ModelResource;
 use App\Http\Resources\Core\PanelResource;
+use App\Http\Resources\Core\RelatedListResource;
 use App\Http\Resources\Core\ViewFilterResource;
 use App\Http\Resources\ModelCollection;
 use App\Models\Company\Branch;
 use App\Models\Core\Entity;
+use App\Models\Core\EntityConnection;
 use App\Models\Core\Field;
 use App\Models\Core\ListItem;
 use App\Models\Core\Panel;
@@ -18,6 +20,8 @@ use App\Models\Core\ViewFilter;
 use App\Models\Customer\SalesQuote;
 use App\Models\Model\Base;
 use App\Models\Module\Module;
+use App\Models\Service\ServiceReport;
+use App\Models\Service\ServiceSchedule;
 use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -36,8 +40,6 @@ class ModuleDataCollector
 
     public Entity $entity;
 
-    private Base $model;
-
     public Collection $fields;
 
     private Collection $currentViewFilterFields;
@@ -51,6 +53,8 @@ class ModuleDataCollector
     public $pickLists;
 
     private $viewFilters;
+
+    private $relatedLists;
 
     private array $mutableData;
 
@@ -98,8 +102,6 @@ class ModuleDataCollector
             $this->module = $module;
 
             $this->entity = $module->entity;
-
-            $this->model = App::make($module->entity->model_class);
         } else {
             throw new Exception("Error. Module named '{$name}' is not found.");
         }
@@ -130,7 +132,7 @@ class ModuleDataCollector
             $viewFilters = $viewFilterQuery->get();
 
             if ($viewFilters->isEmpty()) {
-                $viewFilters = (new ViewFilterService)->getDefaultViewFilter($this->user, "{$this->module->name} .index", false, $this->module);
+                $viewFilters = ViewFilterService::getDefaultViewFilter($this->user, "{$this->module->name} .index", false, $this->module);
             }
 
             $activeViewFilter = $request->input('viewfilter');
@@ -179,8 +181,46 @@ class ModuleDataCollector
         return $this;
     }
 
-    public function getCurrentViewFilterFieldNamesForPagination()
+    public function setRelatedLists()
     {
+        $this->entity->load([
+            'connection',
+            'connection.entities',
+            'connection.entities.panels' => fn ($query) => $query->where('controllerMethod', "{$this->module->name}@show"),
+            'connection.entities.panels.sections',
+        ]);
+
+        $connection = $this->entity->connection;
+
+        if ($connection instanceof EntityConnection) {
+            $entities = $connection->entities->filter(fn (Entity $entity) => $entity->panels->isNotEmpty());
+
+            if ($entities->isNotEmpty()) {
+                $this->relatedLists = $entities
+                    ->map(function (Entity $entity) {
+                        return $entity
+                            ->panels
+                            ->filter(fn (Panel $panel) => $panel->sections->isNotEmpty())
+                            //$label = $panel->label ?? $panel->sections()->pluck('label')->first() ?? $connectedEntity->name.($panel->foreignKey ? ' '.$relatedListables->where('name', $panel->foreignKey)->pluck('label')->first() : '');
+                            ->map(fn (Panel $panel) => ['_id' => $panel->_id, 'label' => $panel->sections->first()->label]);
+                    })
+                    ->collapse();
+            } else {
+                $this->relatedLists = collect();
+            }
+        } else {
+            $this->relatedLists = collect();
+        }
+
+        return $this;
+    }
+
+    public function getCurrentViewFilterFieldNamesForPagination(?Collection $fields = new Collection)
+    {
+        if ($fields->isNotEmpty()) {
+            return $fields->map(fn (Field $field) => $field->name)->toArray();
+        }
+
         return $this->currentViewFilterFields->map(fn (Field $field) => $field->name)->toArray();
     }
 
@@ -199,7 +239,7 @@ class ModuleDataCollector
     // Uses: API
     public function getIndex(Request $request)
     {
-        $query = $this->model->query()->where('deleted_at', null);
+        $query = $this->entity->getModel()->query()->where('deleted_at', null);
 
         $this->setFields();
 
@@ -236,10 +276,13 @@ class ModuleDataCollector
         $modelCollection = new ModelCollection($query, $this->currentViewFilterFields, $this->pickLists);
 
         if ($request->missing('listOnly')) {
+            $this->setRelatedLists();
+
             $modelCollection->additional([
                 'fields' => FieldResource::customCollection($this->fields),
                 'panels' => PanelResource::customCollection($this->panels),
                 'viewFilters' => ViewFilterResource::collection($this->viewFilters),
+                'relatedLists' => RelatedListResource::collection($this->relatedLists),
             ]);
         }
 
@@ -258,7 +301,7 @@ class ModuleDataCollector
             // If it is already existing, then we will just return the model
             // to let FE know that it already exist.
             if ($request->filled('uid')) {
-                $uniqueIdForFE = $this->model->where('uid', $request->input('uid'))->first();
+                $uniqueIdForFE = $this->entity->getModel()->where('uid', $request->input('uid'))->first();
 
                 if ($uniqueIdForFE) {
                     return $uniqueIdForFE;
@@ -277,7 +320,7 @@ class ModuleDataCollector
                 $data['fullName'] = Str::squish("{$request->input('firstName')} {$request->input('lastName')}");
             }
 
-            $model = $this->model->create($data);
+            $model = $this->entity->getModel()->create($data);
 
             foreach ($lookupData as $lookup) {
                 $query = $model->dynamicRelationship($lookup['method'], $lookup['entity'], $lookup['fkey'], $lookup['lkey'], null, true);
@@ -374,18 +417,130 @@ class ModuleDataCollector
         return true;
     }
 
-    public function getRelatedList()
+    // Uses: API
+    public function getShowRelatedList(Request $request)
     {
-        dd($this->entity);
-        $this->entity->entityConnection?->entities
-            ->map(function (Entity $entity) {
-                dd($entity->relationLoaded('fields'));
-                $entity->fields
-                    ->filter(fn (Field $field) => $field->fieldType->name === 'lookupModel')
-                    ->filter(fn (Field $field) => dd($field->relationLoaded('relation')));
-            });
+        $panel = Panel::query()
+            ->where('_id', $request->input('panel'))
+            ->with([
+                'entity',
+                'entity.mainModule',
+                'entity.fields',
+                'sections',
+            ])
+            ->first();
+
+        $model = $this->entity
+            ->getModel()
+            ->where('_id', $request->input('base'))
+            ->first();
+
+        if ($panel instanceof Panel && $model) {
+            $connectedEntity = $panel->entity;
+
+            $section = $panel->sections->first();
+
+            $sectionFieldIds = collect($section->first_ids)->merge($section->second_ids)->unique();
+
+            $connectedEntityFields = $connectedEntity->fields;
+
+            $sectionFields = $connectedEntityFields->whereIn('_id', $sectionFieldIds);
+
+            $pickLists = PicklistService::getPicklistsFromFields($sectionFields);
+
+            if ($this->entity->name === 'Account' && $connectedEntity->name === 'Contact') {
+                $query = $model->contacts();
+            } elseif ($this->entity->name === 'Unit' && $connectedEntity->name === 'ServiceReport') {
+                $schedules = ServiceSchedule::whereIn('unit_ids', [$request->input('base')])->pluck('_id');
+                $query = ServiceReport::whereIn('schedule_id', $schedules);
+            } elseif ($this->entity->name === 'DefectReport' && $connectedEntity->name === 'RPWorkOrder') {
+                $query = $model->rp();
+            } elseif ($this->entity->name === 'SalesOpportunity' && $connectedEntity->name == 'Lead') {
+                $query = $model->lead();
+            } else {
+                [$query, $intQuery] = $this->buildConnectedBaseQuery($sectionFields->pluck('name')->toArray(), $connectedEntity, $connectedEntityFields->pluck('name')->toArray(), $panel->foreignKey ?? null, $model);
+
+                if ($panel->filterQuery) {
+                    $resultQuery = $this->dataQueryBuilder->selectFrom($sectionFields->pluck('name')->toArray(), $connectedEntity, true)->filterGet($panel->filterQuery);
+                    $query = $this->dataQueryBuilder->mergeQueries($query, $resultQuery);
+                }
+
+                $viewFilter = ViewFilterService::getWidestScope($this->user, $connectedEntity->mainModule, true);
+
+                if ($viewFilter instanceof ViewFilter) {
+                    $filterQuery = $viewFilter->filterQuery;
+
+                    if ($filterQuery) {
+                        $intQuery = $intQuery.'->'.$filterQuery->query;
+                        $result = $this->dataQueryBuilder->selectFrom($sectionFields->pluck('name')->toArray(), $connectedEntity)->filterGet($intQuery);
+
+                        if ($result) {
+                            $query->whereIn('_id', $result->pluck('_id')->toArray());
+                        }
+                    }
+                }
+            }
+
+            $hasBranch = $connectedEntity->fields->contains('name', 'branch_id');
+
+            if ($hasBranch) {
+                $query = $query->whereIn('branch_id', $this->user->handled_branch_ids);
+            }
+
+            if ($request->exists('cname')) {
+                $query = $this->getQueryBasedOnSearch($query, $request);
+            }
+
+            if ($this->entity->name === 'Unit' && $connectedEntity->name === 'ServiceJob' && $request->filled('current_status_id')) {
+                $query->where('current_status_id', $request->input('current_status_id'));
+            }
+
+            $deep = $request->input('deep', false);
+
+            $field = $connectedEntity->fields->filter(fn (Field $field) => $field->name == $request->input('sortField', 'created_at') || $field->_id == $request->input('sortField', 'created_at'))->first();
+
+            if ($field instanceof Field) {
+                $query->orderBy($field->name, $request->input('sortOrder', 'desc'));
+            }
+
+            // if ($connectedEntity->entityConnection && $panel->mutable) {
+            //     $deepMutables = $connectedEntity->deepConnectedEntities(true, 1);
+            // } else {
+            //     $deepMutables = [];
+            // }
+
+            // if ($connectedEntity->name == 'ProductItem') {
+            //     $transformer = new SRProductItemTransformer();
+            // } else {
+            //     $transformer = new ModelTransformer($fields, $picklists, $deepMutables, $this->module->name);
+            // }
+
+            // From Version 1
+            // Code added below para mawala yung exception found by mongodb
+            // $sort timeout error
+            // Issue: due to opportunity's stage histories na may mga images (base64) sa remarks field
+            $query->options(['allowDiskUse' => true]);
+
+            // dd($query->toMql());
+            $query = $query->paginate($request->input('limit', 25), $this->getCurrentViewFilterFieldNamesForPagination($sectionFields), 'page', $request->input('page', 0));
+
+            $data = [
+                'cname' => $panel->name,
+                'label' => $section->label,
+                'entityName' => $connectedEntity->name,
+                'link' => $connectedEntity->mainModule->name,
+                'panelOrder' => $panel->order,
+                'mutable' => $panel->mutable,
+                'paginated' => $panel->paginated !== false,
+                'buttons' => $panel->buttons,
+                'fields' => FieldResource::customCollection($sectionFields, $pickLists),
+            ];
+
+            return RelatedListResource::customCollection($query, $data, $sectionFields, $pickLists);
+        }
     }
 
+    // Uses: API
     public function postMergeDuplicate(string $identifierToBeSaved, Request $request)
     {
         $identifiersToBeRemoved = $request->input('identifiers-to-be-removed');
@@ -432,7 +587,7 @@ class ModuleDataCollector
         // Fetch data based on user's handled branches
         // No fetching need if ignorePermission of the currentViewFilter is true
 
-        if ($this->currentViewFilter->ignorePermission === false) {
+        if (in_array($this->currentViewFilter->ignorePermission, [false, null])) {
             $hasBranchField = $this->fields->contains('name', 'branch_id');
 
             if ($hasBranchField) {
@@ -1022,5 +1177,20 @@ class ModuleDataCollector
         }
 
         return [$formulaFields, $rusField];
+    }
+
+    protected function buildConnectedBaseQuery($fieldNames, $connectedEntity, $allFields, $pfk = null, $model = null)
+    {
+        if (! $pfk) {
+            if (in_array(idify($this->entity->name), $allFields)) {
+                $query = 'where("'.$connectedEntity->name.'::'.idify($this->entity).'", "=", "'.$model->_id.'")';
+            } else {
+                $query = 'where("'.$connectedEntity->name.'::'.idify($this->entity->name).'s", "in", "'.$model->_id.'")';
+            }
+        } else {
+            $query = 'where("'.$connectedEntity->name.'::'.$pfk.'", "=", "'.$model->_id.'")';
+        }
+
+        return [$this->dataQueryBuilder->selectFrom($fieldNames, $connectedEntity, true)->filterGet($query), $query];
     }
 }
