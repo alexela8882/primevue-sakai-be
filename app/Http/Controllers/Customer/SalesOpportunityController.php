@@ -13,19 +13,19 @@ use App\Services\ModuleDataCollector;
 use App\Services\SalesModuleService;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SalesOpportunityController extends Controller
 {
     use ApiResponseTrait;
 
-    public $user;
-
-    public $mdc;
+    public User $user;
 
     public function __construct(private ModuleDataCollector $moduleDataCollector)
     {
 
-        $this->mdc = $this->moduleDataCollector->setUser()->setModule('salesopportunities');
+        $this->user = Auth::guard('api')->user();
+        $this->moduleDataCollector->setModule('salesopportunities');
     }
 
     public function index(Request $request)
@@ -35,7 +35,7 @@ class SalesOpportunityController extends Controller
                 $this->respondUnprocessable('Error. You do not have access to view Sales Opportunity list');
             }
 
-            return $this->mdc->getIndex($request);
+            return $this->moduleDataCollector->getIndex($request);
 
         });
     }
@@ -47,7 +47,7 @@ class SalesOpportunityController extends Controller
                 $this->respondUnprocessable('Error. You do not have access to view Sales Opportunity records');
             }
 
-            return $this->mdc->getShow($salesopportunity, $request);
+            return $this->moduleDataCollector->getShow($salesopportunity, $request);
 
         });
 
@@ -62,7 +62,7 @@ class SalesOpportunityController extends Controller
                 $this->respondUnprocessable('Error. You do not have access to create Sales Opportunity');
             }
 
-            $item = $this->mdc->postStore($request);
+            $item = $this->moduleDataCollector->postStore($request);
             $data = (new SalesModuleService)->getStageHistoryData($request, $item->_id);
 
             if ($data) {
@@ -82,7 +82,7 @@ class SalesOpportunityController extends Controller
             $stageId = $request->get('stage_id');
             $oldStageID = $salesopportunity->stage_id;
 
-            // $this->mdc->patchUpdate($salesopportunity->_id, $request);
+            // $this->moduleDataCollector->patchUpdate($salesopportunity->_id, $request);
 
             $data = (new SalesModuleService)->getStageHistoryData($request->all(), $salesopportunity->_id, null, false, $salesopportunity);
 
@@ -106,7 +106,7 @@ class SalesOpportunityController extends Controller
     {
         return $this->respondFriendly(function () use ($id) {
 
-            $item = $id; //$this->mdc->upsert($id, $request);
+            $item = $id; //$this->moduleDataCollector->upsert($id, $request);
 
             (new SalesModuleService)->checkOpportunityQuoteStat($id);
 
@@ -142,7 +142,7 @@ class SalesOpportunityController extends Controller
             $request['lead_id'] = $id;
             $request['dateConverted'] = new Carbon('NOW');
 
-            $item = $this->mdc->postStore($request);
+            $item = $this->moduleDataCollector->postStore($request);
 
             $data = (new SalesModuleService)->getStageHistoryData($request, $item->_id);
 
