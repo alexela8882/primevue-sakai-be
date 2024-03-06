@@ -29,6 +29,7 @@ class ViewFilterResource extends JsonResource
             'summarize_by' => $this->summarize_by,
             'group_by' => $this->group_by,
             'owner' => $this->owner,
+			'pageSize' => $this->pageSize,
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
             'updated_at' => $this->updated_at,
