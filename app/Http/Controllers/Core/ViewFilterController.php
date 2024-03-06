@@ -56,14 +56,25 @@ class ViewFilterController extends Controller
 
             $viewFilter->summarize_by = $request->summarize_by;
             $viewFilter->group_by = $request->group_by;
+            $viewFilter->title_ids = $request->title_ids;
 
-        } else if ($request->updateType == 'table') {
+        } elseif ($request->updateType == 'table') {
 
-            if ($request->filterName) $viewFilter->filterName = $request->filterName;
-            if ($request->fields)  $viewFilter->fields = $request->fields;
-            if ($request->sortField)  $viewFilter->sortField = $request->sortField;
-            if ($request->sortOrder)  $viewFilter->sortOrder = $request->sortOrder;
-            if ($request->pageSize)  $viewFilter->pageSize = $request->pageSize;
+            if ($request->filterName) {
+                $viewFilter->filterName = $request->filterName;
+            }
+            if ($request->fields) {
+                $viewFilter->fields = $request->fields;
+            }
+            if ($request->sortField) {
+                $viewFilter->sortField = $request->sortField;
+            }
+            if ($request->sortOrder) {
+                $viewFilter->sortOrder = $request->sortOrder;
+            }
+            if ($request->pageSize) {
+                $viewFilter->pageSize = $request->pageSize;
+            }
 
         }
 

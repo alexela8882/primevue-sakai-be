@@ -30,6 +30,7 @@ class ViewFilterResource extends JsonResource
             'group_by' => $this->group_by,
             'owner' => $this->owner,
             'pageSize' => $this->pageSize,
+            'title_ids' => $this->title_ids,
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
             'updated_at' => $this->updated_at,

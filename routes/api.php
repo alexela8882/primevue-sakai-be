@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\Account\UserController;
 use App\Http\Controllers\API\CountryController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\UserConfigController;
