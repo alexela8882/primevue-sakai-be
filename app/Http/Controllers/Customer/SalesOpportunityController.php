@@ -9,12 +9,12 @@ use App\Models\Customer\SalesOpportunity;
 use App\Models\Customer\SalesOpptItem;
 use App\Models\Customer\SalesQuote;
 use App\Models\Service\ServiceJob;
+use App\Models\User;
 use App\Services\ModuleDataCollector;
 use App\Services\SalesModuleService;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 
 class SalesOpportunityController extends Controller
 {
@@ -280,7 +280,7 @@ class SalesOpportunityController extends Controller
                     'quote_to_name_id' => null,
                     'quoteToName' => null,
                     'account_id' => $newAccountID,
-                    'old_account_id' => $so->account_id,
+                    'old_account_id' => $salesOpportunity->account_id,
 
                     'billingStreet' => null,
                     'billingZipCode' => null,
