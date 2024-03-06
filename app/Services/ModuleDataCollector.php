@@ -202,7 +202,7 @@ class ModuleDataCollector
                             ->panels
                             ->filter(fn (Panel $panel) => $panel->sections->isNotEmpty())
                             //$label = $panel->label ?? $panel->sections()->pluck('label')->first() ?? $connectedEntity->name.($panel->foreignKey ? ' '.$relatedListables->where('name', $panel->foreignKey)->pluck('label')->first() : '');
-                            ->map(fn (Panel $panel) => ['_id' => $panel->_id, 'label' => $panel->sections->first()->label]);
+                            ->map(fn (Panel $panel) => ['_id' => $panel->_id, 'label' => $panel->sections->first()->label, 'entityName' => $entity->name]);
                     })
                     ->collapse();
             } else {
