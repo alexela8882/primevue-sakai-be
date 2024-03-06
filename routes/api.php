@@ -85,9 +85,9 @@ Route::middleware('auth:api')->group(function () {
         'modules/leads' => LeadController::class,
         'modules/salesopportunities' => SalesOpportunityController::class,
         'modules/salesquotes' => SalesQuotationController::class,
-        'modules/users' => UserController::class,
         'modules' => ModuleController::class,
         'viewFilters' => ViewFilterController::class,
         'quotationtemplates' => QuotationTemplateController::class,
+        'users' => UserController::class,
     ]);
 });
