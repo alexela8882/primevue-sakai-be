@@ -42,7 +42,7 @@ class CampaignController extends Controller
         return $this->moduleDataCollector->patchUpdate($campaign, $request);
     }
 
-    public function upsert(Campaign $campaign, Request $request)
+    public function patchUpsert(Campaign $campaign, Request $request)
     {
         return $this->moduleDataCollector->patchUpsert($campaign, $request);
     }

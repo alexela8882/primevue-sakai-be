@@ -13,6 +13,7 @@ use App\Http\Controllers\Core\PicklistController;
 use App\Http\Controllers\Core\QuotationTemplateController;
 use App\Http\Controllers\Core\ViewFilterController;
 use App\Http\Controllers\Customer\AccountController;
+use App\Http\Controllers\Customer\ContactController;
 use App\Http\Controllers\Customer\LeadController;
 use App\Http\Controllers\Customer\SalesOpportunityController;
 use App\Http\Controllers\Customer\SalesQuotationController;
@@ -44,7 +45,14 @@ Route::get('passwordless-login', [RegisterController::class, 'passwordLessLogin'
 Route::get('logout', [RegisterController::class, 'logout'])->middleware(['web']);
 
 Route::middleware('auth:api')->group(function () {
-    Route::post('/postMergeDuplicateAccounts', [AccountController::class, 'postMergeDuplicateAccounts']);
+    Route::controller(AccountController::class)
+        ->prefix('modules/accounts')
+        ->group(function () {
+            Route::patch('/{account}/patchUpsert', 'patchUpsert');
+            Route::post('/postMergeDuplicates/{identifier}', 'postMergeDuplicates');
+        });
+
+    Route::post('/modules/contacts/postMergeDuplicates/{identifier}', [ContactController::class, 'postMergeDuplicates']);
 
     Route::get('/getModuleFields', [FieldController::class, 'getModuleFields']);
 
@@ -80,6 +88,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResources([
         'campaigns' => CampaignController::class,
+        'modules/contacts' => ContactController::class,
         'countries' => CountryController::class,
         'modules/accounts' => AccountController::class,
         'modules/leads' => LeadController::class,

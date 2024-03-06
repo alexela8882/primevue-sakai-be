@@ -542,8 +542,8 @@ class ModuleDataCollector
                         $this->compute($modelq, $rus, $formula);
                     }
 
-                    RusResolver::setEntity($this->module->main);
-                    FormulaParser::setEntity($this->module->main);
+                    RusResolver::setEntity($this->entity);
+                    FormulaParser::setEntity($this->entity);
 
                     $fields = $this->entity->fields->filter(fn (Field $field) => in_array($field->fieldType->name, ['formula', 'rollUpSummary']));
 
@@ -697,7 +697,7 @@ class ModuleDataCollector
     }
 
     // Uses: API
-    public function postMergeDuplicate(string $identifierToBeSaved, Request $request)
+    public function postMergeDuplicates(string $identifierToBeSaved, Request $request)
     {
         $identifiersToBeRemoved = $request->input('identifiers-to-be-removed');
 
@@ -735,7 +735,7 @@ class ModuleDataCollector
 
         $this->entity->getModel()->whereIn('_id', $identifiersToBeRemoved)->delete();
 
-        return $this->patchUpdate($identifierToBeSaved, $request);
+        return $this->patchUpdate($model, $request);
     }
 
     public function getQueryBasedOnHandledBranches($query)
@@ -1203,8 +1203,8 @@ class ModuleDataCollector
 
             // FOR CHARISSE
             if ($mutableEntity->name == 'SalesOpptItem') {
-                RusResolver::setEntity($entity);
-                FormulaParser::setEntity($entity);
+                RusResolver::setEntity($mutableEntity);
+                FormulaParser::setEntity($mutableEntity);
                 $fields = $entity->fields()->get();
                 [$formula, $rus] = $this->getRusAndFormula($fields);
             }
