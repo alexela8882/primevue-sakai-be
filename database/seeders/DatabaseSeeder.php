@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
         //     'app_theme_scale' => '14',
         // ]);
 
-        $this->changeRelationUserModelClass(false);
+        $this->changeRelationUserModelClass();
         $this->renameConnectionIdToConnectionIdsInEntityCollections();
     }
 
