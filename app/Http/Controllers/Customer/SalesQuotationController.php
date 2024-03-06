@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer\SalesQuote;
-use App\Services\SalesModuleService;
 use App\Services\ModuleDataCollector;
+use App\Services\SalesModuleService;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,14 +14,14 @@ class SalesQuotationController extends Controller
 {
     use ApiResponseTrait;
 
-    private $mdc;
+    private $moduleDataCollector;
 
-    private $user;
+    private User $user;
 
     public function __construct(private ModuleDataCollector $moduleDataCollector)
     {
         $this->user = Auth::guard('api')->user();
-        $this->mdc = $moduleDataCollector->setUser()->setModule('salesquotes');
+        $this->moduleDataCollector->setModule('salesquotes');
     }
 
     public function index(Request $request)
@@ -31,7 +31,7 @@ class SalesQuotationController extends Controller
                 $this->respondUnprocessable('Error. You do not have access to view Sales Quote list');
             }
 
-            return $this->mdc->getIndex($request);
+            return $this->moduleDataCollector->getIndex($request);
 
         });
     }
@@ -43,7 +43,7 @@ class SalesQuotationController extends Controller
                 $this->respondUnprocessable('Error. You do not have access to view Sales Quote records');
             }
 
-            return $this->mdc->getShow($salesquote, $request);
+            return $this->moduleDataCollector->getShow($salesquote, $request);
 
         });
 
@@ -55,7 +55,7 @@ class SalesQuotationController extends Controller
             if (! $this->user->canRead('salesquotes')) {
                 $this->respondUnprocessable('Error. You do not have access to create Sales Quote');
             }
-            $item = $this->mdc->postStore($request);
+            $item = $this->moduleDataCollector->postStore($request);
 
             return $this->respondSuccessful('Sales opportunity successfully saved', $item->_id);
         });
@@ -65,7 +65,7 @@ class SalesQuotationController extends Controller
     {
         return $this->respondFriendly(function () use ($salesquote) {
 
-            //$item = $this->mdc->patchUpdate($salesquote->_id, $request);
+            //$item = $this->moduleDataCollector->patchUpdate($salesquote->_id, $request);
 
             (new SalesModuleService)->checkQuoteStat($salesquote->_id, true);
 
@@ -78,7 +78,7 @@ class SalesQuotationController extends Controller
     {
         return $this->respondFriendly(function () use ($id) {
 
-            $item = $id; //$this->mdc->upsert($id, $request);
+            $item = $id; //$this->moduleDataCollector->upsert($id, $request);
             (new SalesModuleService)->checkQuoteStat(SalesQuote::find($id));
 
             return $this->respond([
