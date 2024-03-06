@@ -26,7 +26,7 @@ class UserController extends Controller
         return $this->moduleDataCollector->getIndex($request);
     }
 
-	public function store(Request $request)
+    public function store(Request $request)
     {
         $user = $this->moduleDataCollector->postStore($request);
 

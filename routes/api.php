@@ -80,7 +80,7 @@ Route::middleware('auth:api')->group(function () {
         'modules' => ModuleController::class,
         'viewFilters' => ViewFilterController::class,
         'quotationtemplates' => QuotationTemplateController::class,
-		'users' => UserController::class,
+        'users' => UserController::class,
     ]);
 });
 
