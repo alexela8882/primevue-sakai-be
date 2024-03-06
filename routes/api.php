@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Account\UserController;
+use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\CountryController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\UserConfigController;
@@ -29,6 +29,14 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+Route::controller(UserConfigController::class)
+    ->prefix('user-configs')
+    ->middleware('auth:api')
+    ->group(function () {
+        Route::get('get-app-theme', 'getAppTheme');
+        Route::post('change-app-theme', 'changeAppTheme');
+    });
 
 Route::post('login', [RegisterController::class, 'login'])->name('login');
 Route::post('saml-login', [RegisterController::class, 'samlLogin']);
@@ -83,11 +91,3 @@ Route::middleware('auth:api')->group(function () {
         'quotationtemplates' => QuotationTemplateController::class,
     ]);
 });
-
-Route::controller(UserConfigController::class)
-    ->prefix('user-configs')
-    ->middleware('auth:api')
-    ->group(function () {
-        Route::get('get-app-theme', 'getAppTheme');
-        Route::post('change-app-theme', 'changeAppTheme');
-    });

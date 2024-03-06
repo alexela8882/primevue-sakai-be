@@ -46,6 +46,8 @@ class ViewFilterController extends Controller
     public function update(ViewFilter $viewFilter, Request $request)
     {
 
+        // update current display
+        $viewFilter->currentDisplay = $request->updateType;
         if ($request->updateType == 'filters') {
 
             $viewFilter->filters = $request->filters;
@@ -55,13 +57,13 @@ class ViewFilterController extends Controller
             $viewFilter->summarize_by = $request->summarize_by;
             $viewFilter->group_by = $request->group_by;
 
-        } else {
+        } else if ($request->updateType == 'table') {
 
-            $viewFilter->filterName = $request->filterName;
-            $viewFilter->fields = $request->fields;
-            $viewFilter->sortField = $request->sortField;
-            $viewFilter->sortOrder = $request->sortOrder;
-            $viewFilter->pageSize = $request->pageSize;
+            if ($request->filterName) $viewFilter->filterName = $request->filterName;
+            if ($request->fields)  $viewFilter->fields = $request->fields;
+            if ($request->sortField)  $viewFilter->sortField = $request->sortField;
+            if ($request->sortOrder)  $viewFilter->sortOrder = $request->sortOrder;
+            if ($request->pageSize)  $viewFilter->pageSize = $request->pageSize;
 
         }
 
