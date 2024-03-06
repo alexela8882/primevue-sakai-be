@@ -14,6 +14,7 @@ use App\Services\SalesModuleService;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class SalesOpportunityController extends Controller
 {
@@ -25,7 +26,7 @@ class SalesOpportunityController extends Controller
     {
 
         $this->user = Auth::guard('api')->user();
-        $this->moduleDataCollector->setModule('salesopportunities');
+        $this->moduleDataCollector->setUser()->setModule('salesopportunities');
     }
 
     public function index(Request $request)

@@ -75,7 +75,7 @@ class SalesModuleService
         }
 
         if ($save) {
-            $data['remarks'] = array_key_exists('remarks', $request) ? $request['remarks'] : $oldData->remarks ?? null;
+            $data['remarks'] = $request->input('remarks', $oldData->remarks ?? null);
 
             $stats[] = picklist_id('opportunity_status', 'Closed Lost');
             $stats[] = picklist_id('opportunity_status', 'Cancelled');

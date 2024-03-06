@@ -18,7 +18,7 @@ class SalesQuotationController extends Controller
     public function __construct(private ModuleDataCollector $moduleDataCollector)
     {
         $this->user = Auth::guard('api')->user();
-        $this->moduleDataCollector->setModule('salesquotes');
+        $this->moduleDataCollector->setUser()->setModule('salesquotes');
     }
 
     public function index(Request $request)
