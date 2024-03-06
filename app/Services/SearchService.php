@@ -13,8 +13,9 @@ class SearchService
 
         $searchString = trim(request('search', null));
 
-        if(!$searchString)
-          return $builder;
+        if (! $searchString) {
+            return $builder;
+        }
 
         if (! $fields) {
             $fields = request('searchFields', null);
