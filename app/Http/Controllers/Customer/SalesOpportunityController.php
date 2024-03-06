@@ -9,6 +9,7 @@ use App\Models\Customer\SalesOpportunity;
 use App\Models\Customer\SalesOpptItem;
 use App\Models\Customer\SalesQuote;
 use App\Models\Service\ServiceJob;
+use App\Models\User;
 use App\Services\ModuleDataCollector;
 use App\Services\SalesModuleService;
 use App\Traits\ApiResponseTrait;
@@ -25,7 +26,7 @@ class SalesOpportunityController extends Controller
     {
 
         $this->user = Auth::guard('api')->user();
-        $this->moduleDataCollector->setModule('salesopportunities');
+        $this->moduleDataCollector->setUser()->setModule('salesopportunities');
     }
 
     public function index(Request $request)
@@ -279,7 +280,7 @@ class SalesOpportunityController extends Controller
                     'quote_to_name_id' => null,
                     'quoteToName' => null,
                     'account_id' => $newAccountID,
-                    'old_account_id' => $so->account_id,
+                    'old_account_id' => $salesOpportunity->account_id,
 
                     'billingStreet' => null,
                     'billingZipCode' => null,
