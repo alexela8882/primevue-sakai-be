@@ -17,6 +17,8 @@ use App\Models\Core\ListItem;
 use App\Models\Core\Panel;
 use App\Models\Core\Picklist;
 use App\Models\Core\ViewFilter;
+use App\Models\Customer\SalesOpportunity;
+use App\Models\Customer\SalesOpptItem;
 use App\Models\Customer\SalesQuote;
 use App\Models\Model\Base;
 use App\Models\Module\Module;
@@ -127,7 +129,10 @@ class ModuleDataCollector
         if ($this->module->hasViewFilter) {
             $viewFilterQuery = ViewFilter::query()
                 ->where('moduleName', $this->module->name)
-                ->where('owner', $this->user->_id);
+                ->where('owner', $this->user->_id)
+                ->with([
+                    'filterQuery',
+                ]);
 
             $viewFilters = $viewFilterQuery->get();
 
@@ -165,6 +170,8 @@ class ModuleDataCollector
                 $this->currentViewFilterFields = Field::query()
                     ->whereIn('_id', $this->currentViewFilter->fields)
                     ->with([
+                        'rules',
+                        'entity',
                         'relation',
                         'fieldType',
                     ])
@@ -412,9 +419,158 @@ class ModuleDataCollector
 
     // Function: update
     // Uses: API
-    public function patchUpdate()
+    public function patchUpdate(Base $base, Request $request)
     {
-        return true;
+        [$data, $lookupData, $formulaFields] = $this->getDataForSaving($request, null, false, true);
+
+        // Adding fullName attribute to the following entities for updating.
+        if (in_array($this->entity->name, ['Contact', 'Employee', 'User', 'EscoVenturesContact'])) {
+            $data['fullName'] = Str::squish("{$request->input('firstName')} {$request->input('lastName')}");
+        }
+
+        $base->update($data);
+
+        foreach ($lookupData as $lookup) {
+            $base->belongsToMany($lookup['entity'], null, $lookup['fkey'], $lookup['lkey'])->sync($lookup['data'] ?? []);
+        }
+
+        if ($this->entity->name === 'SalesOpportunity') {
+            $base->quotations->each(fn (SalesQuote $salesQuote) => $salesQuote->updateQuietly(['sales_type_id' => $base->sales_type_id]));
+        }
+
+        // FOR CHARISSE
+        // if (count($formula)) {
+        //     usort($formula, function ($a, $b) {
+        //         return $a['hierarchy'] <=> $b['hierarchy'];
+        //     });
+        //     FormulaParser::setEntity($this->mainEntityName);
+        //     foreach ($formula as $formulaField) {
+        //         $value = FormulaParser::parseField($formulaField, $model, true);
+        //         $model->update([$formulaField->name => $value]);
+        //     }
+        // }
+
+        return $this->getShow($base, $request, true);
+    }
+
+    // Function: upsert
+    // Uses: API
+    public function patchUpsert(Base $base, Request $request)
+    {
+        $mutables = [];
+
+        try {
+            $hasMutable = (new EntityService)->hasMutable($this->entity);
+
+            if ($hasMutable) {
+                if ($this->entity->name === 'ServiceReport') {
+                    $mutables = $request->input('mutables');
+
+                    foreach ($mutables as $key => $mutable) {
+                        $mutableEntityName = Str::replace('mutable_', '', $key);
+                        $entityModel = Entity::where('name', $mutableEntityName)->first()->getModel();
+                        $mutableIds = $entityModel->where('service_report_id', $base->_id)->pluck('_id')->toArray();
+
+                        if (! empty($mutableIds)) {
+                            $newIds = collect($mutable)->pluck('_id')->toArray();
+                            $deleteIds = array_diff($mutableIds, $newIds);
+
+                            if ($deleteIds) {
+                                $entityModel->whereIn('_id', $deleteIds)->delete();
+                            }
+                        }
+                    }
+                } else {
+                    $mutables = $this->executeMutableDataFromRequest($request, $base, true);
+                }
+
+                if (in_array($this->entity->name, ['SalesOpportunity', 'SalesQuote'])) {
+                    if ($this->entity->name == 'SalesOpportunity') {
+                        $quoteIds = SalesOpptItem::where('sales_opportunity_id', $base->_id)->pluck('sales_quote_id')->toArray();
+                        $quoteIds = array_filter(array_unique($quoteIds));
+                        $entity = Entity::query()
+                            ->where('name', 'SalesQuote')
+                            ->with([
+                                'fields' => fn ($fieldQuery) => $fieldQuery->whereHas('fieldType', fn ($fieldTypeQuery) => $fieldTypeQuery->whereIn('name', ['formula', 'rollUpSummary'])),
+                                'fields.fieldType',
+                            ])
+                            ->first();
+
+                        RusResolver::setEntity($entity);
+
+                        FormulaParser::setEntity($entity);
+
+                        $fields = $entity->fields;
+
+                        [$formula, $rus] = $this->getRusAndFormula($fields);
+
+                        if (count($formula)) {
+                            usort($formula, function ($a, $b) {
+                                return $a['hierarchy'] <=> $b['hierarchy'];
+                            });
+                        }
+
+                        $ms = SalesQuote::whereIn('_id', $quoteIds)->get();
+
+                        foreach ($ms as $modelq) {
+                            $this->compute($modelq, $rus, $formula);
+                        }
+                    } else {
+                        $entity = Entity::query()
+                            ->where('name', 'SalesOpportunity')
+                            ->with([
+                                'fields' => fn ($fieldQuery) => $fieldQuery->whereHas('fieldType', fn ($fieldTypeQuery) => $fieldTypeQuery->whereIn('name', ['formula', 'rollUpSummary'])),
+                                'fields.fieldType',
+                            ])
+                            ->first();
+
+                        RusResolver::setEntity($entity);
+
+                        FormulaParser::setEntity($entity);
+
+                        $fields = $entity->fields;
+
+                        [$formula, $rus] = $this->getRusAndFormula($fields);
+
+                        if (count($formula)) {
+                            usort($formula, function ($a, $b) {
+                                return $a['hierarchy'] <=> $b['hierarchy'];
+                            });
+                        }
+
+                        $modelq = SalesOpportunity::find($base->sales_opportunity_id);
+                        $this->compute($modelq, $rus, $formula);
+                    }
+
+                    RusResolver::setEntity($this->module->main);
+                    FormulaParser::setEntity($this->module->main);
+
+                    $fields = $this->entity->fields->filter(fn (Field $field) => in_array($field->fieldType->name, ['formula', 'rollUpSummary']));
+
+                    [$formula, $rus] = $this->getRusAndFormula($fields);
+
+                    if (count($formula)) {
+                        usort($formula, function ($a, $b) {
+                            return $a['hierarchy'] <=> $b['hierarchy'];
+                        });
+                    }
+
+                    $this->compute($base, $rus, $formula);
+                }
+            } else {
+                throw new Exception("Error. No mutables found for {$this->module->name}");
+            }
+        } catch (Exception $exception) {
+            $this->deleteMutableChanges(true);
+
+            if (App::environment('RESPOND_FRIENDLY')) {
+                throw new Exception("Error. Failed to upsert in {$this->module->name}.");
+            } else {
+                throw $exception;
+            }
+        }
+
+        return $mutables;
     }
 
     // Uses: API
@@ -809,11 +965,13 @@ class ModuleDataCollector
         if ($this->mutableEntityNames) {
             foreach ($this->mutableEntityNames as $mutableEntityName) {
                 $items = $this->mutableData[$mutableEntityName];
+
                 if (count($items)) {
                     foreach ($items as $item) {
                         $item->delete();
                     }
                 }
+
                 if ($upsert) {
                     foreach ($this->mutableEntityNames as $mutableEntityName) {
                         $items = $this->revertibleMutableData[$mutableEntityName];

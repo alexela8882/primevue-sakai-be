@@ -31,6 +31,16 @@ class AccountController extends Controller
         return $this->moduleDataCollector->getShow($account, $request);
     }
 
+    public function update(Account $account, Request $request)
+    {
+        return $this->moduleDataCollector->patchUpdate($account, $request);
+    }
+
+    public function upsert(Account $account, Request $request)
+    {
+        return $this->moduleDataCollector->patchUpsert($account, $request);
+    }
+
     public function postMergeDuplicateAccounts(string $identifier, Request $request)
     {
         return $this->moduleDataCollector->postMergeDuplicate($identifier, $request);
