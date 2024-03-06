@@ -62,9 +62,9 @@ class SalesQuotationController extends Controller
 
     public function update(SalesQuote $salesquote, Request $request)
     {
-        return $this->respondFriendly(function () use ($salesquote) {
+        return $this->respondFriendly(function () use ($salesquote, $request) {
 
-            //$item = $this->moduleDataCollector->patchUpdate($salesquote->_id, $request);
+            $item = $this->moduleDataCollector->patchUpdate($salesquote->_id, $request);
 
             (new SalesModuleService)->checkQuoteStat($salesquote->_id, true);
 
@@ -75,13 +75,13 @@ class SalesQuotationController extends Controller
 
     public function upsert($id, Request $request)
     {
-        return $this->respondFriendly(function () use ($id) {
+        return $this->respondFriendly(function () use ($id, $request) {
 
-            $item = $id; //$this->moduleDataCollector->upsert($id, $request);
+            $item = $this->moduleDataCollector->patchUpsert($id, $request);
             (new SalesModuleService)->checkQuoteStat(SalesQuote::find($id));
 
             return $this->respond([
-                'item' => $item, 'message' => 'Items saved',
+                'item' => $item->_id, 'message' => 'Items saved',
             ]);
         });
     }

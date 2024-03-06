@@ -49,45 +49,34 @@ class SalesModuleService
 
     }
 
-    public function getStageHistoryData($request, $id, $amount = null, $create = true, $oldData = null)
+    public function getStageHistoryData($id, $create = true, $oldData = null)
     {
         $data = [];
-        $save = true;
 
         if (! $oldData) {
             $oldData = SalesOpportunity::find($id);
         }
 
-        $data['stage_id'] = $request['stage_id'] ?? $oldData->stage_id;
-        $data['probability'] = $request['probability'] ?? $oldData->probability;
-        $data['sales_opportunity_id'] = $id;
-        $data['salesAmount'] = $this->getAmount($id);
-        $data['from_date'] = $oldData->lastStageUpdateDate;
-
-        if (! $create) {
-            if ($data['stage_id'] == $oldData->stage_id) {
-                $save = false;
-            } else {
-                $data['from_stage_id'] = $oldData->stage_id;
-            }
-        } else {
-            $data['from_stage_id'] = null;
+        if (! $create && request('stage_id') == $oldData->stage_id) {
+            return null;
         }
 
-        if ($save) {
-            $data['remarks'] = $request->input('remarks', $oldData->remarks ?? null);
+        $data = [
+            'stage_id' => request('stage_id') ?? $oldData->stage_id,
+            'probability' => request('probability') ?? $oldData->probability,
+            'sales_opportunity_id' => $id,
+            'salesAmount' => $this->getAmount($id),
+            'from_date' => $oldData->lastStageUpdateDate,
+            'from_stage_id' => $create ? null : $oldData->stage_id,
+            'remarks' => request('remarks', $oldData->remarks ?? null),
+        ];
+        $stats = picklist_id('opportunity_status', ['Closed Lost', 'Tender Lost', 'Cancelled']);
 
-            $stats[] = picklist_id('opportunity_status', 'Closed Lost');
-            $stats[] = picklist_id('opportunity_status', 'Cancelled');
-
-            if (in_array($data['stage_id'], $stats)) {
-                $data['reason_lost_cancelled_id'] = array_key_exists('reason_lost_cancelled_id', $request) ? $request['reason_lost_cancelled_id'] : $oldData->reason_lost_cancelled_id ?? null;
-            }
-
-            return $data;
+        if (in_array(request('stage_id'), $stats)) {
+            $data['reason_lost_cancelled_id'] = request('reason_lost_cancelled_id', null) ? request('reason_lost_cancelled_id') : $oldData->reason_lost_cancelled_id ?? null;
         }
 
-        return null;
+        return $data;
     }
 
     public function firstData($id)

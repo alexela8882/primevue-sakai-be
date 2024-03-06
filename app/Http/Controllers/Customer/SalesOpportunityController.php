@@ -64,7 +64,7 @@ class SalesOpportunityController extends Controller
             }
 
             $item = $this->moduleDataCollector->postStore($request);
-            $data = (new SalesModuleService)->getStageHistoryData($request, $item->_id);
+            $data = (new SalesModuleService)->getStageHistoryData($item->_id);
 
             if ($data) {
                 OpportunityStageHistory::create($data);
@@ -83,9 +83,9 @@ class SalesOpportunityController extends Controller
             $stageId = $request->get('stage_id');
             $oldStageID = $salesopportunity->stage_id;
 
-            // $this->moduleDataCollector->patchUpdate($salesopportunity->_id, $request);
+            $updatedSalesopportunity = $this->moduleDataCollector->patchUpdate($salesopportunity->_id, $request);
 
-            $data = (new SalesModuleService)->getStageHistoryData($request->all(), $salesopportunity->_id, null, false, $salesopportunity);
+            $data = (new SalesModuleService)->getStageHistoryData($salesopportunity->_id, false, $salesopportunity);
 
             if ($data) {
                 OpportunityStageHistory::create($data);
@@ -95,24 +95,24 @@ class SalesOpportunityController extends Controller
                 $salesopportunity->update(['lastStageUpdateDate' => date('Y-m-d')]);
             }
 
-            if (Input::exists('PONo') && $salesopportunity->PONo ?? $request->input('PONo') !== null) {
+            if ($request->has('PONo') && $salesopportunity->PONo ?? $request->input('PONo') !== null) {
                 ServiceJob::where('sales_opportunity_id', $salesopportunity->_id)->update(['PONo' => $request->input('PONo')]);
             }
 
-            return $this->respondSuccessful('Sales opportunity successfully updated', $salesopportunity->_id);
+            return $this->respondSuccessful('Sales opportunity successfully updated', $updatedSalesopportunity->_id);
         });
     }
 
     public function upsert($id, Request $request)
     {
-        return $this->respondFriendly(function () use ($id) {
+        return $this->respondFriendly(function () use ($id, $request) {
 
-            $item = $id; //$this->moduleDataCollector->upsert($id, $request);
+            $item = $this->moduleDataCollector->patchUpsert($id, $request);
 
             (new SalesModuleService)->checkOpportunityQuoteStat($id);
 
             return $this->respond([
-                'item' => $item, 'message' => 'Items saved',
+                'item' => $item->_id, 'message' => 'Items saved',
             ]);
         });
     }
@@ -145,7 +145,7 @@ class SalesOpportunityController extends Controller
 
             $item = $this->moduleDataCollector->postStore($request);
 
-            $data = (new SalesModuleService)->getStageHistoryData($request, $item->_id);
+            $data = (new SalesModuleService)->getStageHistoryData($item->_id);
 
             if ($data) {
                 OpportunityStageHistory::create($data);

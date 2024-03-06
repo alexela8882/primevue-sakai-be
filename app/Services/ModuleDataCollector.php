@@ -268,7 +268,7 @@ class ModuleDataCollector
 
         $query = $this->getQueryBasedOnHeaderFilters($query, $request);
 
-        $query = $this->getQueryBasedOnSearch($query, $request);
+        $query = (new SearchService)->checkSearch($query, null, $this->entity->name);
 
         $query = $this->getQueryBasedOnCustomFilters($query, $request);
 
@@ -757,14 +757,18 @@ class ModuleDataCollector
     public function getQueryBasedOnSearch($query, Request $request)
     {
         if ($request->filled('search')) {
-            $searchFields = (array) $request->input('searchFields');
+            $searchFields = $request->input('searchFields');
 
             // Must have at least 1 search field to run this query below
             $query->where(function (Builder $query) use ($searchFields, $request) {
                 foreach ($searchFields as $searchField) {
+
+                    // dd($searchField);
+
                     $field = $this->fields->firstWhere('_id', $searchField);
 
                     if ($field->fieldType->name === 'lookupModel') {
+
                     } elseif ($field->fieldType->name === 'picklist') {
                         $items = Picklist::query()
                             ->where('name', $field->listName)
