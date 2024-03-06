@@ -30,6 +30,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::controller(UserConfigController::class)
+    ->prefix('user-configs')
+    ->middleware('auth:api')
+    ->group(function () {
+        Route::get('get-app-theme', 'getAppTheme');
+        Route::post('change-app-theme', 'changeAppTheme');
+    });
+
 Route::post('login', [RegisterController::class, 'login'])->name('login');
 Route::post('saml-login', [RegisterController::class, 'samlLogin']);
 Route::get('passwordless-login', [RegisterController::class, 'passwordLessLogin'])->middleware(['web']);
@@ -83,11 +91,3 @@ Route::middleware('auth:api')->group(function () {
         'users' => UserController::class,
     ]);
 });
-
-Route::controller(UserConfigController::class)
-    ->prefix('user-configs')
-    ->middleware('auth:api')
-    ->group(function () {
-        Route::get('get-app-theme', 'getAppTheme');
-        Route::post('change-app-theme', 'changeAppTheme');
-    });
