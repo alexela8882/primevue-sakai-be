@@ -91,6 +91,7 @@ class ModuleDataCollector
             ->with([
                 'entity',
                 'entity.fields',
+                'entity.fields.entity',
                 'entity.fields.rules',
                 'entity.fields.fieldType',
                 'entity.fields.relation',
@@ -768,7 +769,6 @@ class ModuleDataCollector
                     $field = $this->fields->firstWhere('_id', $searchField);
 
                     if ($field->fieldType->name === 'lookupModel') {
-
                     } elseif ($field->fieldType->name === 'picklist') {
                         $items = Picklist::query()
                             ->where('name', $field->listName)
