@@ -1,11 +1,12 @@
 <?php
 
-namespace Laravel\Passport;
+namespace App\Models\Passport;
 
-// use Illuminate\Database\Eloquent\Model;
-use MongoDB\Laravel\Eloquent\Model;
+use App\Models\Model\Base;
+use Laravel\Passport\Passport;
+use Laravel\Passport\ResolvesInheritedScopes;
 
-class Token extends Model
+class Token extends Base
 {
     use ResolvesInheritedScopes;
 

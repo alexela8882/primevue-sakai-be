@@ -3,20 +3,22 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use MongoDB\Laravel\Eloquent\Model as Eloquent;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Core\Permission;
 // use Illuminate\Foundation\Auth\User as Authenticatable;
-use MongoDB\Laravel\Auth\User as Authenticatable;
+use App\Services\AccessService;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
 // use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
+use MongoDB\Laravel\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $connection = 'mongodb';
+
     protected $collection = 'users';
 
     /**
@@ -25,9 +27,9 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-      'name',
-      'email',
-      'password',
+        'name',
+        'email',
+        'password',
     ];
 
     /**
@@ -36,8 +38,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-      'password',
-      'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
@@ -46,8 +48,8 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-      'email_verified_at' => 'datetime',
-      'password' => 'hashed',
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
     ];
 
     /**
@@ -56,8 +58,9 @@ class User extends Authenticatable
      * @param  string  $email
      * @return \App\User
      */
-    public function findForPassport($email) {
-      return $this->where('email', $email)->first();
+    public function findForPassport($email)
+    {
+        return $this->where('email', $email)->first();
     }
 
     /**
@@ -66,12 +69,84 @@ class User extends Authenticatable
      * @param  string  $password
      * @return bool
      */
-    public function validateForPassportPasswordGrant($password) {
+    public function validateForPassportPasswordGrant($password)
+    {
         return Hash::check($password, $this->password);
     }
 
     // relationships
-    public function branch () {
-      return $this->belongsTo(Branch::class, 'branch_id');
+    public function branch()
+    {
+        return $this->belongsTo('App\Models\Company\Branch', 'branch_id', '_id');
+    }
+
+    public function handledBranches()
+    {
+        return $this->belongsToMany('App\Models\Company\Branch', null, 'handling_user_ids', 'handled_branch_ids');
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany('App\Models\User\Role', null, 'user_id', 'role_id');
+    }
+
+    public function position()
+    {
+        return $this->belongsTo('App\Models\Employee\Position', 'position_id', '_id');
+    }
+
+    public function loginHistories()
+    {
+        return $this->hasMany('App\Models\Auth\LoginHistory');
+    }
+
+    public function canRead($moduleName)
+    {
+
+        $has = Permission::query()
+            ->whereIn('role_id', $this->role_id)
+            ->where('name', $moduleName.'.show')->first();
+
+        return $has ? true : false;
+    }
+
+    public function canView($moduleName)
+    {
+
+        $has = Permission::query()
+            ->whereIn('role_id', $this->role_id)
+            ->where('name', $moduleName.'.index')->first();
+
+        return $has ? true : false;
+    }
+
+    public function canDelete($moduleName)
+    {
+
+        $has = Permission::query()
+            ->whereIn('role_id', $this->role_id)
+            ->where('name', $moduleName.'.delete')->first();
+
+        return $has ? true : false;
+    }
+
+    public function canUpdate($moduleName)
+    {
+
+        $has = Permission::query()
+            ->whereIn('role_id', $this->role_id)
+            ->where('name', $moduleName.'.update')->first();
+
+        return $has ? true : false;
+
+    }
+
+    public function getPeople()
+    {
+
+        $people = (new AccessService)->hasUnder($this->role_id, $this->handled_branch_ids);
+        $people[] = $this->_id;
+
+        return $people;
     }
 }
