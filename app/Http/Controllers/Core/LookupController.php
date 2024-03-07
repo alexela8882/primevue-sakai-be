@@ -11,8 +11,8 @@ use App\Models\User;
 use App\Services\FieldService;
 use App\Services\LookupService;
 use App\Services\PicklistService;
+use App\Services\SearchService;
 use App\Traits\ApiResponseTrait;
-use App\Traits\BuilderSearchTrait;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\App;
@@ -23,7 +23,6 @@ class LookupController extends Controller
     const DEFAULT_LIMIT = 50;
 
     use ApiResponseTrait;
-    use BuilderSearchTrait;
 
     protected $queryBuilder;
 
@@ -150,8 +149,9 @@ class LookupController extends Controller
             }
 
             if ($searchString) {
-                $this->checkSearch($collection, $searchfield);
+                (new SearchService)->checkSearch($collection, $searchfield, $entity->name);
             }
+
             if ($entity->name == 'Account') {
                 $collection->orderBy($searchfield[0]['name'], 'asc');
             }

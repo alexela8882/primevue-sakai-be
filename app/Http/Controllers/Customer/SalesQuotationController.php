@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer\SalesQuote;
+use App\Models\User;
 use App\Services\ModuleDataCollector;
 use App\Services\SalesModuleService;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SalesQuotationController extends Controller
 {
@@ -18,7 +20,7 @@ class SalesQuotationController extends Controller
     public function __construct(private ModuleDataCollector $moduleDataCollector)
     {
         $this->user = Auth::guard('api')->user();
-        $this->moduleDataCollector->setModule('salesquotes');
+        $this->moduleDataCollector->setUser()->setModule('salesquotes');
     }
 
     public function index(Request $request)
@@ -60,9 +62,9 @@ class SalesQuotationController extends Controller
 
     public function update(SalesQuote $salesquote, Request $request)
     {
-        return $this->respondFriendly(function () use ($salesquote) {
+        return $this->respondFriendly(function () use ($salesquote, $request) {
 
-            //$item = $this->moduleDataCollector->patchUpdate($salesquote->_id, $request);
+            $item = $this->moduleDataCollector->patchUpdate($salesquote->_id, $request);
 
             (new SalesModuleService)->checkQuoteStat($salesquote->_id, true);
 
@@ -73,13 +75,13 @@ class SalesQuotationController extends Controller
 
     public function upsert($id, Request $request)
     {
-        return $this->respondFriendly(function () use ($id) {
+        return $this->respondFriendly(function () use ($id, $request) {
 
-            $item = $id; //$this->moduleDataCollector->upsert($id, $request);
+            $item = $this->moduleDataCollector->patchUpsert($id, $request);
             (new SalesModuleService)->checkQuoteStat(SalesQuote::find($id));
 
             return $this->respond([
-                'item' => $item, 'message' => 'Items saved',
+                'item' => $item->_id, 'message' => 'Items saved',
             ]);
         });
     }

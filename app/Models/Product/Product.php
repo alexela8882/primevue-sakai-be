@@ -7,8 +7,6 @@ use App\Models\Model\Base;
 
 class Product extends Base
 {
-    use SoftDeletes;
-
     protected $entity = 'Product';
 
     protected $collection = 'products';

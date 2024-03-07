@@ -58,7 +58,7 @@ class LookupService
                     $picklists = $this->picklist->getPicklistsFromFields($relEntity->fields);
                     $values[$fieldSrc->name] = $this->fractalTransformer->createItem($model, new ModelTransformer($relEntity->fields()->whereIn('name', $fieldSrc->relation->displayFieldName)->get(), $picklists, [], null, false, 0, true));
                 } elseif ($fieldSrc->fieldType->name == 'picklist') {
-                    $values[$fieldSrc->name] = $this->picklist->getItemById($fieldSrc->listName, $item->{$fieldSrc->name});
+                    $values[$fieldSrc->name] = picklist_id($fieldSrc->listName, $item->{$fieldSrc->name});
                 } else {
                     $values[$fieldSrc->name] = $item->{$fieldSrc->name};
                 }
@@ -128,10 +128,10 @@ class LookupService
         }
     }
 
-    public function getOpportunityPricebooks($request, $fields = null, $picklists = null)
+    public function getOpportunityPricebooks($fields = null, $picklists = null)
     {
 
-        $currencyId = $request->input('SalesOpportunity::currency_id');
+        $currencyId = request('SalesOpportunity::currency_id');
 
         if (! $currencyId) {
             return ['message' => 'Error. Currency undefined', 'status_code' => 422];
@@ -146,7 +146,7 @@ class LookupService
             return collect($pb->currencies)->contains($currency->_id);
         })->pluck('_id');
 
-        $limit = (int) $request->input('limit', 50);
+        $limit = (int) request('limit', 50);
 
         $paginator = Pricebook::whereIn('_id', $pbs)->paginate($limit);
         $collection = $paginator->getCollection();

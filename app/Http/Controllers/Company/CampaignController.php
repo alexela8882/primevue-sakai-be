@@ -36,4 +36,14 @@ class CampaignController extends Controller
     {
         return $this->moduleDataCollector->getShow($campaign, $request);
     }
+
+    public function update(Campaign $campaign, Request $request)
+    {
+        return $this->moduleDataCollector->patchUpdate($campaign, $request);
+    }
+
+    public function patchUpsert(Campaign $campaign, Request $request)
+    {
+        return $this->moduleDataCollector->patchUpsert($campaign, $request);
+    }
 }

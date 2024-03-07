@@ -30,4 +30,9 @@ class LeadController extends Controller
     {
         return $this->moduleDataCollector->getShow($lead, $request);
     }
+
+    public function update(Lead $lead, Request $request)
+    {
+        return $this->moduleDataCollector->patchUpdate($lead, $request);
+    }
 }
