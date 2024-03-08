@@ -47,8 +47,11 @@ class ViewFilterController extends Controller
     public function update(ViewFilter $viewFilter, Request $request)
     {
 
-        // update current display
+        // update current display & search fields
         $viewFilter->currentDisplay = $request->updateType;
+        if ($request->_searchFields && count($request->_searchFields) > 0) {
+            $viewFilter->search_fields = $request['_searchFields'];
+        }
         if ($request->updateType == 'filters') {
 
             $viewFilter->filters = $request->filters;
@@ -64,11 +67,8 @@ class ViewFilterController extends Controller
             if ($request->filterName) {
                 $viewFilter->filterName = $request->filterName;
             }
-            if ($request->_searchFields) {
-                $viewFilter->search_fields = $request->_searchFields;
-            }
-            if ($request->pickList) {
-                $viewFilter->fields = $request->pickList;
+            if ($request->pickList && count($request->pickList) > 0) {
+                $viewFilter->fields = $request['pickList'];
             }
             if ($request->sortField) {
                 $viewFilter->sortField = $request->sortField;
