@@ -56,6 +56,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/getModulePanels', [PanelController::class, 'getModulePanels']);
 
+    Route::get('/modules/menu', [ModuleController::class, 'getMenu']);
+
     Route::post('/picklist', [PicklistController::class, 'getLists']);
 
     Route::get('/user', [UserController::class, 'getUser']);
