@@ -26,6 +26,7 @@ class ViewFilterResource extends JsonResource
             'fields' => $this->fields,
             'isDefault' => $this->isDefault,
             'currentDisplay' => $this->currentDisplay,
+			'search_fields' => $this->search_fields,
             'summarize_by' => $this->summarize_by,
             'group_by' => $this->group_by,
             'owner' => $this->owner,
