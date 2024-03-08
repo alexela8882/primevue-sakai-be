@@ -28,6 +28,7 @@ class ViewFilterController extends Controller
         $viewFilter->sortOrder = $request->sortOrder ? $request->sortOrder : 'asc';
         $viewFilter->pageSize = $request->pageSize ? $request->pageSize : 10;
         $viewFilter->currentDisplay = 'table';
+        $viewFilter->search_fields = $request->_searchFields;
         $viewFilter->fields = $request->fields;
         $viewFilter->owner = $userId;
         $viewFilter->summarize_by = null;
@@ -63,8 +64,11 @@ class ViewFilterController extends Controller
             if ($request->filterName) {
                 $viewFilter->filterName = $request->filterName;
             }
-            if ($request->fields) {
-                $viewFilter->fields = $request->fields;
+            if ($request->_searchFields) {
+                $viewFilter->search_fields = $request->_searchFields;
+            }
+            if ($request->pickList) {
+                $viewFilter->fields = $request->pickList;
             }
             if ($request->sortField) {
                 $viewFilter->sortField = $request->sortField;
