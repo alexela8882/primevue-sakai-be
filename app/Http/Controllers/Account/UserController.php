@@ -63,14 +63,25 @@ class UserController extends Controller
         return UserResource::make(User::with(['branch', 'roles', 'handledBranches'])->find(auth()->user()->id));
     }
 
-    public function deactivateUser(User $user)
+    public function deactivateUser($id)
     {
+        $user = User::find($id);
 
-        $user->active = false;
-        $user->deactivatedAt = Carbon::now();
-        $user->save();
+        if ($user) {
 
-        return response()->json(['user' => $user], 200);
+            $user->active = false;
+            $user->deactivated_at = Carbon::now();
+            $user->save();
 
+            $contact = $user->contactInformation();
+
+            if ($contact) {
+                $contact->update(['active' => false]);
+            }
+
+            return response()->json(['user' => $user, 'message' => 'User successfully deactivated.'], 200);
+        } else {
+            return response()->json(['message' => 'User not found.'], 200);
+        }
     }
 }
