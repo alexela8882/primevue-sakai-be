@@ -100,6 +100,11 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Auth\LoginHistory');
     }
 
+    public function contactInformation()
+    {
+        return $this->hasOne('App\Models\Customer\Contact', 'employee_id');
+    }
+
     public function canRead($moduleName)
     {
 
