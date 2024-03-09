@@ -45,12 +45,8 @@ Route::get('passwordless-login', [RegisterController::class, 'passwordLessLogin'
 Route::get('logout', [RegisterController::class, 'logout'])->middleware(['web']);
 
 Route::middleware('auth:api')->group(function () {
-    Route::controller(AccountController::class)
-        ->prefix('modules/accounts')
-        ->group(function () {
-            Route::patch('/{account}/patchUpsert', 'patchUpsert');
-            Route::post('/postMergeDuplicates/{identifier}', 'postMergeDuplicates');
-        });
+    Route::patch('/modules/accounts/{account}/patchUpsert', [AccountController::class, 'patchUpsert']);
+    Route::post('/modules/accounts/postMergeDuplicates/{identifier}', [AccountController::class, 'postMergeDuplicates']);
 
     Route::post('/modules/contacts/postMergeDuplicates/{identifier}', [ContactController::class, 'postMergeDuplicates']);
 
@@ -60,6 +56,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/getModulePanels', [PanelController::class, 'getModulePanels']);
 
+    Route::get('/modules/menu', [ModuleController::class, 'getMenu']);
+
     Route::post('/picklist', [PicklistController::class, 'getLists']);
 
     Route::get('/user', [UserController::class, 'getUser']);
@@ -68,6 +66,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/lookup', [LookupController::class, 'getLookup']);
 
+    Route::patch('/patchInlineUpdates', [ModuleController::class, 'patchInlineUpdates']);
     Route::get('/getShowRelatedList', [ModuleController::class, 'getShowRelatedList']);
 
     Route::patch('/modules/salesquotes/upsert/{id}', [SalesQuotationController::class, 'upsert']);
