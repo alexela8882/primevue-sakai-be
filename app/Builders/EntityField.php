@@ -4,6 +4,7 @@ namespace App\Builders;
 
 use App\Models\Core\Entity;
 use App\Models\Core\Field;
+use App\Services\RollUpSummaryResolver as RusResolver;
 
 class EntityField
 {
@@ -159,48 +160,46 @@ class EntityField
         $field = $this->checkEntityFields($currentEntity, $smartFieldNameElem);
         $currentEntity = $field->entity;
         $fieldName .= '.'.$smartFieldNameElem;
-        try {
-            if ($field->rusType) {
 
-                $val = $value->{$smartFieldNameElem} ?? null;
+        if ($field->rusType) {
 
-                if ($val === null || $val === '') {
-                    RusResolver::setEntity($currentEntity);
-                    $value = RusResolver::resolve($value, $field);
-                } else {
-                    $value = $value->{$smartFieldNameElem};
-                }
-            } // if RUS
+            $val = $value->{$smartFieldNameElem} ?? null;
 
-            elseif ($field->formulaType) {
-
-                $val = $value->{$smartFieldNameElem} ?? null;
-
-                if ($val === null || $val === '') {
-                    FormulaParser::setEntity($currentEntity);
-                    $value = FormulaParser::parseField($field, $value);
-                } else {
-                    $value = $value->{$smartFieldNameElem};
-                }
-            } elseif ($field->fieldType->name == 'lookupModel') {
-                $lookupEntity = $field->relation();
-                $value = $value->{$smartFieldNameElem};
-                $lookupVal = $field->relation->relatedEntity->getModel()->find($value);
-                if ($lookupVal) {
-                    $value = $lookupVal[$smartFieldNameElems[1]];
-                }
-            } elseif ($field->fieldType->name == 'number' || $field->fieldType->name == 'currency') {
-                if ($value->{$smartFieldNameElem}) {
-                    $value = $value->{$smartFieldNameElem};
-                } else {
-                    $value = 0;
-                }
+            if ($val === null || $val === '') {
+                (new RusResolver)->setEntity($currentEntity);
+                $value = (new RusResolver)->resolve($value, $field);
             } else {
                 $value = $value->{$smartFieldNameElem};
             }
-        } catch (\Exception $e) {
-            throw new \Exception('Error. Unidentified field named '.$fieldName);
+        } // if RUS
+
+        elseif ($field->formulaType) {
+
+            $val = $value->{$smartFieldNameElem} ?? null;
+
+            if ($val === null || $val === '') {
+                FormulaParser::setEntity($currentEntity);
+                $value = FormulaParser::parseField($field, $value);
+            } else {
+                $value = $value->{$smartFieldNameElem};
+            }
+        } elseif ($field->fieldType->name == 'lookupModel') {
+            $lookupEntity = $field->relation();
+            $value = $value->{$smartFieldNameElem};
+            $lookupVal = $field->relation->entity->getModel()->find($value);
+            if ($lookupVal) {
+                $value = $lookupVal[$smartFieldNameElems[1]];
+            }
+        } elseif ($field->fieldType->name == 'number' || $field->fieldType->name == 'currency') {
+            if ($value->{$smartFieldNameElem}) {
+                $value = $value->{$smartFieldNameElem};
+            } else {
+                $value = 0;
+            }
+        } else {
+            $value = $value->{$smartFieldNameElem};
         }
+
         // }
 
         if ($requireFieldType && $field->fieldType->name != $requireFieldType) {
