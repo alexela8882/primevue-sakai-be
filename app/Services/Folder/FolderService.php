@@ -33,4 +33,18 @@ class FolderService
 
         return $resource;
     }
+
+    public function getByType($type)
+    {
+        $typeId = picklist_id('folder_types', $type);
+
+        return Folder::where('type_id', $typeId)->get();
+    }
+
+    public function getByTypeAndLabel($label, $type)
+    {
+        $typeId = picklist_id('folder_types', $type);
+
+        return Folder::where(['label' => $label, 'type_id' => $typeId])->first();
+    }
 }

@@ -165,6 +165,11 @@ if (! function_exists('generateSelectableCollectionFields')) {
         }
     }
 
+    function str_plural($value, $count = 2)
+    {
+        return Str::plural($value, $count);
+    }
+
     if (! function_exists('picklist_item')) {
         function picklist_item($listName, $itemId)
         {
