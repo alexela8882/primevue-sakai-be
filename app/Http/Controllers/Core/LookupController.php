@@ -186,4 +186,20 @@ class LookupController extends Controller
             return $this->setStatusCode(200)->respond((new LookupService)->getAutoFillFields($fieldId, $itemId));
         });
     }
+
+    protected function checkFilterSource($builder, $field, $src) {
+
+        $f = $field->rules()->where('name', 'filtered_by')->first()->value ?? null;
+
+        if($f) {
+          $filterSrcValue = request($f, null);
+            if ($filterSrcValue){
+                if(is_array($filterSrcValue))
+                    return $builder->whereIn($src, $filterSrcValue);
+                else
+                   return  $builder->where($src, '=', $filterSrcValue);
+            }
+        }
+        return $builder;
+    }
 }
