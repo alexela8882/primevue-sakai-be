@@ -9,7 +9,7 @@ use App\Http\Controllers\Core\FieldController;
 use App\Http\Controllers\Core\LookupController;
 use App\Http\Controllers\Core\ModuleController;
 use App\Http\Controllers\Core\PanelController;
-use App\Http\Controllers\Core\PicklistController;
+use App\Http\Controllers\Core\PickListController;
 use App\Http\Controllers\Core\QuotationTemplateController;
 use App\Http\Controllers\Core\ViewFilterController;
 use App\Http\Controllers\Customer\AccountController;
@@ -59,7 +59,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/modules/menu', [ModuleController::class, 'getMenu']);
 
-    Route::post('/picklist', [PicklistController::class, 'getLists']);
+    Route::post('/picklist', [PickListController::class, 'getLists']);
 
     Route::get('/user', [UserController::class, 'getUser']);
 
