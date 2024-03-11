@@ -23,7 +23,7 @@ class SearchService
 
         if (! $fields) {
             $fields = Entity::where('name', $entityName)->first()->fields()->where('searchKey', true)->limit(3)->get();
-        } else {
+        } elseif(is_array($fields) && array_depth($fields) == 1) {
             $fields = Entity::where('name', $entityName)->first()->fields()->whereIn('_id', $fields)->limit(3)->get();
         }
 
@@ -31,6 +31,7 @@ class SearchService
             return $builder;
         }
 
+      
         $searchStrings = [$searchString];
 
         $dqb = new DynamicQueryBuilder;

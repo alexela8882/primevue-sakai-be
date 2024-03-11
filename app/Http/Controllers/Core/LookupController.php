@@ -149,7 +149,7 @@ class LookupController extends Controller
             }
 
             if ($searchString) {
-                (new SearchService)->checkSearch($collection, $searchfield, $entity->name);
+                $collection = (new SearchService)->checkSearch($collection, $searchfield, $entity->name);
             }
 
             if ($entity->name == 'Account') {
