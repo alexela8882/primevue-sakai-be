@@ -180,8 +180,8 @@ class LookupController extends Controller
     public function getLookupItem()
     {
         return $this->respondFriendly(function () {
-            $fieldId = $this->request->input('fieldId');
-            $itemId = $this->request->input('itemId');
+            $fieldId = request('fieldId');
+            $itemId = request('itemId');
 
             return $this->setStatusCode(200)->respond((new LookupService)->getAutoFillFields($fieldId, $itemId));
         });

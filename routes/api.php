@@ -66,6 +66,7 @@ Route::middleware('auth:api')->group(function () {
     Route::patch('/user/deactivate/{id}', [UserController::class, 'deactivateUser']);
 
     Route::post('/lookup', [LookupController::class, 'getLookup']);
+    Route::post('/lookup/item', [LookupController::class, 'getLookupItem']);
 
     Route::patch('/patchInlineUpdates', [ModuleController::class, 'patchInlineUpdates']);
     Route::get('/getShowRelatedList', [ModuleController::class, 'getShowRelatedList']);
