@@ -95,7 +95,7 @@ class LookupController extends Controller
 
                 switch ($field->uniqueName) {
                     case 'salesopportunity_pricebook_id':
-                        return $lookupService->getOpportunityPricebooks($this->request, $fields, $picklists);
+                        return $lookupService->getOpportunityPricebooks($fields, $picklists);
                         // case 'oncallservicelist_service_id':
                         //     return $lookupService->getUnitServices($this->request, $limit, $fields, $picklists, $moduleName);
                         // case 'serviceinclusive_service_id':
@@ -187,19 +187,22 @@ class LookupController extends Controller
         });
     }
 
-    protected function checkFilterSource($builder, $field, $src) {
+    protected function checkFilterSource($builder, $field, $src)
+    {
 
         $f = $field->rules()->where('name', 'filtered_by')->first()->value ?? null;
 
-        if($f) {
-          $filterSrcValue = request($f, null);
-            if ($filterSrcValue){
-                if(is_array($filterSrcValue))
+        if ($f) {
+            $filterSrcValue = request($f, null);
+            if ($filterSrcValue) {
+                if (is_array($filterSrcValue)) {
                     return $builder->whereIn($src, $filterSrcValue);
-                else
-                   return  $builder->where($src, '=', $filterSrcValue);
+                } else {
+                    return $builder->where($src, '=', $filterSrcValue);
+                }
             }
         }
+
         return $builder;
     }
 }

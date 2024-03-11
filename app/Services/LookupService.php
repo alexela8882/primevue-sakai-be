@@ -142,7 +142,7 @@ class LookupService
             return ['message' => 'Error. Unknown currency '.$currencyId, 'status_code' => 422];
         }
 
-        $pbs = Pricebook::here('isStandard', false)->get()->filter(function ($pb) use ($currency) {
+        $pbs = Pricebook::where('isStandard', false)->get()->filter(function ($pb) use ($currency) {
             return collect($pb->currencies)->contains($currency->_id);
         })->pluck('_id');
 
@@ -152,7 +152,7 @@ class LookupService
         $collection = $paginator->getCollection();
 
         if (! $fields) {
-            $fields = Pricebook::getEntityFields()->whereIn('name', ['_id', 'name']);
+            $fields = Field::where('uniqueName', 'pricebook_name');
         }
         if (! $picklists) {
             $picklists = (new PicklistService)->getPicklistsFromFields($fields);
