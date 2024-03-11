@@ -62,4 +62,9 @@ class Base extends Model
     {
         return call_user_func_array([$this, static::$relationship_method], static::$relationship_params);
     }
+
+    public function getEntityName()
+    {
+        return $this->entity ?? (new \ReflectionClass($this))->getShortName();
+    }
 }

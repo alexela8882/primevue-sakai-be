@@ -112,6 +112,46 @@ if (! function_exists('generateSelectableCollectionFields')) {
             return Str::endsWith($haystack, $needles);
         }
     }
+    if (! function_exists('title_case')) {
+        function title_case(string $str)
+        {
+            return Str::title($str);
+        }
+    }
+
+    if (! function_exists('is_valid_date')) {
+        function is_valid_date($date, $format = 'Y-m-d')
+        {
+            $d = DateTime::createFromFormat($format, $date);
+
+            return $d && $d->format($format) == $date;
+        }
+    }
+
+    if (! function_exists('left')) {
+
+        function left($str, $length)
+        {
+            return substr($str, 0, $length);
+        }
+    }
+
+    if (! function_exists('right')) {
+
+        function right($str, $length)
+        {
+            return substr($str, -$length);
+        }
+    }
+
+    if (! function_exists('stringify')) {
+
+        function stringify($name)
+        {
+            return starts_with($name, '"') ? $name : '"'.$name.'"';
+        }
+    }
+
     if (! function_exists('camel_case')) {
         /**
          * Convert a value to camel case.
@@ -123,6 +163,11 @@ if (! function_exists('generateSelectableCollectionFields')) {
         {
             return Str::camel($value);
         }
+    }
+
+    function str_plural($value, $count = 2)
+    {
+        return Str::plural($value, $count);
     }
 
     if (! function_exists('picklist_item')) {

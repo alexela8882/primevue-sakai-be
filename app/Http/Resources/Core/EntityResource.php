@@ -12,8 +12,31 @@ class EntityResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+    protected static $forReport;
+
+    public static function customCollection($resource, $forReport = false)
+    {
+        self::$forReport = $forReport;
+
+        return parent::collection($resource);
+    }
+
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+
+        if ($this->forReport) {
+            $data = [
+                '_id' => $request->_id,
+                'label' => $request->label,
+                'name' => $request->name,
+            ];
+        } else {
+            $data = parent::toArray($request);
+        }
+
+        $data['fields'] = FieldResource::customCollection($request->fields);
+
+        return $data;
+
     }
 }
