@@ -279,7 +279,7 @@ class ModuleDataCollector
 
         $query = $query->orderBy('name', 'ASC');
 
-        $query = $query->paginate($request->input('limit', $this->currentViewFilter->pageSize), $this->getCurrentViewFilterFieldNamesForPagination(), 'page', $request->input('page', 0));
+        $query = $query->paginate($request->input('pageSize', $this->currentViewFilter->pageSize), $this->getCurrentViewFilterFieldNamesForPagination(), 'page', $request->input('page', 0));
 
         $modelCollection = new ModelCollection($query, $this->currentViewFilterFields, $this->pickLists);
 
