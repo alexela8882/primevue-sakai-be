@@ -95,7 +95,7 @@ class LookupController extends Controller
 
                 switch ($field->uniqueName) {
                     case 'salesopportunity_pricebook_id':
-                        return $lookupService->getOpportunityPricebooks($this->request, $fields, $picklists);
+                        return $lookupService->getOpportunityPricebooks($fields, $picklists);
                         // case 'oncallservicelist_service_id':
                         //     return $lookupService->getUnitServices($this->request, $limit, $fields, $picklists, $moduleName);
                         // case 'serviceinclusive_service_id':
@@ -149,7 +149,7 @@ class LookupController extends Controller
             }
 
             if ($searchString) {
-                (new SearchService)->checkSearch($collection, $searchfield, $entity->name);
+                $collection = (new SearchService)->checkSearch($collection, $searchfield, $entity->name);
             }
 
             if ($entity->name == 'Account') {
@@ -180,10 +180,29 @@ class LookupController extends Controller
     public function getLookupItem()
     {
         return $this->respondFriendly(function () {
-            $fieldId = $this->request->input('fieldId');
-            $itemId = $this->request->input('itemId');
+            $fieldId = request('fieldId');
+            $itemId = request('itemId');
 
             return $this->setStatusCode(200)->respond((new LookupService)->getAutoFillFields($fieldId, $itemId));
         });
+    }
+
+    protected function checkFilterSource($builder, $field, $src)
+    {
+
+        $f = $field->rules()->where('name', 'filtered_by')->first()->value ?? null;
+
+        if ($f) {
+            $filterSrcValue = request($f, null);
+            if ($filterSrcValue) {
+                if (is_array($filterSrcValue)) {
+                    return $builder->whereIn($src, $filterSrcValue);
+                } else {
+                    return $builder->where($src, '=', $filterSrcValue);
+                }
+            }
+        }
+
+        return $builder;
     }
 }

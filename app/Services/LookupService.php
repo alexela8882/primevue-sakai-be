@@ -20,7 +20,7 @@ class LookupService
             throw new \Exception('Error Field type must be a lookup');
         }
 
-        $item = $field->relation->relatedEntity->getModel()->find($itemId);
+        $item = $field->relation->entity->getModel()->find($itemId);
         if (! $item) {
             throw new \Exception('Error. Cannot find '.$itemId.' in '.$field->entity->name);
         }
@@ -38,9 +38,9 @@ class LookupService
             $values = [];
             $fieldSrcsNames = [];
             foreach ($rules as $rule) {
-                $fieldSrcsNames = array_merge($fieldSrcsNames, array_pluck($rule->value, 0.0));
+                $fieldSrcsNames = array_merge($fieldSrcsNames, array_column($rule->value, 0));
             }
-            $fieldSrcs = $field->relation->relatedEntity->fields()->with('fieldType')->whereIn('name', $fieldSrcsNames)->get();
+            $fieldSrcs = $field->relation->entity->fields()->with('fieldType')->whereIn('name', $fieldSrcsNames)->get();
 
             foreach ($fieldSrcs as $fieldSrc) {
                 if (array_key_exists($fieldSrc->name, $values)) {
@@ -48,15 +48,17 @@ class LookupService
                 }
 
                 if ($fieldSrc->fieldType->name == 'lookupModel') {
-                    $relEntity = $fieldSrc->relation->relatedEntity->load('fields');
+                    $relEntity = $fieldSrc->relation->entity->load('fields');
                     $model = $relEntity->getModel()->find($item->{$fieldSrc->name});
                     if (! $model) {
                         continue;
                     }
                     //  throw new \Exception('Error. Cannot find ' . $item->{$fieldSrc->name} . ' in given field source ' . $relEntity->name);
 
-                    $picklists = $this->picklist->getPicklistsFromFields($relEntity->fields);
-                    $values[$fieldSrc->name] = $this->fractalTransformer->createItem($model, new ModelTransformer($relEntity->fields()->whereIn('name', $fieldSrc->relation->displayFieldName)->get(), $picklists, [], null, false, 0, true));
+                    $relFields = $relEntity->fields()->whereIn('name', $fieldSrc->relation->displayFieldName)->get();
+                    $picklists = (new Picklist)->getPicklistsFromFields($relFields);
+
+                    $values[$fieldSrc->name] = new ModelCollection($model, $relFields, $picklists);
                 } elseif ($fieldSrc->fieldType->name == 'picklist') {
                     $values[$fieldSrc->name] = picklist_id($fieldSrc->listName, $item->{$fieldSrc->name});
                 } else {
@@ -80,7 +82,7 @@ class LookupService
             throw new \Exception('Error Field type must be a lookup');
         }
 
-        $item = $field->entity->getRepository()->find($itemId);
+        $item = $field->entity->getModel()->find($itemId);
         if (! $item) {
             throw new \Exception('Error. Cannot find '.$itemId.' in '.$field->entity->name);
         }
@@ -91,14 +93,14 @@ class LookupService
         if (count($displayFields)) {
 
             if (! is_array($fieldValues)) {
-                $relEntityFields = $field->relation->relatedEntity->fields()->get();
+                $relEntityFields = $field->relation->entity->fields()->get();
                 $returnSingle = true;
                 $fieldValues = [$fieldValues];
             } else {
                 $returnSingle = false;
             }
 
-            $relatedItems = $field->relation->relatedEntity->getRepository()->getModel()->whereIn('_id', $fieldValues)->get();
+            $relatedItems = $field->relation->entity->getModel()->whereIn('_id', $fieldValues)->get();
 
             $list = collect([]);
             foreach ($relatedItems as $relatedItem) {
@@ -142,7 +144,7 @@ class LookupService
             return ['message' => 'Error. Unknown currency '.$currencyId, 'status_code' => 422];
         }
 
-        $pbs = Pricebook::here('isStandard', false)->get()->filter(function ($pb) use ($currency) {
+        $pbs = Pricebook::where('isStandard', false)->get()->filter(function ($pb) use ($currency) {
             return collect($pb->currencies)->contains($currency->_id);
         })->pluck('_id');
 
@@ -152,7 +154,7 @@ class LookupService
         $collection = $paginator->getCollection();
 
         if (! $fields) {
-            $fields = Pricebook::getEntityFields()->whereIn('name', ['_id', 'name']);
+            $fields = Field::where('uniqueName', 'pricebook_name');
         }
         if (! $picklists) {
             $picklists = (new PicklistService)->getPicklistsFromFields($fields);

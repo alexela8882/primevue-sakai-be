@@ -29,7 +29,7 @@ class ViewFilterController extends Controller
         $viewFilter->pageSize = $request->pageSize ? $request->pageSize : 10;
         $viewFilter->currentDisplay = 'table';
         $viewFilter->search_fields = $request->_searchFields;
-        $viewFilter->fields = $request->fields;
+        $viewFilter->fields = $request->pickList;
         $viewFilter->owner = $userId;
         $viewFilter->summarize_by = null;
         $viewFilter->group_by = null;
