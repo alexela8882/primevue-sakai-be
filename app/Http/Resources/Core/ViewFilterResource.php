@@ -22,6 +22,7 @@ class ViewFilterResource extends JsonResource
             'filters' => $this->filters,
             'filterLogic' => $this->filterLogic,
             'filterName' => $this->filterName,
+            'module_id' => $this->module_id,
             'moduleName' => $this->moduleName,
             'fields' => $this->fields,
             'isDefault' => $this->isDefault,
