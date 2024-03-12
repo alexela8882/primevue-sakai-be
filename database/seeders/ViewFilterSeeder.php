@@ -24,7 +24,9 @@ class ViewFilterSeeder extends Seeder
         foreach ($viewFilters as $viewFilter) {
 
             $module = Module::where('name', $viewFilter->moduleName)->first();
-            $viewFilter->update(['module_id' => $module->id]);
+            if ($module) {
+                $viewFilter->update(['module_id' => $module->id]);
+            }
 
         }
 
