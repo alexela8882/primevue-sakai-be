@@ -16,17 +16,14 @@ class QuotationTemplateController extends Controller
 
     public function __construct()
     {
-        // $this->user = Auth::guard('api')->user();
+        $this->user = auth('api')->user();
     }
 
     public function index(Request $request)
     {
         return $this->respondFriendly(function () use ($request) {
-            $qtFor = $request->input('qtFor', null);
-            if (! $qtFor) {
-                $this->respondUnprocessable('Error. Missing qtFor input for fetching Quotation Template');
-            }
-
+            $qtFor = $request->input('qtFor', 'sales');
+        
             return QuotationTemplate::where('qtFor', $qtFor)
                 ->whereIn('branch_id', $this->user->handled_branch_ids)
                 ->get();
