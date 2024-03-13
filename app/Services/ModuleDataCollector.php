@@ -620,7 +620,6 @@ class ModuleDataCollector
                     $query = $this->dataQueryBuilder->mergeQueries($query, $resultQuery);
                 }
 
-
                 $viewFilter = ViewFilterService::getWidestScope($this->user, $connectedEntity->mainModule, true);
 
                 if ($viewFilter instanceof ViewFilter) {
@@ -684,7 +683,7 @@ class ModuleDataCollector
                 'cname' => $panel->name,
                 'label' => $section->label,
                 'entityName' => $connectedEntity->name,
-                'link' => $connectedEntity->mainModule->name,
+                'link' => $connectedEntity->mainModule->name ?? null,
                 'panelOrder' => $panel->order,
                 'mutable' => $panel->mutable,
                 'paginated' => $panel->paginated !== false,
