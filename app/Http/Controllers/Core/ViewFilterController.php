@@ -23,13 +23,14 @@ class ViewFilterController extends Controller
 
         $viewFilter = new ViewFilter;
         $viewFilter->filterName = $request->filterName;
+        $viewFilter->module_id = $request->module_id;
         $viewFilter->moduleName = $request->moduleName;
         $viewFilter->sortField = $request->sortField;
         $viewFilter->sortOrder = $request->sortOrder ? $request->sortOrder : 'asc';
         $viewFilter->pageSize = $request->pageSize ? $request->pageSize : 10;
         $viewFilter->currentDisplay = 'table';
         $viewFilter->search_fields = $request->_searchFields;
-        $viewFilter->fields = $request->fields;
+        $viewFilter->fields = $request->pickList;
         $viewFilter->owner = $userId;
         $viewFilter->summarize_by = null;
         $viewFilter->group_by = null;
@@ -50,7 +51,15 @@ class ViewFilterController extends Controller
         // update current display & search fields
         $viewFilter->currentDisplay = $request->updateType;
         if ($request->_searchFields && count($request->_searchFields) > 0) {
-            $viewFilter->search_fields = $request['_searchFields'];
+
+            $viewFilters = ViewFilter::where('module_id', $viewFilter->module_id)->get();
+
+            if ($viewFilters) {
+                foreach ($viewFilters as $viewFilter) {
+                    $viewFilter->update(['search_fields' => $request['_searchFields']]);
+                }
+            }
+
         }
         if ($request->updateType == 'filters') {
 

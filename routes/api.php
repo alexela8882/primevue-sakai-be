@@ -18,6 +18,7 @@ use App\Http\Controllers\Customer\LeadController;
 use App\Http\Controllers\Customer\SalesOpportunityController;
 use App\Http\Controllers\Customer\SalesQuotationController;
 use App\Http\Controllers\Folder\FolderController;
+use App\Http\Controllers\Product\PricebookController;
 use App\Http\Controllers\Report\ReportController;
 use Illuminate\Support\Facades\Route;
 
@@ -97,6 +98,7 @@ Route::middleware('auth:api')->group(function () {
         'countries' => CountryController::class,
         'modules/accounts' => AccountController::class,
         'modules/leads' => LeadController::class,
+        'modules/pricebooks' => PricebookController::class,
         'modules/salesopportunities' => SalesOpportunityController::class,
         'modules/salesquotes' => SalesQuotationController::class,
         'modules' => ModuleController::class,
