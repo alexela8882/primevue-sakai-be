@@ -620,6 +620,7 @@ class ModuleDataCollector
                     $query = $this->dataQueryBuilder->mergeQueries($query, $resultQuery);
                 }
 
+
                 $viewFilter = ViewFilterService::getWidestScope($this->user, $connectedEntity->mainModule, true);
 
                 if ($viewFilter instanceof ViewFilter) {
@@ -1339,7 +1340,7 @@ class ModuleDataCollector
     {
         if (! $pfk) {
             if (in_array(idify($this->entity->name), $allFields)) {
-                $query = 'where("'.$connectedEntity->name.'::'.idify($this->entity).'", "=", "'.$model->_id.'")';
+                $query = 'where("'.$connectedEntity->name.'::'.idify($this->entity->name).'", "=", "'.$model->_id.'")';
             } else {
                 $query = 'where("'.$connectedEntity->name.'::'.idify($this->entity->name).'s", "in", "'.$model->_id.'")';
             }
