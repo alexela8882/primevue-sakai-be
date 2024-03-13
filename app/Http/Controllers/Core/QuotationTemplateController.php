@@ -62,10 +62,10 @@ class QuotationTemplateController extends Controller
                 $return['Product']['collection'] = $products;
             }
 
-            if ($request['moduleName'] == 'salesquotes') {
-                $return['Opportunity'] = $this->mdc->setModule('salesquotes')->getShow($opp, $request, true);
-                $return['Opportunity']['connected'] = $this->mdc->setModule($request['moduleName'])->getShow($quote, $request, false, true)['connected'];
-            }
+            
+            $return['Opportunity'] = $this->mdc->setModule('salesquotes')->getShow($opp, $request, true);
+            $return['Opportunity']['connected'] = $this->mdc->getShow($quote, $request, false, true)['connected'];
+            
 
             return $return;
         });
