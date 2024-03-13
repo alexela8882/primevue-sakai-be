@@ -8,8 +8,6 @@ use App\Models\User;
 
 class SalesQuote extends Base
 {
-    protected $date = ['deleted_at'];
-
     protected $entity = 'SalesQuote';
 
     protected $collection = 'sales_quotes';

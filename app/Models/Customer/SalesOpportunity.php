@@ -8,8 +8,6 @@ use App\Models\User;
 
 class SalesOpportunity extends Base
 {
-    protected $date = ['deleted_at'];
-
     protected $collection = 'sales_opportunities';
 
     protected $entity = 'SalesOpportunity';
