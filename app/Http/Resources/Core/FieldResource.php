@@ -26,11 +26,6 @@ class FieldResource extends JsonResource
     {
         $data = parent::toArray($request);
 
-        $data['field_type'] = [
-            '_id' => $this->fieldType->_id,
-            'name' => $this->fieldType->name,
-        ];
-
         $fieldService = new FieldService;
 
         $defaultValueRule = $this->rules->firstWhere('name', 'default_value');
