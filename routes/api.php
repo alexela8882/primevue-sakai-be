@@ -92,7 +92,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/modules/folders/showreports/{id}', [ReportController::class, 'showReports']);
 
-    Route::post('/quotationtemplates/getInfo', [ReportController::class, 'getInfo']);
+    Route::get('/quotationtemplates/getInfo/{id}', [QuotationTemplateController::class, 'getInfo']);
 
     Route::apiResources([
         'campaigns' => CampaignController::class,

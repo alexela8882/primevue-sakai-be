@@ -43,19 +43,19 @@ class QuotationTemplateController extends Controller
         return (new SalesModuleService)->transform($quotationTemplate);
     }
 
-    public function getInfo(Request $request)
+    public function getInfo($id, Request $request)
     {
-        return $this->respondFriendly(function () use ($request) {
+        return $this->respondFriendly(function () use ($id, $request) {
             $return = [];
 
-            $quote = SalesQuote::find($request['_id']);
+            $quote = SalesQuote::find($id);
             $opp = SalesOpportunity::find($quote->sales_opportunity_id);
 
             $productIDs = SalesOpptItem::where('sales_opportunity_id', $opp->_id)->pluck('product_id')->toArray();
             $productIDs = array_unique($productIDs);
 
             $return['Account'] = $this->mdc->setModule('accounts')->getShow(Account::find($opp->account_id), $request, true);
-            $return['Contact'] = $this->mdc->setModule('contacts')->getShow(Contact::find($opp->contact_id), $request, true);
+      //      $return['Contact'] = $this->mdc->setModule('contacts')->getShow(Contact::find($opp->contact_id), $request, true);
 
             if ($productIDs) {
                 $products = Product::whereIn('_id', $productIDs)->get(['_id', 'uom', 'description']);
@@ -63,8 +63,8 @@ class QuotationTemplateController extends Controller
             }
 
             
-            $return['Opportunity'] = $this->mdc->setModule('salesquotes')->getShow($opp, $request, true);
-            $return['Opportunity']['connected'] = $this->mdc->getShow($quote, $request, false, true)['connected'];
+            $return['Opportunity'] = $this->mdc->setModule('salesopportunities')->getShow($opp, $request, true);
+        //   $return['Opportunity']['connected'] = $this->mdc->setModule('salesquotes')->getShow($quote, $request, false, true)['connected'] ?? [];
             
 
             return $return;
