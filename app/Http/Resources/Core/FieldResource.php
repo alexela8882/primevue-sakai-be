@@ -25,6 +25,11 @@ class FieldResource extends JsonResource
     public function toArray(Request $request): array
     {
         $data = parent::toArray($request);
+     
+        $data['field_type'] = [
+            '_id' => $this->fieldType->_id, 
+            'name' => $this->fieldType->name 
+        ];
 
         $fieldService = new FieldService;
 
