@@ -6,5 +6,4 @@ use App\Models\Model\Base;
 
 class QuotationPDF extends Base
 {
-    //
 }
