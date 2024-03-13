@@ -4,6 +4,13 @@ namespace App\Http\Controllers\Core;
 
 use App\Http\Controllers\Controller;
 use App\Models\Core\QuotationTemplate;
+use App\Models\Customer\Account;
+use App\Models\Customer\Contact;
+use App\Models\Customer\SalesOpportunity;
+use App\Models\Customer\SalesOpptItem;
+use App\Models\Customer\SalesQuote;
+use App\Models\Product\Product;
+use App\Services\ModuleDataCollector;
 use App\Services\SalesModuleService;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
@@ -14,7 +21,7 @@ class QuotationTemplateController extends Controller
 
     private $user;
 
-    public function __construct()
+    public function __construct(private ModuleDataCollector $mdc)
     {
         $this->user = auth('api')->user();
     }
@@ -23,7 +30,7 @@ class QuotationTemplateController extends Controller
     {
         return $this->respondFriendly(function () use ($request) {
             $qtFor = $request->input('qtFor', 'sales');
-        
+
             return QuotationTemplate::where('qtFor', $qtFor)
                 ->whereIn('branch_id', $this->user->handled_branch_ids)
                 ->get();
@@ -34,5 +41,33 @@ class QuotationTemplateController extends Controller
     public function show(QuotationTemplate $quotationTemplate)
     {
         return (new SalesModuleService)->transform($quotationTemplate);
+    }
+
+    public function getInfo(Request $request)
+    {
+        return $this->respondFriendly(function () use ($request) {
+            $return = [];
+
+            $quote = SalesQuote::find($request['_id']);
+            $opp = SalesOpportunity::find($quote->sales_opportunity_id);
+
+            $productIDs = SalesOpptItem::where('sales_opportunity_id', $opp->_id)->pluck('product_id')->toArray();
+            $productIDs = array_unique($productIDs);
+
+            $return['Account'] = $this->mdc->setModule('accounts')->getShow(Account::find($opp->account_id), $request, true);
+            $return['Contact'] = $this->mdc->setModule('contacts')->getShow(Contact::find($opp->contact_id), $request, true);
+
+            if ($productIDs) {
+                $products = Product::whereIn('_id', $productIDs)->get(['_id', 'uom', 'description']);
+                $return['Product']['collection'] = $products;
+            }
+
+            if ($request['moduleName'] == 'salesquotes') {
+                $return['Opportunity'] = $this->mdc->setModule('salesquotes')->getShow($opp, $request, true);
+                $return['Opportunity']['connected'] = $this->mdc->setModule($request['moduleName'])->getShow($quote, $request, false, true)['connected'];
+            }
+
+            return $return;
+        });
     }
 }

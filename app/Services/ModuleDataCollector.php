@@ -64,7 +64,7 @@ class ModuleDataCollector
 
     private array $mutableEntityNames;
 
-    public function __construct(private DynamicQueryBuilder $dataQueryBuilder, private FieldService $fieldService)
+    public function __construct(private DynamicQueryBuilder $dataQueryBuilder, private FieldService $fieldService, private RollUpSummaryResolver $rusResolver, private FormulaParser $formulaParser)
     {
         //
     }
@@ -348,17 +348,15 @@ class ModuleDataCollector
 
             if ($mainOnly === false && $hasMutable) {
                 $this->executeMutableDataFromRequest($request, $model);
+            } elseif (count($formulaFields) !== 0) {
+                // FOR CHARISSE
+                $this->formulaParser->setEntity($this->module->main);
+
+                foreach ($formulaFields as $formulaField) {
+                    $value = $this->formulaParser->parseField($formulaField, $model, true);
+                    $model->update([$formulaField->name => $value]);
+                }
             }
-
-            // elseif (count($formulaFields) !== 0) {
-            //     // FOR CHARISSE
-            //     FormulaParser::setEntity($this->module->main);
-
-            //     foreach ($formulaFields as $formulaField) {
-            //         $value = FormulaParser::parseField($formulaField, $model, true);
-            //         $model->update([$formulaField->name => $value]);
-            //     }
-            // }
         } catch (Exception $exception) {
             if ($mainOnly === false) {
                 $this->deleteMutableChanges();
@@ -444,9 +442,9 @@ class ModuleDataCollector
         //     usort($formula, function ($a, $b) {
         //         return $a['hierarchy'] <=> $b['hierarchy'];
         //     });
-        //     FormulaParser::setEntity($this->mainEntityName);
+        //     $this->formulaParser->setEntity($this->mainEntityName);
         //     foreach ($formula as $formulaField) {
-        //         $value = FormulaParser::parseField($formulaField, $model, true);
+        //         $value = $this->formulaParser->parseField($formulaField, $model, true);
         //         $model->update([$formulaField->name => $value]);
         //     }
         // }
@@ -497,9 +495,9 @@ class ModuleDataCollector
                             ])
                             ->first();
 
-                        RusResolver::setEntity($entity);
+                        $this->rusResolver->setEntity($entity);
 
-                        FormulaParser::setEntity($entity);
+                        $this->formulaParser->setEntity($entity);
 
                         $fields = $entity->fields;
 
@@ -525,9 +523,9 @@ class ModuleDataCollector
                             ])
                             ->first();
 
-                        RusResolver::setEntity($entity);
+                        $this->rusResolver->setEntity($entity);
 
-                        FormulaParser::setEntity($entity);
+                        $this->formulaParser->setEntity($entity);
 
                         $fields = $entity->fields;
 
@@ -543,8 +541,8 @@ class ModuleDataCollector
                         $this->compute($modelq, $rus, $formula);
                     }
 
-                    RusResolver::setEntity($this->entity);
-                    FormulaParser::setEntity($this->entity);
+                    $this->rusResolver->setEntity($this->entity);
+                    $this->formulaParser->setEntity($this->entity);
 
                     $fields = $this->entity->fields->filter(fn (Field $field) => in_array($field->fieldType->name, ['formula', 'rollUpSummary']));
 
@@ -1162,14 +1160,10 @@ class ModuleDataCollector
             foreach ($rus as $rusField) {
                 $v = $model->{$rusField->name} ?? null;
 
-                $value = RusResolver::resolve($model, $rusField);
+                $value = $this->rusResolver->resolve($model, $rusField);
 
                 $update[$rusField->name] = $value;
             }
-
-            //   if($model->branch_id == '5badf748678f7111186ba275'){
-            //     dump($update);
-            //   }
 
             $model->update($update);
         }
@@ -1178,7 +1172,7 @@ class ModuleDataCollector
 
         if (count($formula)) {
             foreach ($formula as $formulaField) {
-                $value = FormulaParser::parseField($formulaField, $model, true);
+                $value = $this->formulaParser->parseField($formulaField, $model, true);
                 $model->update([$formulaField->name => $value]);
             }
         }
@@ -1207,8 +1201,8 @@ class ModuleDataCollector
 
             // FOR CHARISSE
             if ($mutableEntity->name == 'SalesOpptItem') {
-                RusResolver::setEntity($mutableEntity);
-                FormulaParser::setEntity($mutableEntity);
+                $this->rusResolver->setEntity($mutableEntity);
+                $this->formulaParser->setEntity($mutableEntity);
                 $fields = $entity->fields()->get();
                 [$formula, $rus] = $this->getRusAndFormula($fields);
             }
