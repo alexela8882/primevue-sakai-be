@@ -55,17 +55,15 @@ class QuotationTemplateController extends Controller
             $productIDs = array_unique($productIDs);
 
             $return['Account'] = $this->mdc->setModule('accounts')->getShow(Account::find($opp->account_id), $request, true);
-      //      $return['Contact'] = $this->mdc->setModule('contacts')->getShow(Contact::find($opp->contact_id), $request, true);
+            //      $return['Contact'] = $this->mdc->setModule('contacts')->getShow(Contact::find($opp->contact_id), $request, true);
 
             if ($productIDs) {
                 $products = Product::whereIn('_id', $productIDs)->get(['_id', 'uom', 'description']);
                 $return['Product']['collection'] = $products;
             }
 
-            
             $return['Opportunity'] = $this->mdc->setModule('salesopportunities')->getShow($opp, $request, true);
-        //   $return['Opportunity']['connected'] = $this->mdc->setModule('salesquotes')->getShow($quote, $request, false, true)['connected'] ?? [];
-            
+            //   $return['Opportunity']['connected'] = $this->mdc->setModule('salesquotes')->getShow($quote, $request, false, true)['connected'] ?? [];
 
             return $return;
         });

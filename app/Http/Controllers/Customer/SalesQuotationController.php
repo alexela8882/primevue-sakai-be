@@ -4,29 +4,24 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer\SalesQuote;
-use App\Models\User;
 use App\Services\ModuleDataCollector;
 use App\Services\SalesModuleService;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class SalesQuotationController extends Controller
 {
     use ApiResponseTrait;
 
-    private User $user;
-
     public function __construct(private ModuleDataCollector $moduleDataCollector)
     {
-        $this->user = Auth::guard('api')->user();
         $this->moduleDataCollector->setUser()->setModule('salesquotes');
     }
 
     public function index(Request $request)
     {
         return $this->respondFriendly(function () use ($request) {
-            if (! $this->user->canView('salesquotes')) {
+            if (! $this->moduleDataCollector->user->canView('salesquotes')) {
                 $this->respondUnprocessable('Error. You do not have access to view Sales Quote list');
             }
 
@@ -38,7 +33,7 @@ class SalesQuotationController extends Controller
     public function show(SalesQuote $salesquote, Request $request)
     {
         return $this->respondFriendly(function () use ($salesquote, $request) {
-            if (! $this->user->canRead('salesquotes')) {
+            if (! $this->moduleDataCollector->user->canRead('salesquotes')) {
                 $this->respondUnprocessable('Error. You do not have access to view Sales Quote records');
             }
 
@@ -51,7 +46,7 @@ class SalesQuotationController extends Controller
     public function store(Request $request)
     {
         return $this->respondFriendly(function () use ($request) {
-            if (! $this->user->canRead('salesquotes')) {
+            if (! $this->moduleDataCollector->user->canRead('salesquotes')) {
                 $this->respondUnprocessable('Error. You do not have access to create Sales Quote');
             }
             $item = $this->moduleDataCollector->postStore($request);

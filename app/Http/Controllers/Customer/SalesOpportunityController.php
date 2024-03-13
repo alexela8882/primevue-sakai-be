@@ -4,62 +4,55 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ModelCollection;
+use App\Models\Customer\Account;
+use App\Models\Customer\Lead;
 use App\Models\Customer\OpportunityStageHistory;
 use App\Models\Customer\SalesOpportunity;
 use App\Models\Customer\SalesOpptItem;
 use App\Models\Customer\SalesQuote;
 use App\Models\Service\ServiceJob;
-use App\Models\User;
 use App\Services\ModuleDataCollector;
+use App\Services\PicklistService;
 use App\Services\SalesModuleService;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
 
 class SalesOpportunityController extends Controller
 {
     use ApiResponseTrait;
 
-    public User $user;
-
     public function __construct(private ModuleDataCollector $moduleDataCollector)
     {
-
-        $this->user = Auth::guard('api')->user();
         $this->moduleDataCollector->setUser()->setModule('salesopportunities');
     }
 
     public function index(Request $request)
     {
         return $this->respondFriendly(function () use ($request) {
-            if (! $this->user->canView('salesopportunities')) {
+            if (! $this->moduleDataCollector->user->canView('salesopportunities')) {
                 $this->respondUnprocessable('Error. You do not have access to view Sales Opportunity list');
             }
 
             return $this->moduleDataCollector->getIndex($request);
-
         });
     }
 
     public function show(SalesOpportunity $salesopportunity, Request $request)
     {
         return $this->respondFriendly(function () use ($salesopportunity, $request) {
-            if (! $this->user->canRead('salesopportunities')) {
+            if (! $this->moduleDataCollector->user->canRead('salesopportunities')) {
                 $this->respondUnprocessable('Error. You do not have access to view Sales Opportunity records');
             }
 
             return $this->moduleDataCollector->getShow($salesopportunity, $request);
-
         });
-
     }
 
     public function store(Request $request)
     {
-
         return $this->respondFriendly(function () use ($request) {
-
-            if (! $this->user->canRead('salesopportunities')) {
+            if (! $this->moduleDataCollector->user->canRead('salesopportunities')) {
                 $this->respondUnprocessable('Error. You do not have access to create Sales Opportunity');
             }
 
@@ -79,8 +72,8 @@ class SalesOpportunityController extends Controller
     public function update(SalesOpportunity $salesopportunity, Request $request)
     {
         return $this->respondFriendly(function () use ($salesopportunity, $request) {
-
             $stageId = $request->get('stage_id');
+
             $oldStageID = $salesopportunity->stage_id;
 
             $updatedSalesopportunity = $this->moduleDataCollector->patchUpdate($salesopportunity->_id, $request);
@@ -106,7 +99,6 @@ class SalesOpportunityController extends Controller
     public function upsert($id, Request $request)
     {
         return $this->respondFriendly(function () use ($id, $request) {
-
             $item = $this->moduleDataCollector->patchUpsert($id, $request);
 
             (new SalesModuleService)->checkOpportunityQuoteStat($id);
@@ -156,7 +148,7 @@ class SalesOpportunityController extends Controller
             $lead->update([
                 'converted' => true,
                 'status_id' => picklist_id('lead_status', 'Converted to Opportunity'),
-                'dateConverted' => new Carbon('NOW'),
+                'dateConverted' => Carbon::now(),
             ]);
 
             return $this->respondSuccessful('Lead successfuly converted', $item);
@@ -192,7 +184,7 @@ class SalesOpportunityController extends Controller
                 $coll = (new SalesModuleService)->getActiveOppItems($id, $request->input('withQuote', false));
 
                 $fields = SalesOpptItem::getEntityFields();
-                $esPicklists = PickList::getPicklistsFromFields($fields);
+                $esPicklists = PicklistService::getPicklistsFromFields($fields);
 
                 return new ModelCollection($coll, $fields, $esPicklists);
 
