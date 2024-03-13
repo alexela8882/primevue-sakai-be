@@ -2,13 +2,12 @@
 
 namespace App\Models\Customer;
 
+use App\Models\Company\BusinessUnit;
 use App\Models\Model\Base;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\User;
 
 class SalesOpportunity extends Base
 {
-    use SoftDeletes;
-
     protected $date = ['deleted_at'];
 
     protected $collection = 'sales_opportunities';
@@ -19,12 +18,12 @@ class SalesOpportunity extends Base
 
     public function account()
     {
-        return $this->belongsTo('App\Models\Customer\Account');
+        return $this->belongsTo(Account::class);
     }
 
     public function businessUnits()
     {
-        return $this->belongsToMany('App\Models\Company\BusinessUnit');
+        return $this->belongsToMany(BusinessUnit::class);
     }
 
     public function tasks()
@@ -39,22 +38,22 @@ class SalesOpportunity extends Base
 
     public function quotations()
     {
-        return $this->hasMany('App\Models\Customer\SalesQuote');
+        return $this->hasMany(SalesQuote::class);
     }
 
     public function items()
     {
-        return $this->hasMany('App\Models\Customer\SalesOpptItem', 'sales_opportunity_id', '_id');
+        return $this->hasMany(SalesOpptItem::class, 'sales_opportunity_id', '_id');
     }
 
     public function owner()
     {
-        return $this->belongsTo('App\User', 'owner_id');
+        return $this->belongsTo(User::class, 'owner_id');
     }
 
     public function salesPersonInCharge()
     {
-        return $this->belongsTo('App\Models\Customer\Contact', 'salesperson_in_charge_id');
+        return $this->belongsTo(Contact::class, 'salesperson_in_charge_id');
     }
 
     public function branch()
