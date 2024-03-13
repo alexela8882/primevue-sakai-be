@@ -38,9 +38,9 @@ class QuotationTemplateController extends Controller
         });
     }
 
-    public function show(QuotationTemplate $quotationTemplate)
+    public function show(QuotationTemplate $quotationtemplate)
     {
-        return (new SalesModuleService)->transform($quotationTemplate);
+        return (new SalesModuleService)->transform($quotationtemplate);
     }
 
     public function getInfo($id, Request $request)
