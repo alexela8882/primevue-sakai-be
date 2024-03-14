@@ -123,6 +123,8 @@ class ModuleDataCollector
         } else {
             throw new Exception("Error. Unable to find the main entity of '{$this->module->name}'");
         }
+
+        return $this;
     }
 
     public function setViewFilters(Request $request)
