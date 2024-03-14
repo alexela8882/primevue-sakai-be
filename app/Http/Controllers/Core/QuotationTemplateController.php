@@ -63,7 +63,7 @@ class QuotationTemplateController extends Controller
         //  $return['Contact'] = $this->mdc->setModule('contacts')->getShow(Contact::find($opp->contact_id), $request, true);
 
         if ($productIDs) {
-            $products = Product::whereIn('_id', $productIDs)->get(['_id', 'uom', 'description']);
+            $products = Product::whereIn('_id', $productIDs)->get(['_id', 'uom', 'name', 'description', 'modelCode', 'itemCode']);
             $return['Product']['collection'] = $products;
         }
 
