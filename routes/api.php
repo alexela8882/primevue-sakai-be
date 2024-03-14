@@ -109,4 +109,6 @@ Route::middleware('auth:api')->group(function () {
         'users' => UserController::class,
         'modules/reports' => ReportController::class,
     ]);
+
+    Route::post('/rfqform', [LeadController::class, 'getRFQ']);
 });
