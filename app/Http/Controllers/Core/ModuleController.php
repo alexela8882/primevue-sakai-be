@@ -87,39 +87,11 @@ class ModuleController extends Controller
 
     public function getMenu()
     {
-        if ($this->moduleDataCollector->user) {
-            $folders = Folder::query()
-                ->whereIn('name', ['top', 'admin'])
-                ->where('type_id', '5bb104cf678f71061f643c27') // Folder Type: Module Navigation | 5bb104cf678f71061f643c27
-                ->get()
-                ->map(function (Folder $folder) {
-                    return [$folder->name => $folder];
-                })
-                ->collapse();
+        $folder = Folder::query()
+            ->where('name', 'top')
+            ->where('type_id', '5bb104cf678f71061f643c27') // Folder Type: Module Navigation | 5bb104cf678f71061f643c27
+            ->first();
 
-            $top = FolderResource::make($folders['top']);
-
-            $data['top'] = [
-                'modules' => $top['modules'],
-                'folders' => $top['folders'],
-            ];
-
-            if ($this->moduleDataCollector->user->roles->contains('name', 'crm_admin') && array_key_exists('admin', $folders->toArray())) {
-                $admin = FolderResource::make($folders['admin']);
-                $data['admin'] = [
-                    'modules' => $admin['modules'] ?? null,
-                    'folders' => $admin['folders'] ?? null,
-                ];
-            } else {
-                $data['admin'] = [
-                    'modules' => [],
-                    'folders' => [],
-                ];
-            }
-
-            return response()->json($data, 200);
-        }
-
-        return redirect('/');
+        return FolderResource::make($folder);
     }
 }
