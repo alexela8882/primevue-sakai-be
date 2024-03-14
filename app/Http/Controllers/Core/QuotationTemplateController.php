@@ -45,27 +45,33 @@ class QuotationTemplateController extends Controller
 
     public function getInfo($id, Request $request)
     {
-        return $this->respondFriendly(function () use ($id, $request) {
-            $return = [];
+        //  return $this->respondFriendly(function () use ($id, $request) {
+        $return = [];
 
-            $quote = SalesQuote::find($id);
-            $opp = SalesOpportunity::find($quote->sales_opportunity_id);
+        $quote = SalesQuote::find($id);
+        $opp = SalesOpportunity::find($quote->sales_opportunity_id);
 
-            $productIDs = SalesOpptItem::where('sales_opportunity_id', $opp->_id)->pluck('product_id')->toArray();
-            $productIDs = array_unique($productIDs);
+        $productIDs = SalesOpptItem::where('sales_opportunity_id', $opp->_id)->pluck('product_id')->toArray();
+        $productIDs = array_unique($productIDs);
 
-            $return['Account'] = $this->mdc->setModule('accounts')->getShow(Account::find($opp->account_id), $request, true);
-            //      $return['Contact'] = $this->mdc->setModule('contacts')->getShow(Contact::find($opp->contact_id), $request, true);
+        $account = Account::find($opp->account_id);
 
-            if ($productIDs) {
-                $products = Product::whereIn('_id', $productIDs)->get(['_id', 'uom', 'description']);
-                $return['Product']['collection'] = $products;
-            }
+        $return['Account'] = $this->mdc->setModule('accounts')->setFields()->getShow($account, $request, true)
+            ->toResponse(app('request'))
+            ->getData()->data ?? null;
 
-            $return['Opportunity'] = $this->mdc->setModule('salesopportunities')->getShow($opp, $request, true);
-            //   $return['Opportunity']['connected'] = $this->mdc->setModule('salesquotes')->getShow($quote, $request, false, true)['connected'] ?? [];
+        //  $return['Contact'] = $this->mdc->setModule('contacts')->getShow(Contact::find($opp->contact_id), $request, true);
 
-            return $return;
-        });
+        if ($productIDs) {
+            $products = Product::whereIn('_id', $productIDs)->get(['_id', 'uom', 'description']);
+            $return['Product']['collection'] = $products;
+        }
+
+        $return['Opportunity'] = $this->mdc->setModule('salesopportunities')->getShow($opp, $request, true);
+        //   $return['Opportunity']['connected'] = $this->mdc->setModule('salesquotes')->getShow($quote, $request, false, true)['connected'] ?? [];
+
+        //   dd($return);
+        return $return;
+        //     });
     }
 }

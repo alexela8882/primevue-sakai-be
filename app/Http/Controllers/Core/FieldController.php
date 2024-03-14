@@ -43,8 +43,6 @@ class FieldController extends Controller
 
             $this->moduleDataCollector->setFields();
 
-            return new FieldResource($this->moduleDataCollector->fields->first());
-
             return FieldResource::customCollection($this->moduleDataCollector->fields, $this->moduleDataCollector->pickLists);
         } else {
             return $this->respondUnprocessable("Error. Unable to find instance of Entity with name of '{$request->input('entity-name')}'.");
