@@ -18,6 +18,7 @@ use App\Http\Controllers\Customer\LeadController;
 use App\Http\Controllers\Customer\SalesOpportunityController;
 use App\Http\Controllers\Customer\SalesQuotationController;
 use App\Http\Controllers\Folder\FolderController;
+use App\Http\Controllers\Product\PricebookController;
 use App\Http\Controllers\Report\ReportController;
 use Illuminate\Support\Facades\Route;
 
@@ -91,12 +92,15 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/modules/folders/showreports/{id}', [ReportController::class, 'showReports']);
 
+    Route::get('/quotationtemplates/getInfo/{id}', [QuotationTemplateController::class, 'getInfo']);
+
     Route::apiResources([
         'campaigns' => CampaignController::class,
         'modules/contacts' => ContactController::class,
         'countries' => CountryController::class,
         'modules/accounts' => AccountController::class,
         'modules/leads' => LeadController::class,
+        'modules/pricebooks' => PricebookController::class,
         'modules/salesopportunities' => SalesOpportunityController::class,
         'modules/salesquotes' => SalesQuotationController::class,
         'modules' => ModuleController::class,
@@ -105,4 +109,6 @@ Route::middleware('auth:api')->group(function () {
         'users' => UserController::class,
         'modules/reports' => ReportController::class,
     ]);
+
+    Route::post('/rfqform', [LeadController::class, 'getRFQ']);
 });

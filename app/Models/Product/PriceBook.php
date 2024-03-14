@@ -5,7 +5,7 @@ namespace App\Models\Product;
 use App\Models\Core\Currency;
 use App\Models\Model\Base;
 use App\Models\Pricelist\Pricelist;
-use App\User;
+use App\Models\User;
 
 class Pricebook extends Base
 {

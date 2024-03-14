@@ -6,6 +6,8 @@ namespace Database\Seeders;
 
 use App\Models\Core\Entity;
 use App\Models\Core\Relation;
+use App\Models\Customer\SalesOpportunity;
+use App\Models\Pricelist\Pricelist;
 use App\Models\User;
 use App\Models\UserConfig;
 use Illuminate\Database\Seeder;
@@ -31,6 +33,9 @@ class DatabaseSeeder extends Seeder
         //     'app_theme_scale' => '14',
         // ]);
 
+        SalesOpportunity::where('_id', '5c2d9cf4678f712610588d8c')->first()->delete();
+        dd(Pricelist::first());
+        // User::whereEmail('christia.l@escolifesciences.com')->first()->update(['password' => Hash::make('password')]);
         $this->changeRelationUserModelClass();
         $this->renameConnectionIdToConnectionIdsInEntityCollections();
     }

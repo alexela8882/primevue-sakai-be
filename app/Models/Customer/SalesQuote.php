@@ -4,12 +4,10 @@ namespace App\Models\Customer;
 
 use App\Models\Core\Country;
 use App\Models\Model\Base;
-use App\User;
+use App\Models\User;
 
 class SalesQuote extends Base
 {
-    protected $date = ['deleted_at'];
-
     protected $entity = 'SalesQuote';
 
     protected $collection = 'sales_quotes';

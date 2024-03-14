@@ -1,6 +1,8 @@
 <?php
 
 use App\Services\PicklistService;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 if (! function_exists('getCollectionRawFields')) {
@@ -260,5 +262,15 @@ if (! function_exists('idify')) {
         }
 
         return $str;
+    }
+}
+
+if (! function_exists('logDrf')) {
+    function logDrf($value, $type)
+    {
+        $today = Carbon::now()->format('Y-m-d');
+
+        Log::useFiles(storage_path('logs/'.$type.'-'.$today.'.log'));
+        Log::info($value);
     }
 }

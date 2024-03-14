@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Report;
 
-use App\Builders\ReportTypeBuilder;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Field\FieldResource;
 use App\Http\Resources\Module\EntityResource;
@@ -18,12 +17,10 @@ use App\Services\Folder\FolderService;
 use App\Services\ModuleDataCollector;
 use App\Services\PicklistService;
 use App\Traits\ApiResponseTrait;
-use App\Traits\BuilderSearchTrait;
 
 class ReportController extends Controller
 {
     use ApiResponseTrait;
-    use BuilderSearchTrait;
 
     protected $filter = [];
 
@@ -31,7 +28,7 @@ class ReportController extends Controller
 
     private $user;
 
-    public function __construct(private ModuleDataCollector $mdc, private ReportTypeBuilder $reportTypeBuilder)
+    public function __construct(private ModuleDataCollector $mdc)
     {
         $this->filter = [];
         $this->clickfilter = [];

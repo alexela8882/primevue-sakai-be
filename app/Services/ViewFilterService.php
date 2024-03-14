@@ -77,7 +77,7 @@ class ViewFilterService
         return $items;
     }
 
-    public static function getWidestScope(User $user, string|Module $module, $returnBoolean = false)
+    public static function getWidestScope(User $user, null|string|Module $module, $returnBoolean = false)
     {
         if (! $module instanceof Module) {
             $module = Module::where('name', $module)->with('queries')->first();
@@ -85,7 +85,7 @@ class ViewFilterService
             $module->load('queries');
         }
 
-        if ($module->hasViewFilter === true) {
+        if (($module->hasViewFilter ?? null) === true) {
             $queries = $module->queries->pluck('_id');
 
             $viewFilters = self::getDefaultViewFilter($user, $module->name, $returnBoolean, $module);
@@ -114,5 +114,7 @@ class ViewFilterService
 
             return $viewFilters->first();
         }
+
+        return true;
     }
 }
