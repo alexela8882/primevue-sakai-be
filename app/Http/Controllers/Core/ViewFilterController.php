@@ -49,7 +49,7 @@ class ViewFilterController extends Controller
     {
 
         // update current display & search fields
-        $viewFilter->currentDisplay = $request->updateType;
+        if ($request->updateType !== 'filters') $viewFilter->currentDisplay = $request->updateType;
         if ($request->_searchFields && count($request->_searchFields) > 0) {
 
             $viewFilters = ViewFilter::where('module_id', $viewFilter->module_id)->get();
@@ -63,6 +63,13 @@ class ViewFilterController extends Controller
         }
         if ($request->updateType == 'filters') {
 
+            // $reconstructedFilters = array(
+            //     array(
+            //         $request->filters['field_id'],
+            //         $request->filters['operator_id'],
+            //         $request->filters['values']
+            //     )
+            // );
             $viewFilter->filters = $request->filters;
 
         } elseif ($request->updateType == 'kanban') {
