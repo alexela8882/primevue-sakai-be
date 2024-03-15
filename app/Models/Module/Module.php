@@ -4,8 +4,8 @@ namespace App\Models\Module;
 
 use App\Models\Core\Entity;
 use App\Models\Core\ModuleQuery;
-use App\Models\Core\Permission;
 use App\Models\Model\Base;
+use App\Models\User\Permission;
 
 class Module extends Base
 {

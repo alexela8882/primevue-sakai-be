@@ -89,29 +89,29 @@ class ViewFilterController extends Controller
                     $reconstructedFilters->field_id = $request->filters['field_id'];
                     $reconstructedFilters->operator_id = $request->filters['operator_id'];
                     $reconstructedFilters->values = $request->filters['values'];
-    
+
                     if (is_array($viewFilter->filters)) {
                         $prevFilters = $viewFilter->filters;
                     } // get previous filters
                     else {
                         $prevFilters = [];
                     }
-    
+
                     // push new filters
                     array_push($prevFilters, $reconstructedFilters);
-    
+
                     // return $prevFilters;
-    
+
                     // return new filters
                     $viewFilter->filters = $prevFilters;
                     $viewFilter->update();
-    
+
                     $response = [
                         'data' => $reconstructedFilters,
                         'message' => 'New filter successfully added.',
                         'status' => 200,
                     ];
-    
+
                     return response()->json($response, $response['status']);
                 } else {
                     // return $request->filters['uuid'];
@@ -120,7 +120,7 @@ class ViewFilterController extends Controller
                             'filters.$' => $request->filters,
                         ]
                     );
-    
+
                     $filter = ViewFilter::where('filters', 'elemMatch', ['uuid' => $request->filters['uuid']])
                         ->project(['filters.$' => true])
                         ->first();
@@ -129,7 +129,7 @@ class ViewFilterController extends Controller
                         'message' => 'Filter successfully updated.',
                         'status' => 200,
                     ];
-    
+
                     return response()->json($response, $response['status']);
                 }
             } else {
@@ -138,6 +138,7 @@ class ViewFilterController extends Controller
                     'message' => 'Filter successfully applied.',
                     'status' => 200,
                 ];
+
                 return response()->json($response, $response['status']);
             }
 
@@ -149,6 +150,9 @@ class ViewFilterController extends Controller
 
         } elseif ($request->updateType == 'table') {
 
+            if ($request->queryType) {
+                $viewFilter->queryType = $request->queryType;
+            }
             if ($request->filterName) {
                 $viewFilter->filterName = $request->filterName;
             }
