@@ -78,7 +78,7 @@ class ViewFilterController extends Controller
         }
         if ($request->updateType === 'filters') {
             // update query type
-            $viewFilter->query_type = $request->query_type;
+            $viewFilter->queryType = $request->queryType;
             $viewFilter->update();
 
             // update filters
