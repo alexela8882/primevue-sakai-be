@@ -32,7 +32,7 @@ class FieldController extends Controller
         $entity = Entity::query()
             ->where('name', $request->input('entity-name'))
             ->with([
-                'fields' => fn ($query) => $query->where('name', 'owner_id'),
+                'fields',
                 'fields.fieldType',
                 'fields.rules',
                 'fields.relation',
