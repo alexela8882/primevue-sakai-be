@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models\Core;
+namespace App\Models\User;
 
 use App\Models\Model\Base;
 
 class RoleFilter extends Base
 {
-    protected $connection = 'mongodb';
+    //
 }
