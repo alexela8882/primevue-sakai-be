@@ -17,6 +17,7 @@ class ModelCollection extends ResourceCollection
         private ?array $pickLists,
         private bool $fromReport = false,
         private bool $displayFieldNameOnly = false,
+        private bool $withoutPagination = false,
     ) {
         parent::__construct($resource);
 
@@ -29,23 +30,25 @@ class ModelCollection extends ResourceCollection
     {
         $paginated = $this->resource->toArray();
 
-        return [
-            'data' => $this->collection->transform(fn (Base $base) => $this->modelService->getModelInformation($base, $this->fields, $this->pickLists, $this->fromReport, $this->displayFieldNameOnly)),
-            'meta' => [
-                'pagination' => [
-                    'total' => $paginated['total'] ?? null,
-                    'count' => $paginated['per_page'] ?? null,
-                    'per_page' => $paginated['per_page'] ?? null,
-                    'current_page' => $paginated['current_page'] ?? null,
-                    'links' => [
-                        'first' => $paginated['first_page_url'] ?? null,
-                        'last' => $paginated['last_page_url'] ?? null,
-                        'prev' => $paginated['prev_page_url'] ?? null,
-                        'next' => $paginated['next_page_url'] ?? null,
+        return $this->withoutPagination
+            ? $this->collection->transform(fn (Base $base) => $this->modelService->getModelInformation($base, $this->fields, $this->pickLists, $this->fromReport, $this->displayFieldNameOnly))
+            : [
+                'data' => $this->collection->transform(fn (Base $base) => $this->modelService->getModelInformation($base, $this->fields, $this->pickLists, $this->fromReport, $this->displayFieldNameOnly)),
+                'meta' => [
+                    'pagination' => [
+                        'total' => $paginated['total'] ?? null,
+                        'count' => $paginated['per_page'] ?? null,
+                        'per_page' => $paginated['per_page'] ?? null,
+                        'current_page' => $paginated['current_page'] ?? null,
+                        'links' => [
+                            'first' => $paginated['first_page_url'] ?? null,
+                            'last' => $paginated['last_page_url'] ?? null,
+                            'prev' => $paginated['prev_page_url'] ?? null,
+                            'next' => $paginated['next_page_url'] ?? null,
+                        ],
                     ],
                 ],
-            ],
-        ];
+            ];
     }
 
     public function paginationInformation($request, $paginated, $default)
