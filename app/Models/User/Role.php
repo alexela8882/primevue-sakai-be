@@ -20,11 +20,11 @@ class Role extends Base
 
     public function underRole()
     {
-        return $this->belongsToMany('App\Models\Core\Role', null, 'handled_role_id', 'under_role_id');
+        return $this->belongsToMany(Role::class, null, 'handled_role_id', 'under_role_id');
     }
 
     public function handledRole()
     {
-        return $this->belongsToMany('App\Models\Core\Role', null, 'under_role_id', 'handled_role_id');
+        return $this->belongsToMany(Role::class, null, 'under_role_id', 'handled_role_id');
     }
 }
