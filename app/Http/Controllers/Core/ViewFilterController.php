@@ -150,6 +150,9 @@ class ViewFilterController extends Controller
 
         } elseif ($request->updateType == 'table') {
 
+            if ($request->queryType) {
+                $viewFilter->queryType = $request->queryType;
+            }
             if ($request->filterName) {
                 $viewFilter->filterName = $request->filterName;
             }
