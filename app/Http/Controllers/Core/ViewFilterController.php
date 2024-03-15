@@ -81,62 +81,63 @@ class ViewFilterController extends Controller
             $viewFilter->queryType = $request->queryType;
             $viewFilter->update();
 
-            // update filters
-            // $reconstructedFilters = array(
-            //     array(
-            //         $request->filters['field_id'],
-            //         $request->filters['operator_id'],
-            //         $request->filters['values']
-            //     )
-            // );
-            if ($request->mode === 'new') {
-                $uuid = uniqid(); // generate random id
-                $reconstructedFilters = new \StdClass();
-                $reconstructedFilters->uuid = $uuid;
-                $reconstructedFilters->field_id = $request->filters['field_id'];
-                $reconstructedFilters->operator_id = $request->filters['operator_id'];
-                $reconstructedFilters->values = $request->filters['values'];
-
-                if (is_array($viewFilter->filters)) {
-                    $prevFilters = $viewFilter->filters;
-                } // get previous filters
-                else {
-                    $prevFilters = [];
+            if ($request->filters) {
+                if ($request->mode === 'new') {
+                    $uuid = uniqid(); // generate random id
+                    $reconstructedFilters = new \StdClass();
+                    $reconstructedFilters->uuid = $uuid;
+                    $reconstructedFilters->field_id = $request->filters['field_id'];
+                    $reconstructedFilters->operator_id = $request->filters['operator_id'];
+                    $reconstructedFilters->values = $request->filters['values'];
+    
+                    if (is_array($viewFilter->filters)) {
+                        $prevFilters = $viewFilter->filters;
+                    } // get previous filters
+                    else {
+                        $prevFilters = [];
+                    }
+    
+                    // push new filters
+                    array_push($prevFilters, $reconstructedFilters);
+    
+                    // return $prevFilters;
+    
+                    // return new filters
+                    $viewFilter->filters = $prevFilters;
+                    $viewFilter->update();
+    
+                    $response = [
+                        'data' => $reconstructedFilters,
+                        'message' => 'New filter successfully added.',
+                        'status' => 200,
+                    ];
+    
+                    return response()->json($response, $response['status']);
+                } else {
+                    // return $request->filters['uuid'];
+                    ViewFilter::where('filters.uuid', $request->filters['uuid'])->update(
+                        [
+                            'filters.$' => $request->filters,
+                        ]
+                    );
+    
+                    $filter = ViewFilter::where('filters', 'elemMatch', ['uuid' => $request->filters['uuid']])
+                        ->project(['filters.$' => true])
+                        ->first();
+                    $response = [
+                        'data' => $filter,
+                        'message' => 'Filter successfully updated.',
+                        'status' => 200,
+                    ];
+    
+                    return response()->json($response, $response['status']);
                 }
-
-                // push new filters
-                array_push($prevFilters, $reconstructedFilters);
-
-                // return $prevFilters;
-
-                // return new filters
-                $viewFilter->filters = $prevFilters;
-                $viewFilter->update();
-
-                $response = [
-                    'data' => $reconstructedFilters,
-                    'message' => 'New filter successfully added.',
-                    'status' => 200,
-                ];
-
-                return response()->json($response, $response['status']);
             } else {
-                // return $request->filters['uuid'];
-                ViewFilter::where('filters.uuid', $request->filters['uuid'])->update(
-                    [
-                        'filters.$' => $request->filters,
-                    ]
-                );
-
-                $filter = ViewFilter::where('filters', 'elemMatch', ['uuid' => $request->filters['uuid']])
-                    ->project(['filters.$' => true])
-                    ->first();
                 $response = [
-                    'data' => $filter,
-                    'message' => 'Filter successfully updated.',
+                    'data' => $viewFilter,
+                    'message' => 'Filter successfully applied.',
                     'status' => 200,
                 ];
-
                 return response()->json($response, $response['status']);
             }
 
