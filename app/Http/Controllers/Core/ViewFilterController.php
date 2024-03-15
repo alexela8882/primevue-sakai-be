@@ -30,7 +30,7 @@ class ViewFilterController extends Controller
             'sortOrder' => 'required',
             'pageSize' => 'required',
             'queryType' => 'required|in:owned,all',
-            'fields' => 'required|array|min:2',
+            'pickList' => 'required|array|min:2',
 
         ]);
 
@@ -97,8 +97,12 @@ class ViewFilterController extends Controller
                 $reconstructedFilters->operator_id = $request->filters['operator_id'];
                 $reconstructedFilters->values = $request->filters['values'];
 
-                if (is_array($viewFilter->filters)) $prevFilters = $viewFilter->filters; // get previous filters
-                else $prevFilters = [];
+                if (is_array($viewFilter->filters)) {
+                    $prevFilters = $viewFilter->filters;
+                } // get previous filters
+                else {
+                    $prevFilters = [];
+                }
 
                 // push new filters
                 array_push($prevFilters, $reconstructedFilters);
