@@ -61,9 +61,10 @@ class ViewFilterController extends Controller
             }
 
         }
-        if ($request->updateType == 'filters') {
+        if ($request->updateType === 'filters') {
             // update query type
             $viewFilter->query_type = $request->query_type;
+            $viewFilter->update();
 
             // update filters
             // $reconstructedFilters = array(
@@ -81,7 +82,8 @@ class ViewFilterController extends Controller
                 $reconstructedFilters->operator_id = $request->filters['operator_id'];
                 $reconstructedFilters->values = $request->filters['values'];
 
-                $prevFilters = $viewFilter->filters; // get previous filters
+                if (is_array($viewFilter->filters)) $prevFilters = $viewFilter->filters; // get previous filters
+                else $prevFilters = [];
 
                 // push new filters
                 array_push($prevFilters, $reconstructedFilters);
