@@ -1141,7 +1141,7 @@ class ModuleDataCollector
             }
         }
 
-        if ($field->hasMultipleValues()) {
+        if ($this->fieldService->hasMultipleValues($field)) {
             return [
                 'entity' => $field->relation->relatedEntity->model_class,
                 'method' => $field->relation->method,

@@ -35,6 +35,7 @@ class FieldController extends Controller
                 'fields',
                 'fields.fieldType',
                 'fields.rules',
+                'fields.relation',
             ])
             ->first();
 
