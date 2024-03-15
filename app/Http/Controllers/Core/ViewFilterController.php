@@ -21,6 +21,19 @@ class ViewFilterController extends Controller
 
         $userId = $request->default ? 'default' : auth()->user()->_id;
 
+        $this->validate($request, [
+
+            'filterName' => 'required',
+            'module_id' => 'required',
+            'moduleName' => 'required',
+            'sortField' => 'required',
+            'sortOrder' => 'required',
+            'pageSize' => 'required',
+            'queryType' => 'required|in:owned,all',
+            'pickList' => 'required|array|min:2',
+
+        ]);
+
         $viewFilter = new ViewFilter;
         $viewFilter->filterName = $request->filterName;
         $viewFilter->module_id = $request->module_id;
@@ -49,7 +62,9 @@ class ViewFilterController extends Controller
     {
 
         // update current display & search fields
-        if ($request->updateType !== 'filters') $viewFilter->currentDisplay = $request->updateType;
+        if ($request->updateType !== 'filters') {
+            $viewFilter->currentDisplay = $request->updateType;
+        }
         if ($request->_searchFields && count($request->_searchFields) > 0) {
 
             $viewFilters = ViewFilter::where('module_id', $viewFilter->module_id)->get();
@@ -61,58 +76,67 @@ class ViewFilterController extends Controller
             }
 
         }
-        if ($request->updateType == 'filters') {
+        if ($request->updateType === 'filters') {
             // update query type
-            $viewFilter->query_type = $request->query_type;
+            $viewFilter->queryType = $request->queryType;
+            $viewFilter->update();
 
-            // update filters
-            // $reconstructedFilters = array(
-            //     array(
-            //         $request->filters['field_id'],
-            //         $request->filters['operator_id'],
-            //         $request->filters['values']
-            //     )
-            // );
-            if ($request->mode === 'new') {
-                $uuid = uniqid(); // generate random id
-                $reconstructedFilters = new \StdClass();
-                $reconstructedFilters->uuid = $uuid;
-                $reconstructedFilters->field_id = $request->filters['field_id'];
-                $reconstructedFilters->operator_id = $request->filters['operator_id'];
-                $reconstructedFilters->values = $request->filters['values'];
-
-                $prevFilters = $viewFilter->filters; // get previous filters
-
-                // push new filters
-                array_push($prevFilters, $reconstructedFilters);
-
-                // return $prevFilters;
-
-                // return new filters
-                $viewFilter->filters = $prevFilters;
-                $viewFilter->update();
-
-                $response = [
-                    'data' => $reconstructedFilters,
-                    'message' => 'New filter successfully added.',
-                    'status' => 200
-                ];
-                return response()->json($response, $response['status']);
+            if ($request->filters) {
+                if ($request->mode === 'new') {
+                    $uuid = uniqid(); // generate random id
+                    $reconstructedFilters = new \StdClass();
+                    $reconstructedFilters->uuid = $uuid;
+                    $reconstructedFilters->field_id = $request->filters['field_id'];
+                    $reconstructedFilters->operator_id = $request->filters['operator_id'];
+                    $reconstructedFilters->values = $request->filters['values'];
+    
+                    if (is_array($viewFilter->filters)) {
+                        $prevFilters = $viewFilter->filters;
+                    } // get previous filters
+                    else {
+                        $prevFilters = [];
+                    }
+    
+                    // push new filters
+                    array_push($prevFilters, $reconstructedFilters);
+    
+                    // return $prevFilters;
+    
+                    // return new filters
+                    $viewFilter->filters = $prevFilters;
+                    $viewFilter->update();
+    
+                    $response = [
+                        'data' => $reconstructedFilters,
+                        'message' => 'New filter successfully added.',
+                        'status' => 200,
+                    ];
+    
+                    return response()->json($response, $response['status']);
+                } else {
+                    // return $request->filters['uuid'];
+                    ViewFilter::where('filters.uuid', $request->filters['uuid'])->update(
+                        [
+                            'filters.$' => $request->filters,
+                        ]
+                    );
+    
+                    $filter = ViewFilter::where('filters', 'elemMatch', ['uuid' => $request->filters['uuid']])
+                        ->project(['filters.$' => true])
+                        ->first();
+                    $response = [
+                        'data' => $filter,
+                        'message' => 'Filter successfully updated.',
+                        'status' => 200,
+                    ];
+    
+                    return response()->json($response, $response['status']);
+                }
             } else {
-                // return $request->filters['uuid'];
-                ViewFilter::where('filters.uuid', $request->filters['uuid'])->update(
-                    [
-                        'filters.$' => $request->filters
-                    ]
-                );
-
-                $filter = ViewFilter::where('filters', 'elemMatch', ['uuid' => $request->filters['uuid']])
-                                    ->project(['filters.$' => true])
-                                    ->first();
                 $response = [
-                    'data' => $filter,
-                    'message' => 'Filter successfully updated.',
-                    'status' => 200
+                    'data' => $viewFilter,
+                    'message' => 'Filter successfully applied.',
+                    'status' => 200,
                 ];
                 return response()->json($response, $response['status']);
             }
@@ -155,18 +179,29 @@ class ViewFilterController extends Controller
 
     public function destroy(ViewFilter $viewFilter, Request $request)
     {
-        if ($viewFilter) {
-            if ($viewFilter->owner == 'default' || $viewFilter->owner !== auth()->user()->id) {
-                return response()->json(['message' => 'You don\'t have permission to delete this view filter.'], 422);
-            } elseif ($viewFilter->isDefault == true) {
-                return response()->json(['message' => 'Cannot delete default view filter.'], 422);
-            } else {
-                $viewFilter->delete();
 
-                return response()->json(['viewFilter' => $viewFilter, 'message' => 'View filter has been successfully deleted.'], 200);
+        if ($viewFilter->owner == 'default' || $viewFilter->owner !== auth()->user()->id) {
+            return response()->json(['message' => 'You don\'t have permission to delete this view filter.'], 422);
+        } elseif ($viewFilter->isDefault == true) {
+
+            if ($request->defaultId) {
+                $setAsDefaultViewFilter = ViewFilter::find($request->defaultId);
+                if ($setAsDefaultViewFilter) {
+                    $setAsDefaultViewFilter->update(['isDefault' => true]);
+                    $viewFilter->delete();
+
+                    return response()->json(['viewFilter' => $viewFilter, 'message' => 'View filter has been successfully deleted.'], 200);
+                } else {
+                    return response()->json(['message' => 'Cannot delete default view filter.'], 422);
+                }
+
+            } else {
+                return response()->json(['message' => 'Cannot delete default view filter.'], 422);
             }
         } else {
-            return response()->json(['message' => 'View filter cannot be found.'], 422);
+            $viewFilter->delete();
+
+            return response()->json(['viewFilter' => $viewFilter, 'message' => 'View filter has been successfully deleted.'], 200);
         }
     }
 }
