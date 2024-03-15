@@ -8,6 +8,8 @@ use App\Http\Resources\Folder\FolderResource;
 use App\Models\Core\Field;
 use App\Models\Core\Folder;
 use App\Models\Module\Module;
+use App\Models\User\Permission;
+use App\Models\User\Role;
 use App\Services\ModuleDataCollector;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
@@ -23,15 +25,23 @@ class ModuleController extends Controller
 
     public function index()
     {
-        if ($this->moduleDataCollector->user) {
-            if ($this->moduleDataCollector->user->roles->contains('name', 'crm_admin')) {
-                return ModuleResource::collection(Module::with('entity')->get());
-            } else {
-                return response()->json([], 200);
-            }
-        }
+        $user = $this->moduleDataCollector->user;
 
-        return redirect('/');
+        $user->load([
+            'roles',
+            'roles.permissions' => fn ($query) => $query->where('name', 'like', '%index%'),
+            'roles.permissions.module',
+            'roles.permissions.module.entity',
+        ]);
+
+        $modules = $user
+            ->roles
+            ->map(fn (Role $role) => $role->permissions)
+            ->collapse()
+            ->unique('name')
+            ->map(fn (Permission $permission) => $permission->module);
+
+        return $this->respondSuccessful("Successfully retrieved modules of {$user->fullName}.", ModuleResource::collection($modules));
     }
 
     public function getShowRelatedList(Request $request)
