@@ -91,6 +91,18 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/quotationtemplates/getInfo/{id}', [QuotationTemplateController::class, 'getInfo']);
 
+    Route::get('/download-pdf/{filename}', [PDFController::class, 'download']);
+
+    Route::get('/downloadpdf/{filename}', [PDFController::class, 'generalDownload']);
+
+    Route::get('/downloadfile/{id}', [PDFController::class, 'redownload']);
+
+    Route::post('/generatepdf', [PDFController::class, 'pdfviewgeneral']);
+
+    Route::post('/generate-pdf', [PDFController::class, 'PDFView']);
+
+    Route::post('/deleteQuotePDF/{id}', [PDFController::class, 'deleteQuotePDF']);
+
     Route::apiResources([
         'campaigns' => CampaignController::class,
         'modules/contacts' => ContactController::class,
