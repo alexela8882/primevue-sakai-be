@@ -1205,7 +1205,7 @@ class ModuleDataCollector
             if ($mutableEntity->name == 'SalesOpptItem') {
                 $this->rusResolver->setEntity($mutableEntity);
                 $this->formulaParser->setEntity($mutableEntity);
-                $fields = $entity->fields()->get();
+                $fields = $mutableEntity->fields()->get();
                 [$formula, $rus] = $this->getRusAndFormula($fields);
             }
 
