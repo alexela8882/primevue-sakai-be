@@ -61,16 +61,16 @@ class LeadController extends Controller
 
         if ($campaign) {
             if ($request->has('g-recaptcha-response') && $campaign->name != 'Website - Medical RFQ Form') {
-                logDrf($request->all(), 'lead-regional');
+                // logDrf($request->all(), 'lead-regional');
 
-                $client = new Client();
-                $secret = '6LfU-6cUAAAAAEEvGKwvRhasKaSKRer8FVllpjWJ';
-                $response = $request['g-recaptcha-response'];
-                $ip = $request->ip();
-                $response = $client->post('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$response.'&remoteip='.$ip);
-                $data = json_decode($response->getBody(), true);
+                // $client = new Client();
+                // $secret = '6LfU-6cUAAAAAEEvGKwvRhasKaSKRer8FVllpjWJ';
+                // $response = $request['g-recaptcha-response'];
+                // $ip = $request->ip();
+                // $response = $client->post('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$response.'&remoteip='.$ip);
+                // $data = json_decode($response->getBody(), true);
 
-                if ($data['success'] === true) {
+                if (true) {
                     $poi = explode(',', $cleanRequest['00N90000071POI']);
                     $units = array_map(function ($value) {
                         if ($value == 'Lab') {

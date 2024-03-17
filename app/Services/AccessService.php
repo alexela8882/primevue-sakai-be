@@ -5,9 +5,9 @@ namespace App\Services;
 use App\Models\Company\Branch;
 use App\Models\Core\Module;
 use App\Models\Core\ModuleQuery;
-use App\Models\Core\Permission;
-use App\Models\Core\Role;
 use App\Models\User;
+use App\Models\User\Permission;
+use App\Models\User\Role;
 use Illuminate\Support\Collection;
 
 class AccessService

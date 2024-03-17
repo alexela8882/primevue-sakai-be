@@ -142,7 +142,7 @@ class FieldService
             }
         }
 
-        if ($field->hasMultipleValues()) {
+        if ($this->hasMultipleValues($field)) {
             return [
                 'entity' => $field->relation->entity->model_class,
                 'method' => $field->relation->method,
