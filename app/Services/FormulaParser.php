@@ -553,7 +553,6 @@ class FormulaParser
         return $this->parse($exp);
     }
 
-
     public function formulaFilter($model, $field)
     {
 
@@ -588,7 +587,6 @@ class FormulaParser
         return $exp;
 
     }
-
 
     /*************************************** Functions ******************************************************************/
 
