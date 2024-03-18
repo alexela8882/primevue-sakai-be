@@ -291,7 +291,7 @@ class ModuleDataCollector
             $modelCollection->additional([
                 'fields' => FieldResource::customCollection($this->fields),
                 'panels' => PanelResource::customCollection($this->panels),
-                'viewFilters' => ViewFilterResource::collection($this->viewFilters),
+                'viewFilters' => ViewFilterResource::customCollection($this->viewFilters),
                 'relatedLists' => RelatedListResource::collection($this->relatedLists),
             ]);
         }
