@@ -45,6 +45,12 @@ Route::post('saml-login', [RegisterController::class, 'samlLogin']);
 Route::get('passwordless-login', [RegisterController::class, 'passwordLessLogin'])->middleware(['web']);
 Route::get('logout', [RegisterController::class, 'logout'])->middleware(['web']);
 
+Route::middleware('cors')->group(function () {
+    Route::post('/rfq/lifesciences', [LeadController::class, 'storeLifesciencesRFQ']);
+    Route::post('/rfq/medical', [LeadController::class, 'storeMedicalRFQ']);
+    Route::post('/rfq/vaccixcell', [LeadController::class, 'storeVaccixcellRFQ']);
+});
+
 Route::middleware('auth:api')->group(function () {
     Route::patch('/modules/accounts/{account}/patchUpsert', [AccountController::class, 'patchUpsert']);
     Route::post('/modules/accounts/postMergeDuplicates/{identifier}', [AccountController::class, 'postMergeDuplicates']);
@@ -106,6 +112,4 @@ Route::middleware('auth:api')->group(function () {
         'users' => UserController::class,
         'modules/reports' => ReportController::class,
     ]);
-
-    Route::post('/rfqform', [LeadController::class, 'getRFQ']);
 });
