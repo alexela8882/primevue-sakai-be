@@ -140,7 +140,7 @@ class ModuleDataCollector
             $viewFilters = $viewFilterQuery->get();
 
             if ($viewFilters->isEmpty()) {
-                $viewFilters = ViewFilterService::getDefaultViewFilter($this->user, "{$this->module->name} .index", false, $this->module);
+                $viewFilters = ViewFilterService::getDefaultViewFilter($this->user, $this->module->name, false, $this->module);
             }
 
             $activeViewFilter = $request->input('viewfilter');

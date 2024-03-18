@@ -7,6 +7,7 @@ use App\Models\Module\Module;
 use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Arr;
 
 class ViewFilterService
 {
@@ -22,10 +23,10 @@ class ViewFilterService
             $viewFilterQuery = ViewFilter::query()
                 ->where(['moduleName' => $moduleName, 'owner' => 'default']);
 
-            if (empty($moduleQueries)) {
+            if ($moduleQueries->isEmpty()) {
                 $modules = ['products', 'servicereports', 'services', 'employees', 'servicejobs', 'navisionorders'];
 
-                if ($user->can($moduleName.'.index') && ! in_array($moduleName, $modules)) {
+                if ($user->canView($moduleName) && ! in_array($moduleName, $modules)) {
                     $defaultViewFilters = $viewFilterQuery->where('query_id', '!=', null)->get();
                 } elseif (in_array($moduleName, $modules)) {
                     $defaultViewFilters = $viewFilterQuery->get();
@@ -47,34 +48,53 @@ class ViewFilterService
             throw new \Exception("Error. No existing default view filter either for this module {$moduleName} or the user's role(s).");
         }
 
-        return $this->copyDefault($defaultViewFilters, $user->_id);
+        return self::copyDefault($defaultViewFilters, $user->_id);
     }
 
     private static function copyDefault(Collection $defaultViewFilters, $userId): Collection
     {
-        $items = collect([]);
+        $defaultViewFilters
+            ->each(function (ViewFilter $viewFilter) use ($defaultViewFilters, $userId) {
+                $viewFilterData = Arr::except($viewFilter->toArray(), ['_id', 'created_at', 'updated_at', 'created_by', 'updated_by']);
 
-        $arrayOfDefaultViewFilters = $defaultViewFilters->toArray();
+                $viewFilterData['owner'] = $userId;
 
-        foreach ($arrayOfDefaultViewFilters as $defaultViewFilter) {
-            unset(
-                $defaultViewFilter['_id'],
-                $defaultViewFilter['created_at'],
-                $defaultViewFilter['updated_at'],
-                $defaultViewFilter['created_by'],
-                $defaultViewFilter['updated_by']
-            );
+                $newViewFilter = ViewFilter::create($viewFilterData);
 
-            $defaultViewFilter['owner'] = $userId;
+                $defaultViewFilters->push($newViewFilter);
+            });
 
-            $items->push(ViewFilter::create($defaultViewFilter));
+        $exists = $defaultViewFilters->contains('isDefault', '=', true);
+
+        if (! $exists) {
+            $defaultViewFilters->last()->update(['isDefault' => true]);
         }
 
-        if (! $items->where('isDefault', true)->first()) {
-            $items->last()->update(['isDefault' => true]);
-        }
+        return $defaultViewFilters;
 
-        return $items;
+        // $items = collect([]);
+
+        // $arrayOfDefaultViewFilters = $defaultViewFilters->toArray();
+
+        // foreach ($arrayOfDefaultViewFilters as $defaultViewFilter) {
+        //     unset(
+        //         $defaultViewFilter['_id'],
+        //         $defaultViewFilter['created_at'],
+        //         $defaultViewFilter['updated_at'],
+        //         $defaultViewFilter['created_by'],
+        //         $defaultViewFilter['updated_by']
+        //     );
+
+        //     $defaultViewFilter['owner'] = $userId;
+
+        //     $items->push(ViewFilter::create($defaultViewFilter));
+        // }
+
+        // if (!$items->where('isDefault', true)->first()) {
+        //     $items->last()->update(['isDefault' => true]);
+        // }
+
+        // return $items;
     }
 
     public static function getWidestScope(User $user, null|string|Module $module, $returnBoolean = false)

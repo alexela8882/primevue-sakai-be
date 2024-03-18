@@ -4,6 +4,7 @@ namespace App\Http\Resources\Core;
 
 use App\Http\Resources\ModelCollection;
 use App\Models\Core\Field;
+use App\Models\Core\ListItem;
 use App\Models\Core\Picklist;
 use App\Services\RelationService;
 use Exception;
@@ -43,7 +44,7 @@ class ViewFilterResource extends JsonResource
             ->collapse();
 
         $resource = $resource->map(function ($resource) use ($fields, $listItems) {
-            $resource->filters = Arr::map($resource->filters, function ($filter) use ($fields, $listItems) {
+            $resource->filters = Arr::map($resource->filters, function ($filter) use ($fields, $listItems, $resource) {
                 $field = $fields->firstWhere('_id', $filter['field_id']);
 
                 if ($field->fieldType->name == 'lookupModel' && $filter['values'] != null) {
@@ -53,7 +54,7 @@ class ViewFilterResource extends JsonResource
 
                     $values = new ModelCollection($test, $displayFields, [], false, false, true);
                 } elseif ($field->fieldType->name == 'picklist') {
-                    $values = $listItems[$field->listName]->only($filter['values'])->values();
+                    $values = $listItems[$field->listName]->whereIn('value', $filter['values'])->map(fn (ListItem $listItem) => ['_id' => $listItem->_id, 'label' => $listItem->value]);
                 } else {
                     $values = $filter['values'];
                 }
@@ -70,8 +71,8 @@ class ViewFilterResource extends JsonResource
                         ],
                         'values' => $values,
                     ];
-                } catch (Exception $exce) {
-                    dd($filter);
+                } catch (Exception $exception) {
+                    dd($resource);
                 }
             });
 
