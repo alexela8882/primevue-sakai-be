@@ -15,7 +15,8 @@ use Illuminate\Support\Arr;
 class ViewFilterResource extends JsonResource
 {
 
-    public static function customItemCollection ($item) {
+    public static function customItemCollection($item)
+    {
         $filters = $item->pluck('filters')->collapse();
 
         $fields = Field::query()
@@ -128,18 +129,18 @@ class ViewFilterResource extends JsonResource
                     $values = $filter['values'];
                 }
 
-                    return [
-                        'field_id' => [
-                            '_id' => $field->_id,
-                            'label' => $field->label,
-                        ],
-                        'operator_id' => [
-                            '_id' => $filter['operator_id'],
-                            'label' => $listItems['filter_operators'][$filter['operator_id']],
-                        ],
-                        'values' => $values,
-                    ];
-             
+                return [
+                    'uuid' => $filter->uuid,
+                    'field_id' => [
+                        '_id' => $field->_id,
+                        'label' => $field->label,
+                    ],
+                    'operator_id' => [
+                        '_id' => $filter['operator_id'],
+                        'label' => $listItems['filter_operators'][$filter['operator_id']],
+                    ],
+                    'values' => $values,
+                ];
             });
 
             return $resource;
