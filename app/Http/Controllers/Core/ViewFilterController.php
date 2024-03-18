@@ -124,8 +124,11 @@ class ViewFilterController extends Controller
                     $filter = ViewFilter::where('filters', 'elemMatch', ['uuid' => $request->filters['uuid']])
                         ->project(['filters.$' => true])
                         ->first();
+
+                    $finalFilter = ViewFilterResource::customItemCollection($filter);
+
                     $response = [
-                        'data' => $filter,
+                        'data' => $finalFilter,
                         'message' => 'Filter successfully updated.',
                         'status' => 200,
                     ];
