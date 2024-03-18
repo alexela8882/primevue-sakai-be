@@ -128,11 +128,11 @@ class ViewFilterResource extends JsonResource
 
                 return [
                     'uuid' => $filter['uuid'] ?? null,
-                    'field' => (object) [
+                    'field' => [
                         '_id' => $field->_id,
                         'label' => $field->label
                     ],
-                    'operator' => (object) [
+                    'operator' => [
                         '_id' => $filter['operator_id'],
                         'label' => array_key_exists($filter['operator_id'], $listItems['filter_operators']->toArray()) ? $listItems['filter_operators'][$filter['operator_id']] : null
                     ],
