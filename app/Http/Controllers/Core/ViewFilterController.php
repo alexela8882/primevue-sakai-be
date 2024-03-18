@@ -84,11 +84,11 @@ class ViewFilterController extends Controller
             if ($request->filters) {
                 if ($request->mode === 'new') {
                     $uuid = uniqid(); // generate random id
-                    $reconstructedFilters = new \StdClass();
-                    $reconstructedFilters->uuid = $uuid;
-                    $reconstructedFilters->field_id = $request->filters['field_id'];
-                    $reconstructedFilters->operator_id = $request->filters['operator_id'];
-                    $reconstructedFilters->values = $request->filters['values'];
+                    $reconstructedFilter = new \StdClass();
+                    $reconstructedFilter->uuid = $uuid;
+                    $reconstructedFilter->field_id = $request->filters['field_id'];
+                    $reconstructedFilter->operator_id = $request->filters['operator_id'];
+                    $reconstructedFilter->values = $request->filters['values'];
 
                     if (is_array($viewFilter->filters)) {
                         $prevFilters = $viewFilter->filters;
@@ -98,7 +98,7 @@ class ViewFilterController extends Controller
                     }
 
                     // push new filters
-                    array_push($prevFilters, $reconstructedFilters);
+                    array_push($prevFilters, $reconstructedFilter);
 
                     // return $prevFilters;
 
@@ -106,8 +106,14 @@ class ViewFilterController extends Controller
                     $viewFilter->filters = $prevFilters;
                     $viewFilter->update();
 
+                    $updatedFilter = ViewFilter::where('filters', 'elemMatch', ['uuid' => $reconstructedFilter->uuid])
+                        ->project(['filters.$' => true])
+                        ->first();
+
+                    $finalFilter = ViewFilterResource::customItemCollection($updatedFilter);
+
                     $response = [
-                        'data' => $reconstructedFilters,
+                        'data' => $finalFilter,
                         'message' => 'New filter successfully added.',
                         'status' => 200,
                     ];
