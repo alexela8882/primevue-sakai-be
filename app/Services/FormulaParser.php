@@ -531,7 +531,7 @@ class FormulaParser
         }
     }
 
-    public function parseField($field, $model, $first = false)
+    public function parseField($field, $model, $first = false, $exp = null)
     {
         $this->field = $field;
 
@@ -548,7 +548,7 @@ class FormulaParser
             $this->setDecimalPlaces($field->decimalPlace);
         }
 
-        return $this->parse($field->formulaExpression);
+        return $this->parse($exp ? $exp : $field->formulaExpression);
     }
 
     /*************************************** Functions ******************************************************************/
