@@ -45,19 +45,7 @@ class DatabaseSeeder extends Seeder
 
     public function testingArea()
     {
-
-        [
-            [
-                'uuid' => '65f7da169014a',
-                'field_id' => '5c906a14a6ebc7193110ef94',
-                'operator_id' => '5bb104cf678f71061f643c2f',
-                'values' => ['60bdd7c6a6ebc77ede159522', '5d36d395a6ebc7301e5601d3', '60bdd7c6a6ebc77ede159523', '60bdd7c6a6ebc77ede159524'],
-            ],
-            [
-                'field_id' => '5c906a15a6ebc7193110eff4', 'operator_id' => '5bb104cf678f71061f643c2a', 'values' => true,
-            ],
-
-        ];
+        // dd(collect(['test'])->each(fn ($value) => true)->push(['test']));
     }
 
     public function changeRelationUserModelClass($isForV2 = true)
@@ -92,7 +80,7 @@ class DatabaseSeeder extends Seeder
     {
         ViewFilter::query()
             ->each(function (ViewFilter $viewFilter) {
-                $filters = Arr::map(Arr::wrap($viewFilter->filters), function ($array) {
+                $filters = Arr::map($viewFilter->filters, function ($array) {
                     return [
                         'field_id' => $array['field_id'] ?? $array[0],
                         'operator_id' => $array['field_id'] ?? $array[1],
@@ -103,6 +91,6 @@ class DatabaseSeeder extends Seeder
                 $viewFilter->update(['filters' => $filters]);
             });
 
-        dump("Mass updated all filters of each view filters based on discussed object structure.");
+        dump('Mass updated all filters of each view filters based on discussed object structure.');
     }
 }

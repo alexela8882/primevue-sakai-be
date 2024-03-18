@@ -30,7 +30,7 @@ class ModuleQueryService
             foreach ($roles as $role) {
                 $moduleQueryIds = $role->filters->whereIn('permission_id', $permissionIds)->pluck('module_query_ids')->flatten()->toArray();
 
-                if (empty($moduleQueryIds)) {
+                if (! count($moduleQueryIds)) {
                     $queries = [];
 
                     break;
