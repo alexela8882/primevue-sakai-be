@@ -121,7 +121,7 @@ class ViewFilterResource extends JsonResource
 
                     $values = new ModelCollection($test, $displayFields, [], false, false, true);
                 } elseif ($field->fieldType->name == 'picklist') {
-                    $values = $listItems[$field->listName]->only($filter['values'])->map(fn ($key, $value) => ['_id' => $key, 'label' => $value])->values();
+                    $values = $listItems[$field->listName]->only($filter['values'])->map(fn ($label, $_id) => ['_id' => $_id, 'label' => $label])->values();
                 } else {
                     $values = $filter['values'];
                 }
