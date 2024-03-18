@@ -46,27 +46,29 @@ class ViewFilterResource extends JsonResource
             ->collapse();
 
         $resource = $resource->map(function ($resource) use ($fields, $listItems) {
-            $resource->filters = Arr::map($resource->filters, function ($filter) use ($fields, $listItems) {
-                $field = $fields->firstWhere('_id', $filter['field_id']);
+            if (is_array($resource->filters)) {
+                $resource->filters = Arr::map($resource->filters, function ($filter) use ($fields, $listItems) {
+                    $field = $fields->firstWhere('_id', $filter['field_id']);
 
-                if ($field->fieldType->name == 'lookupModel' && $filter['values'] != null) {
-                    $displayFields = (new RelationService)->getActualDisplayFields($field->relation);
+                    if ($field->fieldType->name == 'lookupModel' && $filter['values'] != null) {
+                        $displayFields = (new RelationService)->getActualDisplayFields($field->relation);
 
-                    $test = $field->relation->entity->getModel()->whereIn('_id', (array) $filter['values'])->select($field->relation->displayFieldName)->get();
+                        $test = $field->relation->entity->getModel()->whereIn('_id', (array) $filter['values'])->select($field->relation->displayFieldName)->get();
 
-                    $values = new ModelCollection($test, $displayFields, [], false, false, true);
-                } elseif ($field->fieldType->name == 'picklist') {
-                    $values = $listItems[$field->listName]->only($filter['values'])->values();
-                } else {
-                    $values = $filter['values'];
-                }
+                        $values = new ModelCollection($test, $displayFields, [], false, false, true);
+                    } elseif ($field->fieldType->name == 'picklist') {
+                        $values = $listItems[$field->listName]->only($filter['values'])->values();
+                    } else {
+                        $values = $filter['values'];
+                    }
 
-                return [
-                    'field_id' => $field->label,
-                    'operator_id' => $listItems['filter_operators'][$filter['operator_id']],
-                    'values' => $values,
-                ];
-            });
+                    return [
+                        'field_id' => $field->label,
+                        'operator_id' => $listItems['filter_operators'][$filter['operator_id']],
+                        'values' => $values,
+                    ];
+                });
+            }
 
             return $resource;
         });
