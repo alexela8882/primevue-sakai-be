@@ -46,6 +46,9 @@ Route::get('passwordless-login', [RegisterController::class, 'passwordLessLogin'
 Route::get('logout', [RegisterController::class, 'logout'])->middleware(['web']);
 
 Route::middleware('auth:api')->group(function () {
+    // When putting a non api-resource route,
+    // please it alphabetically via controller's name
+
     Route::patch('/modules/accounts/{account}/patchUpsert', [AccountController::class, 'patchUpsert']);
     Route::post('/modules/accounts/postMergeDuplicates/{identifier}', [AccountController::class, 'postMergeDuplicates']);
 
@@ -68,6 +71,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::patch('/patchInlineUpdates', [ModuleController::class, 'patchInlineUpdates']);
     Route::get('/getShowRelatedList', [ModuleController::class, 'getShowRelatedList']);
+
+    Route::get('/test', [PricebookController::class, 'test']);
 
     Route::patch('/modules/salesquotes/upsert/{id}', [SalesQuotationController::class, 'upsert']);
 
