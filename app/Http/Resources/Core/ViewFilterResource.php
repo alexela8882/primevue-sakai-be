@@ -26,11 +26,7 @@ class ViewFilterResource extends JsonResource
             ])
             ->get();
 
-        $listNames = $fields->filter(fn (Field $field) => $field->fieldType->name == 'picklist')->map(fn (Field $field) => $field->listName);
-
-        if ($listNames->isNotEmpty()) {
-            $listNames = $listNames->merge(['filter_operators']);
-        }
+        $listNames = $fields->filter(fn (Field $field) => $field->fieldType->name == 'picklist')->map(fn (Field $field) => $field->listName)->push('filter_operators');
 
         $listItems = Picklist::query()
             ->whereIn('name', $listNames)
@@ -46,7 +42,6 @@ class ViewFilterResource extends JsonResource
             ->collapse();
 
         $resource = $resource->map(function ($resource) use ($fields, $listItems) {
-            if (is_array($resource->filters)) {
                 $resource->filters = Arr::map($resource->filters, function ($filter) use ($fields, $listItems) {
                     $field = $fields->firstWhere('_id', $filter['field_id']);
 
@@ -68,7 +63,6 @@ class ViewFilterResource extends JsonResource
                         'values' => $values,
                     ];
                 });
-            }
 
             return $resource;
         });
