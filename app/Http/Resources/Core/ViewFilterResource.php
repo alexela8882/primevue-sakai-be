@@ -6,6 +6,7 @@ use App\Http\Resources\ModelCollection;
 use App\Models\Core\Field;
 use App\Models\Core\Picklist;
 use App\Services\RelationService;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
@@ -42,27 +43,31 @@ class ViewFilterResource extends JsonResource
             ->collapse();
 
         $resource = $resource->map(function ($resource) use ($fields, $listItems) {
-                $resource->filters = Arr::map($resource->filters, function ($filter) use ($fields, $listItems) {
-                    $field = $fields->firstWhere('_id', $filter['field_id']);
+            $resource->filters = Arr::map($resource->filters, function ($filter) use ($fields, $listItems) {
+                $field = $fields->firstWhere('_id', $filter['field_id']);
 
-                    if ($field->fieldType->name == 'lookupModel' && $filter['values'] != null) {
-                        $displayFields = (new RelationService)->getActualDisplayFields($field->relation);
+                if ($field->fieldType->name == 'lookupModel' && $filter['values'] != null) {
+                    $displayFields = (new RelationService)->getActualDisplayFields($field->relation);
 
-                        $test = $field->relation->entity->getModel()->whereIn('_id', (array) $filter['values'])->select($field->relation->displayFieldName)->get();
+                    $test = $field->relation->entity->getModel()->whereIn('_id', (array) $filter['values'])->select($field->relation->displayFieldName)->get();
 
-                        $values = new ModelCollection($test, $displayFields, [], false, false, true);
-                    } elseif ($field->fieldType->name == 'picklist') {
-                        $values = $listItems[$field->listName]->only($filter['values'])->values();
-                    } else {
-                        $values = $filter['values'];
-                    }
+                    $values = new ModelCollection($test, $displayFields, [], false, false, true);
+                } elseif ($field->fieldType->name == 'picklist') {
+                    $values = $listItems[$field->listName]->only($filter['values'])->values();
+                } else {
+                    $values = $filter['values'];
+                }
 
+                try {
                     return [
                         'field_id' => $field->label,
                         'operator_id' => $listItems['filter_operators'][$filter['operator_id']],
                         'values' => $values,
                     ];
-                });
+                } catch (Exception $exce) {
+                    dd($filter);
+                }
+            });
 
             return $resource;
         });

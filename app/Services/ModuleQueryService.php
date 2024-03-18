@@ -13,7 +13,8 @@ class ModuleQueryService
         $queries = [];
 
         if (preg_match('/[A-Za-z]*\.[A-Z-a-z]/', $moduleOrPermission)) {
-            dd(true);
+            $permission = $module->permissions->firstWhere('name', $moduleOrPermission);
+            $permissionIds = [$permission->_id];
         } else {
             $permissionIds = $module->permissions->pluck('_id')->toArray();
         }
