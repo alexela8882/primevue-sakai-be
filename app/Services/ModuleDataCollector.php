@@ -140,7 +140,7 @@ class ModuleDataCollector
             $viewFilters = $viewFilterQuery->get();
 
             if ($viewFilters->isEmpty()) {
-                $viewFilters = ViewFilterService::getDefaultViewFilter($this->user, "{$this->module->name} .index", false, $this->module);
+                $viewFilters = ViewFilterService::getDefaultViewFilter($this->user, $this->module->name, false, $this->module);
             }
 
             $activeViewFilter = $request->input('viewfilter');
@@ -291,7 +291,7 @@ class ModuleDataCollector
             $modelCollection->additional([
                 'fields' => FieldResource::customCollection($this->fields),
                 'panels' => PanelResource::customCollection($this->panels),
-                'viewFilters' => ViewFilterResource::collection($this->viewFilters),
+                'viewFilters' => ViewFilterResource::customCollection($this->viewFilters),
                 'relatedLists' => RelatedListResource::collection($this->relatedLists),
             ]);
         }
@@ -1205,7 +1205,7 @@ class ModuleDataCollector
             if ($mutableEntity->name == 'SalesOpptItem') {
                 $this->rusResolver->setEntity($mutableEntity);
                 $this->formulaParser->setEntity($mutableEntity);
-                $fields = $entity->fields()->get();
+                $fields = $mutableEntity->fields()->get();
                 [$formula, $rus] = $this->getRusAndFormula($fields);
             }
 

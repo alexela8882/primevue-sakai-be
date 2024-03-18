@@ -52,6 +52,9 @@ Route::middleware('cors')->group(function () {
 });
 
 Route::middleware('auth:api')->group(function () {
+    // When putting a non api-resource route,
+    // please it alphabetically via controller's name
+
     Route::patch('/modules/accounts/{account}/patchUpsert', [AccountController::class, 'patchUpsert']);
     Route::post('/modules/accounts/postMergeDuplicates/{identifier}', [AccountController::class, 'postMergeDuplicates']);
 
@@ -75,6 +78,8 @@ Route::middleware('auth:api')->group(function () {
     Route::patch('/patchInlineUpdates', [ModuleController::class, 'patchInlineUpdates']);
     Route::get('/getShowRelatedList', [ModuleController::class, 'getShowRelatedList']);
 
+    Route::get('/test', [PricebookController::class, 'test']);
+
     Route::patch('/modules/salesquotes/upsert/{id}', [SalesQuotationController::class, 'upsert']);
 
     Route::get('/modules/salesopportunities/getsjinfo/{id}', [SalesOpportunityController::class, 'getItemsWithSJ']);
@@ -96,6 +101,18 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/modules/folders/showreports/{id}', [ReportController::class, 'showReports']);
 
     Route::get('/quotationtemplates/getInfo/{id}', [QuotationTemplateController::class, 'getInfo']);
+
+    Route::get('/download-pdf/{filename}', [PDFController::class, 'download']);
+
+    Route::get('/downloadpdf/{filename}', [PDFController::class, 'generalDownload']);
+
+    Route::get('/downloadfile/{id}', [PDFController::class, 'redownload']);
+
+    Route::post('/generatepdf', [PDFController::class, 'pdfviewgeneral']);
+
+    Route::post('/generate-pdf', [PDFController::class, 'PDFView']);
+
+    Route::post('/deleteQuotePDF/{id}', [PDFController::class, 'deleteQuotePDF']);
 
     Route::apiResources([
         'campaigns' => CampaignController::class,

@@ -173,6 +173,7 @@ return [
         Slides\Saml2\ServiceProvider::class,
         // Daveismyname\MsGraph\MsGraphServiceProvider::class,
         Dcblogdev\MsGraph\MsGraphServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -189,6 +190,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
         'Saml2' => Slides\Saml2\Facades\Auth::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ])->toArray(),
 
 ];

@@ -4,6 +4,7 @@ namespace App\Builders;
 
 use App\Models\Core\Entity;
 use App\Models\Core\Field;
+use App\Services\FormulaParser;
 use App\Services\RollUpSummaryResolver as RusResolver;
 
 class EntityField
