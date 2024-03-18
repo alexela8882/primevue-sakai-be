@@ -60,8 +60,14 @@ class ViewFilterResource extends JsonResource
 
                 try {
                     return [
-                        'field_id' => $field->label,
-                        'operator_id' => $listItems['filter_operators'][$filter['operator_id']],
+                        'field_id' => [
+                            '_id' => $field->_id,
+                            'label' => $field->label,
+                        ],
+                        'operator_id' => [
+                            '_id' => $filter['operator_id'],
+                            'label' => $listItems['filter_operators'][$filter['operator_id']],
+                        ],
                         'values' => $values,
                     ];
                 } catch (Exception $exce) {
