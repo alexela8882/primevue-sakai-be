@@ -1,10 +1,9 @@
 <?php
 
 namespace App\Http\Resources;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
-use App\Models\Product\Price;
+
 use App\Models\Product\Product;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductFamilyResource extends JsonResource
 {
@@ -20,8 +19,9 @@ class ProductFamilyResource extends JsonResource
         $product = Product::find($data['product_id']);
         $inclusiveServices = [];
 
-        if ($product->inclusiveServices)
+        if ($product->inclusiveServices) {
             $inclusiveServices = $product->inclusiveServices()->get(['name']);
+        }
 
         return [
             '_id' => $request->_id,
@@ -32,11 +32,10 @@ class ProductFamilyResource extends JsonResource
                 'name' => $product->name,
                 'itemCode' => $product->itemCode,
                 'modelCode' => $product->modelCode,
-                'product_type_id' => $product->product_type_id ? picklist_value('product_types',$product->product_type_id) : null,
-                'description' => $product->description
+                'product_type_id' => $product->product_type_id ? picklist_value('product_types', $product->product_type_id) : null,
+                'description' => $product->description,
             ],
         ];
 
-        
     }
 }

@@ -158,7 +158,7 @@ class LookupController extends Controller
             if ($field->filterSourceField ?? null && ! $isForReport) {
                 $collection = $this->checkFilterSource($collection, $field, $field->filterSourceField);
             }
-         
+
             if ($field->uniqueName == 'salesopptitem_list_price_id') {
                 return $this->respond([
                     'values' => ProductFamilyResource::collection($collection->get()),
@@ -174,8 +174,6 @@ class LookupController extends Controller
                     $collection = $collection->all($selectedFields);
                 }
             }
-
-            
 
             return $this->respond([
                 'values' => new ModelCollection($collection, $fields, $picklists),
