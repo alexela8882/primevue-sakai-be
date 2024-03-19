@@ -15,7 +15,7 @@ class ActivityLogController extends Controller
      * Display a listing of the resource.
      */
     public function index() {
-        return ActivityLogResource::collection(ActivityLog::where('id', auth()->user()->id)->get());
+        return ActivityLog::where('created_by', auth()->user()->id)->get();
     }
 
     /**
@@ -47,6 +47,7 @@ class ActivityLogController extends Controller
       $log->date = $request->date;
       $log->status = $request->status;
       $log->remarks = $request->remarks;
+      $log->created_by = auth()->user()->id;
       $log->save();
 
       $response = [

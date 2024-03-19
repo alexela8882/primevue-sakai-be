@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
 
-class ViewFilterResource extends JsonResource
+class ActivityLogResource extends JsonResource
 {
     public static function customItemCollection($item) {
       return $item;
