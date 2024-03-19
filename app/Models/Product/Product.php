@@ -4,6 +4,7 @@ namespace App\Models\Product;
 
 use App\Models\Company\BusinessUnit;
 use App\Models\Model\Base;
+use App\Models\Service\Service;
 
 class Product extends Base
 {

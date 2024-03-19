@@ -80,13 +80,17 @@ class DatabaseSeeder extends Seeder
     {
         ViewFilter::query()
             ->each(function (ViewFilter $viewFilter) {
-                $filters = Arr::map($viewFilter->filters, function ($array) {
-                    return [
-                        'field_id' => $array['field_id'] ?? $array[0],
-                        'operator_id' => $array['field_id'] ?? $array[1],
-                        'values' => $array['field_id'] ?? $array[2],
-                    ];
-                });
+                if (is_array($viewFilter->filters)) {
+                    $filters = Arr::map($viewFilter->filters, function ($array) {
+                        return [
+                            'field_id' => $array['field_id'] ?? $array[0],
+                            'operator_id' => $array['field_id'] ?? $array[1],
+                            'values' => $array['field_id'] ?? $array[2],
+                        ];
+                    });
+                } elseif (is_null($viewFilter->filters)) {
+                    $filters = [];
+                }
 
                 $viewFilter->update(['filters' => $filters]);
             });
