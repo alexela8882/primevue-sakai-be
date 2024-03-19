@@ -41,42 +41,53 @@ class ViewFilterResource extends JsonResource
             })
             ->collapse();
 
-        $item->filters = Arr::map($item->filters, function ($filter) use ($fields, $listItems) {
-            $field = $fields->firstWhere('_id', $filter['field_id']);
+        if (is_array($item->filters)) {
+            $item->filters = Arr::map($item->filters, function ($filter) use ($fields, $listItems) {
+                $field = $fields->firstWhere('_id', $filter['field_id']);
 
-            if ($field->fieldType->name == 'lookupModel' && $filter['values'] != null) {
-                $displayFields = (new RelationService)->getActualDisplayFields($field->relation);
+                if ($field->fieldType->name == 'lookupModel' && $filter['values'] != null) {
+                    $displayFields = (new RelationService)->getActualDisplayFields($field->relation);
 
-                $test = $field->relation->entity->getModel()->whereIn('_id', (array) $filter['values'])->select($field->relation->displayFieldName)->get();
+                    $test = $field->relation->entity->getModel()->whereIn('_id', (array) $filter['values'])->select($field->relation->displayFieldName)->get();
 
-                $values = new ModelCollection($test, $displayFields, [], false, false, true);
-            } elseif ($field->fieldType->name == 'picklist') {
-                $arr = [];
+                    $arr = [];
+                    $_values = new ModelCollection($test, $displayFields, [], false, false, true);
+                    foreach ($_values as $key => $val) {
+                        array_push($arr, [
+                            '_id' => $val->_id,
+                            'label' => $val->name
+                        ]);
+                    }
+                    $values = $arr;
+                } elseif ($field->fieldType->name == 'picklist') {
+                    $arr = [];
 
-                foreach ($listItems[$field->listName]->only($filter['values']) as $key => $i) {
-                    array_push($arr, [
-                        '_id' => $key,
-                        'label' => $i,
-                    ]);
+                    foreach ($listItems[$field->listName]->only($filter['values']) as $key => $i) {
+                        array_push($arr, [
+                            '_id' => $key,
+                            'label' => $i,
+                        ]);
+                    }
+                    $values = $arr;
+                } else {
+                    $values = $filter['values'];
                 }
-                $values = $arr;
-            } else {
-                $values = $filter['values'];
-            }
 
-            return [
-                'uuid' => $filter['uuid'],
-                'field' => (object) [
-                    '_id' => $field->_id,
-                    'label' => $field->label,
-                ],
-                'operator' => (object) [
-                    '_id' => $filter['operator_id'],
-                    'label' => array_key_exists($filter['operator_id'], $listItems['filter_operators']->toArray()) ? $listItems['filter_operators'][$filter['operator_id']] : null,
-                ],
-                'values' => $values,
-            ];
-        });
+                return [
+                    'uuid' => $filter['uuid'],
+                    'field' => (object) [
+                        '_id' => $field->_id,
+                        'label' => $field->label,
+                    ],
+                    'operator' => (object) [
+                        '_id' => $filter['operator_id'],
+                        'label' => array_key_exists($filter['operator_id'], $listItems['filter_operators']->toArray()) ? $listItems['filter_operators'][$filter['operator_id']] : null,
+                    ],
+                    'values' => $values,
+                    'isNull' => $filter['isNull']
+                ];
+            });
+        }
 
         return $item;
     }
@@ -154,6 +165,7 @@ class ViewFilterResource extends JsonResource
                             'label' => array_key_exists($filter['operator_id'], $listItems['filter_operators']->toArray()) ? $listItems['filter_operators'][$filter['operator_id']] : null
                         ],
                         'values' => $values,
+                        'isNull' => $filter['isNull']
                     ];
                 });
             }
