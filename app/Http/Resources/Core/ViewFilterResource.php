@@ -6,15 +6,14 @@ use App\Http\Resources\ModelCollection;
 use App\Models\Core\Field;
 use App\Models\Core\Picklist;
 use App\Services\RelationService;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
 
 class ViewFilterResource extends JsonResource
 {
-
-    public static function customItemCollection ($item) {
+    public static function customItemCollection($item)
+    {
         $filters = $item->pluck('filters')->collapse();
 
         $fields = Field::query()
@@ -57,7 +56,7 @@ class ViewFilterResource extends JsonResource
                 foreach ($listItems[$field->listName]->only($filter['values']) as $key => $i) {
                     array_push($arr, [
                         '_id' => $key,
-                        'label' => $i
+                        'label' => $i,
                     ]);
                 }
                 $values = $arr;
@@ -69,11 +68,11 @@ class ViewFilterResource extends JsonResource
                 'uuid' => $filter['uuid'],
                 'field' => (object) [
                     '_id' => $field->_id,
-                    'label' => $field->label
+                    'label' => $field->label,
                 ],
                 'operator' => (object) [
                     '_id' => $filter['operator_id'],
-                    'label' => array_key_exists($filter['operator_id'], $listItems['filter_operators']->toArray()) ? $listItems['filter_operators'][$filter['operator_id']] : null
+                    'label' => array_key_exists($filter['operator_id'], $listItems['filter_operators']->toArray()) ? $listItems['filter_operators'][$filter['operator_id']] : null,
                 ],
                 'values' => $values,
             ];
@@ -112,42 +111,44 @@ class ViewFilterResource extends JsonResource
             ->collapse();
 
         $resource = $resource->map(function ($resource) use ($fields, $listItems) {
-            $resource->filters = Arr::map($resource->filters, function ($filter) use ($fields, $listItems) {
-                $field = $fields->firstWhere('_id', $filter['field_id']);
+            if (is_array($resource->filters)) {
+                $resource->filters = Arr::map($resource->filters, function ($filter) use ($fields, $listItems) {
+                    $field = $fields->firstWhere('_id', $filter['field_id']);
+    
+                    if ($field->fieldType->name == 'lookupModel' && $filter['values'] != null) {
+                        $displayFields = (new RelationService)->getActualDisplayFields($field->relation);
+    
+                        $test = $field->relation->entity->getModel()->whereIn('_id', (array) $filter['values'])->select($field->relation->displayFieldName)->get();
+    
+                        $values = new ModelCollection($test, $displayFields, [], false, false, true);
+                    } elseif ($field->fieldType->name == 'picklist') {
+                        $arr = [];
 
-                if ($field->fieldType->name == 'lookupModel' && $filter['values'] != null) {
-                    $displayFields = (new RelationService)->getActualDisplayFields($field->relation);
-
-                    $test = $field->relation->entity->getModel()->whereIn('_id', (array) $filter['values'])->select($field->relation->displayFieldName)->get();
-
-                    $values = new ModelCollection($test, $displayFields, [], false, false, true);
-                } elseif ($field->fieldType->name == 'picklist') {
-                    $arr = [];
-
-                    foreach ($listItems[$field->listName]->only($filter['values']) as $key => $i) {
-                        array_push($arr, [
-                            '_id' => $key,
-                            'label' => $i
-                        ]);
+                        foreach ($listItems[$field->listName]->only($filter['values']) as $key => $i) {
+                            array_push($arr, [
+                                '_id' => $key,
+                                'label' => $i
+                            ]);
+                        }
+                        $values = $arr;
+                    } else {
+                        $values = $filter['values'];
                     }
-                    $values = $arr;
-                } else {
-                    $values = $filter['values'];
-                }
-
-                return [
-                    'uuid' => $filter['uuid'] ?? null,
-                    'field' => (object) [
-                        '_id' => $field->_id,
-                        'label' => $field->label
-                    ],
-                    'operator' => (object) [
-                        '_id' => $filter['operator_id'],
-                        'label' => array_key_exists($filter['operator_id'], $listItems['filter_operators']->toArray()) ? $listItems['filter_operators'][$filter['operator_id']] : null
-                    ],
-                    'values' => $values,
-                ];
-            });
+    
+                    return [
+                        'uuid' => $filter['uuid'] ?? null,
+                        'field' => [
+                            '_id' => $field->_id,
+                            'label' => $field->label
+                        ],
+                        'operator' => [
+                            '_id' => $filter['operator_id'],
+                            'label' => array_key_exists($filter['operator_id'], $listItems['filter_operators']->toArray()) ? $listItems['filter_operators'][$filter['operator_id']] : null
+                        ],
+                        'values' => $values,
+                    ];
+                });
+            }
 
             return $resource;
         });
