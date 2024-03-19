@@ -84,7 +84,7 @@ class ViewFilterResource extends JsonResource
                         'label' => array_key_exists($filter['operator_id'], $listItems['filter_operators']->toArray()) ? $listItems['filter_operators'][$filter['operator_id']] : null,
                     ],
                     'values' => $values,
-                    'isNull' => $filter['isNull']
+                    'isNull' => $filter['isNull'] ?? false
                 ];
             });
         }
@@ -165,7 +165,7 @@ class ViewFilterResource extends JsonResource
                             'label' => array_key_exists($filter['operator_id'], $listItems['filter_operators']->toArray()) ? $listItems['filter_operators'][$filter['operator_id']] : null
                         ],
                         'values' => $values,
-                        'isNull' => $filter['isNull']
+                        'isNull' => $filter['isNull'] ?? false
                     ];
                 });
             }
