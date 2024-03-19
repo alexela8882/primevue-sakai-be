@@ -267,34 +267,34 @@ class SalesOpportunityController extends Controller
 
             SalesQuote::where('sales_opportunity_id', $opptID)
                 ->update([
-                    'quoteToEmail' => null,
-                    'quoteToPhoneNo' => null,
-                    'quote_to_name_id' => null,
-                    'quoteToName' => null,
+                    'quoteToEmail' => request('quoteToEmail', null),
+                    'quoteToPhoneNo' => request('quoteToPhoneNo', null),
+                    'quote_to_name_id' => request('quote_to_name_id', null),
+                    'quoteToName' => request('quoteToName', null),
                     'account_id' => $newAccountID,
                     'old_account_id' => $salesOpportunity->account_id,
 
-                    'billingStreet' => null,
-                    'billingZipCode' => null,
-                    'billingCity' => null,
-                    'billingState' => null,
-                    'billing_country_id' => null,
+                    'billingStreet' => request('billingStreet', null),
+                    'billingZipCode' => request('billingZipCode', null),
+                    'billingCity' => request('billingCity', null),
+                    'billingState' => request('billingState', null),
+                    'billing_country_id' => request('billing_country_id', null),
 
-                    'billToName' => null,
-                    'billEmail' => null,
-                    'billPhoneNo' => null,
-                    'bill_to_name_id' => null,
+                    'billToName' => request('billToName', null),
+                    'billEmail' => request('billEmail', null),
+                    'billPhoneNo' => request('billPhoneNo', null),
+                    'bill_to_name_id' => request('bill_to_name_id', null),
 
-                    'shippingStreet' => null,
-                    'shippingZipCode' => null,
-                    'shippingCity' => null,
-                    'shippingState' => null,
-                    'shipping_country_id' => null,
+                    'shippingStreet' => request('shippingStreet', null),
+                    'shippingZipCode' => request('shippingZipCode', null),
+                    'shippingCity' => request('shippingCity', null),
+                    'shippingState' => request('shippingState', null),
+                    'shipping_country_id' => request('shipping_country_id', null),
 
-                    'shipToName' => null,
-                    'shipEmail' => null,
-                    'shipPhoneNo' => null,
-                    'ship_to_name_id' => null,
+                    'shipToName' => request('shipToName', null),
+                    'shipEmail' => request('shipEmail', null),
+                    'shipPhoneNo' => request('shipPhoneNo', null),
+                    'ship_to_name_id' => request('ship_to_name_id', null),
 
                 ]);
 

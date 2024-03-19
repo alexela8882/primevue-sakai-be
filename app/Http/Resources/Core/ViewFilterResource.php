@@ -55,7 +55,7 @@ class ViewFilterResource extends JsonResource
                     foreach ($_values as $key => $val) {
                         array_push($arr, [
                             '_id' => $val->_id,
-                            'label' => $val->name
+                            'label' => $val->name,
                         ]);
                     }
                     $values = $arr;
@@ -84,7 +84,7 @@ class ViewFilterResource extends JsonResource
                         'label' => array_key_exists($filter['operator_id'], $listItems['filter_operators']->toArray()) ? $listItems['filter_operators'][$filter['operator_id']] : null,
                     ],
                     'values' => $values,
-                    'isNull' => $filter['isNull'] ?? false
+                    'isNull' => $filter['isNull'] ?? false,
                 ];
             });
         }
@@ -125,18 +125,18 @@ class ViewFilterResource extends JsonResource
             if (is_array($resource->filters)) {
                 $resource->filters = Arr::map($resource->filters, function ($filter) use ($fields, $listItems) {
                     $field = $fields->firstWhere('_id', $filter['field_id']);
-    
+
                     if ($field->fieldType->name == 'lookupModel' && $filter['values'] != null) {
                         $displayFields = (new RelationService)->getActualDisplayFields($field->relation);
-    
+
                         $test = $field->relation->entity->getModel()->whereIn('_id', (array) $filter['values'])->select($field->relation->displayFieldName)->get();
-    
+
                         $arr = [];
                         $_values = new ModelCollection($test, $displayFields, [], false, false, true);
                         foreach ($_values as $key => $val) {
                             array_push($arr, [
                                 '_id' => $val->_id,
-                                'label' => $val->name
+                                'label' => $val->name,
                             ]);
                         }
                         $values = $arr;
@@ -146,26 +146,26 @@ class ViewFilterResource extends JsonResource
                         foreach ($listItems[$field->listName]->only($filter['values']) as $key => $i) {
                             array_push($arr, [
                                 '_id' => $key,
-                                'label' => $i
+                                'label' => $i,
                             ]);
                         }
                         $values = $arr;
                     } else {
                         $values = $filter['values'];
                     }
-    
+
                     return [
                         'uuid' => $filter['uuid'] ?? null,
                         'field' => [
                             '_id' => $field->_id,
-                            'label' => $field->label
+                            'label' => $field->label,
                         ],
                         'operator' => [
                             '_id' => $filter['operator_id'],
-                            'label' => array_key_exists($filter['operator_id'], $listItems['filter_operators']->toArray()) ? $listItems['filter_operators'][$filter['operator_id']] : null
+                            'label' => array_key_exists($filter['operator_id'], $listItems['filter_operators']->toArray()) ? $listItems['filter_operators'][$filter['operator_id']] : null,
                         ],
                         'values' => $values,
-                        'isNull' => $filter['isNull'] ?? false
+                        'isNull' => $filter['isNull'] ?? false,
                     ];
                 });
             }

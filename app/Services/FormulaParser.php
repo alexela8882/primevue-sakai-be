@@ -535,6 +535,8 @@ class FormulaParser
     {
         $this->field = $field;
 
+        $exp = ($field->formulaFilter ?? null) ? $this->formulaFilter($model, $field) : $field->formulaExpression;
+
         if ($first) {
             $this->oldInstance = $model;
         }
@@ -548,7 +550,42 @@ class FormulaParser
             $this->setDecimalPlaces($field->decimalPlace);
         }
 
-        return $this->parse($exp ? $exp : $field->formulaExpression);
+        return $this->parse($exp);
+    }
+
+    public function formulaFilter($model, $field)
+    {
+
+        $conditions = $field->formulaFilter['conditions'];
+
+        $default = $field->formulaFilter['default'];
+
+        $exp = null;
+
+        foreach ($conditions as $cond) {
+            $conditionFulfilled = false;
+            foreach ($cond['filters'] as $filter) {
+                $fieldName = Field::find($filter['field'])->name;
+                if (! (($model->{$fieldName} ?? null) === $filter['value'])) {
+                    $conditionFulfilled = false;
+                    break;
+                } else {
+                    $conditionFulfilled = true;
+                }
+            }
+
+            if ($conditionFulfilled) {
+                $exp = $cond['resultValue'];
+                break;
+            }
+        }
+
+        if (! $exp) {
+            $exp = $default;
+        }
+
+        return $exp;
+
     }
 
     /*************************************** Functions ******************************************************************/
