@@ -13,7 +13,8 @@ class ModuleQueryService
         $queries = [];
 
         if (preg_match('/[A-Za-z]*\.[A-Z-a-z]/', $moduleOrPermission)) {
-            dd(true);
+            $permission = $module->permissions->firstWhere('name', $moduleOrPermission);
+            $permissionIds = [$permission->_id];
         } else {
             $permissionIds = $module->permissions->pluck('_id')->toArray();
         }
@@ -29,7 +30,7 @@ class ModuleQueryService
             foreach ($roles as $role) {
                 $moduleQueryIds = $role->filters->whereIn('permission_id', $permissionIds)->pluck('module_query_ids')->flatten()->toArray();
 
-                if (empty($moduleQueryIds)) {
+                if (! count($moduleQueryIds)) {
                     $queries = [];
 
                     break;

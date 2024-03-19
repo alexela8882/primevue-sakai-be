@@ -6,11 +6,12 @@ namespace Database\Seeders;
 
 use App\Models\Core\Entity;
 use App\Models\Core\Relation;
-use App\Models\Customer\SalesOpportunity;
-use App\Models\Pricelist\Pricelist;
+use App\Models\Core\ViewFilter;
 use App\Models\User;
 use App\Models\UserConfig;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -33,11 +34,18 @@ class DatabaseSeeder extends Seeder
         //     'app_theme_scale' => '14',
         // ]);
 
-        SalesOpportunity::where('_id', '5c2d9cf4678f712610588d8c')->first()->delete();
-        dd(Pricelist::first());
-        // User::whereEmail('christia.l@escolifesciences.com')->first()->update(['password' => Hash::make('password')]);
         $this->changeRelationUserModelClass();
         $this->renameConnectionIdToConnectionIdsInEntityCollections();
+        $this->massUpdateAllFiltersOfAViewFiltersAndMakeThemToArrayIfItIsNull();
+
+        if (App::environment('local')) {
+            $this->testingArea();
+        }
+    }
+
+    public function testingArea()
+    {
+        // dd(collect(['test'])->each(fn ($value) => true)->push(['test']));
     }
 
     public function changeRelationUserModelClass($isForV2 = true)
@@ -66,5 +74,23 @@ class DatabaseSeeder extends Seeder
         });
 
         dump("Renamed all entity collections' connection_id field to connection_ids.");
+    }
+
+    public function massUpdateAllFiltersOfAViewFiltersAndMakeThemToArrayIfItIsNull()
+    {
+        ViewFilter::query()
+            ->each(function (ViewFilter $viewFilter) {
+                $filters = Arr::map($viewFilter->filters, function ($array) {
+                    return [
+                        'field_id' => $array['field_id'] ?? $array[0],
+                        'operator_id' => $array['field_id'] ?? $array[1],
+                        'values' => $array['field_id'] ?? $array[2],
+                    ];
+                });
+
+                $viewFilter->update(['filters' => $filters]);
+            });
+
+        dump('Mass updated all filters of each view filters based on discussed object structure.');
     }
 }
