@@ -6,7 +6,6 @@ use App\Models\Core\Field;
 use App\Services\FieldService;
 use App\Traits\QueryTrait;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Input;
 use Moloquent\Eloquent\Builder;
 use Nette\Tokenizer\Tokenizer;
 
@@ -850,8 +849,8 @@ class DynamicQueryBuilder
         if (count($matches)) {
             $entity = (new EntityField)->resolveEntity($entity);
 
-            if ($requireParams && Input::exists('itemId')) {
-                $itemId = Input::get('itemId');
+            if ($requireParams && request('itemId', null)) {
+                $itemId = request('itemId');
                 $item = $entity->getModel()->find($itemId);
                 if (! $item) {
                     throw new \Exception('Error. Unknown itemId '.$itemId.' in entity '.$entity->name);
@@ -865,14 +864,14 @@ class DynamicQueryBuilder
                     if ($item) {
                         $filterQuery = str_replace($match, $item->{$fieldName}, $filterQuery);
                     } else {
-                        $param = Input::get($fieldName);
+                        $param = request($fieldName);
                         if (! $param) {
                             // Resolve if wildcard is current user
                             if (starts_with($fieldName, '$currentUser::')) {
                                 [$user, $userField] = explode('::', $fieldName);
                                 $param = $this->user->{$userField};
                             } else {
-                                $param = Input::get($entity->name.'::'.$fieldName);
+                                $param = request($entity->name.'::'.$fieldName);
                             }
                         }
 
