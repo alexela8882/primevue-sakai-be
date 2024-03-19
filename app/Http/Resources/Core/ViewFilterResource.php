@@ -120,7 +120,15 @@ class ViewFilterResource extends JsonResource
     
                         $test = $field->relation->entity->getModel()->whereIn('_id', (array) $filter['values'])->select($field->relation->displayFieldName)->get();
     
-                        $values = new ModelCollection($test, $displayFields, [], false, false, true);
+                        $arr = [];
+                        $_values = new ModelCollection($test, $displayFields, [], false, false, true);
+                        foreach ($_values as $key => $val) {
+                            array_push($arr, [
+                                '_id' => $val->_id,
+                                'label' => $val->name
+                            ]);
+                        }
+                        $values = $arr;
                     } elseif ($field->fieldType->name == 'picklist') {
                         $arr = [];
 
