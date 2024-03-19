@@ -267,7 +267,7 @@ class SalesOpportunityController extends Controller
 
             SalesQuote::where('sales_opportunity_id', $opptID)
                 ->update([
-                    'quoteToEmail' => request( 'quoteToEmail',null),
+                    'quoteToEmail' => request('quoteToEmail', null),
                     'quoteToPhoneNo' => request('quoteToPhoneNo', null),
                     'quote_to_name_id' => request('quote_to_name_id', null),
                     'quoteToName' => request('quoteToName', null),

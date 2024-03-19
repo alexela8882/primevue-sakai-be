@@ -14,7 +14,7 @@ class FormulaSeeder extends Seeder
     {
 
         $this->convertFilter();
-      
+
     }
 
     public function convertFilter()
@@ -137,7 +137,6 @@ class FormulaSeeder extends Seeder
         $default = 0;
         $this->saveFilter('salesquote_grand_total_idr', $case, $default);
 
-
         $case = [
             [[
                 ['amount', '==', 0],
@@ -250,7 +249,6 @@ class FormulaSeeder extends Seeder
 
         $this->saveFilter('salesquote_vat', $case, $default);
 
-
     }
 
     private function saveFilter($uniqueName, $case, $default)
@@ -258,8 +256,9 @@ class FormulaSeeder extends Seeder
         $data = [];
         $formulaField = Field::where('uniqueName', $uniqueName)->first();
 
-        if(!$formulaField){
+        if (! $formulaField) {
             dump($uniqueName);
+
             return null;
         }
 
