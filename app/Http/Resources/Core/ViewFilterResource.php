@@ -136,7 +136,7 @@ class ViewFilterResource extends JsonResource
                 }
 
                 return [
-                    'uuid' => $filter['uuid'],
+                    'uuid' => $filter['uuid'] ?? null,
                     'field' => (object) [
                         '_id' => $field->_id,
                         'label' => $field->label
