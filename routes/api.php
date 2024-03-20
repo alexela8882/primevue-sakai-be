@@ -6,6 +6,7 @@ use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\UserConfigController;
 use App\Http\Controllers\Company\CampaignController;
 use App\Http\Controllers\Core\FieldController;
+use App\Http\Controllers\Core\LogController;
 use App\Http\Controllers\Core\LookupController;
 use App\Http\Controllers\Core\ModuleController;
 use App\Http\Controllers\Core\PanelController;
@@ -75,6 +76,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::patch('/user/deactivate/{id}', [UserController::class, 'deactivateUser']);
 
+    Route::get('/logs', [LogController::class, 'index']);
+    
     Route::post('/lookup', [LookupController::class, 'getLookup']);
     Route::post('/lookup/item', [LookupController::class, 'getLookupItem']);
 

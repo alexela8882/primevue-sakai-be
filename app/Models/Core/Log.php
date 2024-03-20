@@ -3,6 +3,7 @@
 namespace App\Models\Core;
 
 use App\Models\Model\Base;
+use App\Models\User;
 
 class Log extends Base
 {
@@ -15,4 +16,9 @@ class Log extends Base
     ];
 
     const UPDATED_AT = null;
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
