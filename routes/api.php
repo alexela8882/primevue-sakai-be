@@ -82,6 +82,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/getShowRelatedList', [ModuleController::class, 'getShowRelatedList']);
 
     Route::patch('/modules/pricebooks/{pricebook}/patchAddPricelist', [PricebookController::class, 'patchAddPricelist']);
+    Route::patch('/modules/pricebooks/{pricebook}/patchAddFormula', [PricebookController::class, 'patchAddFormula']);
     Route::post('/modules/pricebooks/{pricebook}/postComputePrice', [PricebookController::class, 'postComputePrice']);
     Route::post('/modules/pricebooks/{pricebook}/postApplyComputePrice', [PricebookController::class, 'postApplyComputePrice']);
     Route::post('/modules/pricebooks/{pricebook}/postCancelComputePrice', [PricebookController::class, 'postCancelComputePrice']);

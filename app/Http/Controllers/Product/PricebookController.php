@@ -44,24 +44,32 @@ class PricebookController extends Controller
 
     public function patchAddPricelist(Pricebook $pricebook, Request $request)
     {
-        if ($request->filled('pricelist-ids')) {
-            $pricebook->pricelists()->sync($request->input('pricelist_ids'));
+        if ($pricebook->isComputingPrice !== true) {
+            if ($request->filled('pricelist-ids')) {
+                $pricebook->pricelists()->sync($request->input('pricelist_ids'));
 
-            return $this->respondSuccessful();
+                return $this->respondSuccessful();
+            }
+
+            return $this->respondUnprocessable('Rejected. Missing \'pricelist-ids\' field in payload.');
         }
 
-        return $this->respondUnprocessable('Rejected. Missing \'pricelist-ids\' field in payload.');
+        return $this->respondUnprocessable('Rejected. Pricebook has an ongoing computing prices. Cannot add new \'pricelists\' to this pricebook.');
     }
 
     public function patchAddFormula(Pricebook $pricebook, Request $request)
     {
-        if ($request->filled('formula')) {
-            $pricebook->update(['formula' => $request->input('formula')]);
+        if ($pricebook->isComputingPrice !== true) {
+            if ($request->filled('formula')) {
+                $pricebook->update(['formula' => $request->input('formula')]);
 
-            return $this->respondSuccessful();
+                return $this->respondSuccessful();
+            }
+
+            return $this->respondUnprocessable('Rejected. Missing \'formula\' field in payload.');
         }
 
-        return $this->respondUnprocessable('Rejected. Missing \'formula\' field in payload.');
+        return $this->respondUnprocessable('Rejected. Pricebook has an ongoing computing prices. Cannot add new \'formula\' to this pricebook.');
     }
 
     public function postComputePrice(Pricebook $pricebook)
