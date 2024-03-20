@@ -29,9 +29,11 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
 class ModuleDataCollector
@@ -69,16 +71,18 @@ class ModuleDataCollector
         //
     }
 
-    public function setUser()
+    public function setUser($mandatoryCallAuthenticatedUser = true)
     {
-        if (App::environment('local')) {
+        if (! App::environment('local')) {
             if (Auth::guard('api')->check()) {
                 $this->user = Auth::guard('api')->user();
             } else {
                 $this->user = User::whereEmail('christia.l@escolifesciences.com')->first();
             }
         } else {
-            $this->user = Auth::guard('api')->user();
+            if ($mandatoryCallAuthenticatedUser) {
+                $this->user = Auth::guard('api')->user();
+            }
         }
 
         return $this;
