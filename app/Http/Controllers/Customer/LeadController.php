@@ -22,7 +22,7 @@ class LeadController extends Controller
 
     public function __construct(private ModuleDataCollector $moduleDataCollector)
     {
-        $this->moduleDataCollector = $moduleDataCollector->setUser()->setModule('leads');
+        $this->moduleDataCollector->setUser()->setModule('leads');
     }
 
     public function index(Request $request)

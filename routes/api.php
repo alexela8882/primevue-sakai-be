@@ -9,6 +9,7 @@ use App\Http\Controllers\Core\FieldController;
 use App\Http\Controllers\Core\LookupController;
 use App\Http\Controllers\Core\ModuleController;
 use App\Http\Controllers\Core\PanelController;
+use App\Http\Controllers\Core\PDFController;
 use App\Http\Controllers\Core\PickListController;
 use App\Http\Controllers\Core\QuotationTemplateController;
 use App\Http\Controllers\Core\ViewFilterController;
@@ -124,12 +125,12 @@ Route::middleware('auth:api')->group(function () {
         'modules/salesopportunities' => SalesOpportunityController::class,
         'modules/salesquotes' => SalesQuotationController::class,
         'modules/reports' => ReportController::class,
+        'modules/users' => UserController::class,
         'modules' => ModuleController::class,
         'campaigns' => CampaignController::class,
         'countries' => CountryController::class,
         'viewFilters' => ViewFilterController::class,
         'quotationtemplates' => QuotationTemplateController::class,
-        'users' => UserController::class,
         'activity-logs' => ActivityLogController::class,
     ]);
 });
