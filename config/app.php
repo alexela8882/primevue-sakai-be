@@ -169,6 +169,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         MongoDB\Laravel\MongoDBServiceProvider::class,
+        MongoDB\Laravel\MongoDBQueueServiceProvider::class,
         // MongoDB\Laravel\Auth\PasswordResetServiceProvider::class,
         Slides\Saml2\ServiceProvider::class,
         // Daveismyname\MsGraph\MsGraphServiceProvider::class,

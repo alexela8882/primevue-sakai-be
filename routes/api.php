@@ -81,7 +81,10 @@ Route::middleware('auth:api')->group(function () {
     Route::patch('/patchInlineUpdates', [ModuleController::class, 'patchInlineUpdates']);
     Route::get('/getShowRelatedList', [ModuleController::class, 'getShowRelatedList']);
 
-    Route::get('/test', [PricebookController::class, 'test']);
+    Route::patch('/modules/pricebooks/{pricebook}/patchAddPricelist', [PricebookController::class, 'patchAddPricelist']);
+    Route::post('/modules/pricebooks/{pricebook}/postComputePrice', [PricebookController::class, 'postComputePrice']);
+    Route::post('/modules/pricebooks/{pricebook}/postApplyComputePrice', [PricebookController::class, 'postApplyComputePrice']);
+    Route::post('/modules/pricebooks/{pricebook}/postCancelComputePrice', [PricebookController::class, 'postCancelComputePrice']);
 
     Route::patch('/modules/salesquotes/upsert/{id}', [SalesQuotationController::class, 'upsert']);
 

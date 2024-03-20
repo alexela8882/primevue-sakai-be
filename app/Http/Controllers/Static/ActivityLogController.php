@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Static;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Static\ActivityLogResource;
 use App\Models\Static\ActivityLog;
 use Illuminate\Http\Request;
 use Validator;
@@ -13,7 +12,8 @@ class ActivityLogController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index() {
+    public function index()
+    {
         return ActivityLog::where('created_by', auth()->user()->id)->get();
     }
 
@@ -41,16 +41,16 @@ class ActivityLogController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-      $log = new ActivityLog;
-      $log->module_id = $request->module_id;
-      $log->link_id = $request->link_id;
-      $log->subject = $request->subject;
-      $log->type_id = $request->type_id;
-      $log->date = $request->date;
-      $log->status = $request->status;
-      $log->remarks = $request->remarks;
-      $log->created_by = auth()->user()->id;
-      $log->save();
+        $log = new ActivityLog;
+        $log->module_id = $request->module_id;
+        $log->link_id = $request->link_id;
+        $log->subject = $request->subject;
+        $log->type_id = $request->type_id;
+        $log->date = $request->date;
+        $log->status = $request->status;
+        $log->remarks = $request->remarks;
+        $log->created_by = auth()->user()->id;
+        $log->save();
 
         $response = [
             'data' => $log,

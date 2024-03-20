@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('QUEUE_CONNECTION', 'sync'),
+    'default' => 'database',
 
     /*
     |--------------------------------------------------------------------------
@@ -35,7 +35,8 @@ return [
         ],
 
         'database' => [
-            'driver' => 'database',
+            'driver' => 'mongodb',
+            'connection' => 'mongodb',
             'table' => 'jobs',
             'queue' => 'default',
             'retry_after' => 90,
@@ -101,7 +102,7 @@ return [
     */
 
     'failed' => [
-        'driver' => env('QUEUE_FAILED_DRIVER', 'database-uuids'),
+        'driver' => env('QUEUE_FAILED_DRIVER', 'mongodb'),
         'database' => env('DB_CONNECTION', 'mysql'),
         'table' => 'failed_jobs',
     ],
