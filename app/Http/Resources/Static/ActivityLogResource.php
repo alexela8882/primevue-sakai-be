@@ -18,7 +18,13 @@ class ActivityLogResource extends JsonResource
     }
 
     public static function groupedDateCollection($resources = null, $item = null) {
-      $resources = $resources ?? ActivityLog::all();
+      $query = ActivityLog::query();
+
+      // Apply where clause if $item is provided
+      if ($item) $query->where('record_id', $item->record_id);
+
+      // Get resources based on the query
+      $resources = $resources ?? $query->get();
 
       $resources = $resources->groupBy(function ($item) {
         return $item['created_at']->format('Y-m-d');
@@ -41,23 +47,4 @@ class ActivityLogResource extends JsonResource
   
       return $resources;
     }
-
-    // public static function groupedDateCollection ($resources, $item = null) {
-    //   $resources = $resources->groupBy(function ($item) {
-    //     return $item['created_at']->format('Y-m-d');
-    //   })->map(function ($group, $key) {
-    //     $carbonDate = Carbon::parse($group->first()['created_at']);
-    //     $datePhrase = $carbonDate->diffInMonths(Carbon::now()) == 0 ? 'This month' : ($carbonDate->diffInMonths(Carbon::now()) == 1 ? '1 month ago' : $carbonDate->diffInMonths(Carbon::now()) . ' months ago');
-    //     return [
-    //       'date' => $group->first()['created_at']->format('Y-m-d'),
-    //       'date_mdy' => $group->first()['created_at']->format('M d, Y'),
-    //       'date_dfh' => $group->first()['created_at']->diffForHumans(),
-    //       'date_phrase' => $datePhrase,
-    //       'count' => $group->count(),
-    //       'items' => $group->toArray() // Include all attributes
-    //     ];
-    //   })->values();
-
-    //   return $resources;
-    // }
 }
