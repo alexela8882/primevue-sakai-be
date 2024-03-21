@@ -124,6 +124,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/deleteQuotePDF/{id}', [PDFController::class, 'deleteQuotePDF']);
 
+    Route::get('/activity-logs/by-record/{record_id}', [ActivityLogController::class, 'indexByRecord']);
+
     Route::apiResources([
         'modules/accounts' => AccountController::class,
         'modules/contacts' => ContactController::class,
