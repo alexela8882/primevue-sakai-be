@@ -171,6 +171,44 @@ if (! function_exists('generateSelectableCollectionFields')) {
         return Str::plural($value, $count);
     }
 
+    function str_singular($value)
+    {
+        return Str::singular($value);
+    }
+
+    if (! function_exists('checkRelationshipMethod')) {
+
+        function checkRelationshipMethod($relationshipMethod)
+        {
+            if (in_array($relationshipMethod, ['belongsTo', 'belongsToMany', 'hasMany', 'hasOne'])) {
+                return $relationshipMethod;
+            } else {
+                switch (strtolower($relationshipMethod)) {
+                    case 'many_to_many':
+                        return 'belongsToMany';
+                    case 'one_to_many':
+                        return 'hasMany';
+                    case 'one_from_one':
+                    case 'one_from_many':
+                    case 'many_to_one':
+                        return 'belongsTo';
+                    case 'one_to_one':
+                        return 'hasOne';
+                    default:
+                        throw new \Exception('Error. Unrecognized relationship method named "'.$relationshipMethod.'"');
+                }
+            }
+        }
+    }
+
+    if (! function_exists('labelify')) {
+
+        function labelify($name)
+        {
+            return preg_replace('/ Ids?/', '', title_case_from_snake($name));
+        }
+    }
+
     if (! function_exists('picklist_item')) {
         function picklist_item($listName, $itemId)
         {
@@ -189,6 +227,28 @@ if (! function_exists('generateSelectableCollectionFields')) {
         function picklist_id($listName, $value)
         {
             return (new PicklistService)->getIDs($listName, $value);
+        }
+    }
+
+    if (! function_exists('array_flatten')) {
+        function array_flatten($array)
+        {
+            return Arr::flatten($array);
+        }
+    }
+
+    if (! function_exists('starts_with_vowel')) {
+
+        function starts_with_vowel($str)
+        {
+            return Str::startsWith($str, ['a', 'e', 'i', 'o', 'u']);
+        }
+    }
+
+    if (! function_exists('title_case_from_snake')) {
+        function title_case_from_snake(string $str)
+        {
+            return Str::title(str_replace('_', ' ', snake_case($str)));
         }
     }
 

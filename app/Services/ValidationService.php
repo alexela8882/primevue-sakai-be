@@ -94,7 +94,11 @@ class ValidationService
         if ($firstValidator->fails() || $secondValidator->fails()) {
             $errors = $firstValidator->messages()->merge($secondValidator->messages());
 
-            return response($errors, 422);
+            response()->json([
+                'error' => true,
+                'error_message' => $errors,
+            ], 422)->throwResponse();
+
         }
 
         return null;
