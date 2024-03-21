@@ -12,7 +12,7 @@ class ProductFamilyResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray($request): array
+    public function toArray($request)
     {
 
         $data = (parent::toArray($request));
@@ -24,8 +24,8 @@ class ProductFamilyResource extends JsonResource
         }
 
         return [
-            '_id' => $request->_id,
-            'price' => $request->price,
+            '_id' => $data['_id'],
+            'price' => $data['price'],
             'inclusiveServices' => $inclusiveServices,
             'product_id' => [
                 '_id' => $product->_id,

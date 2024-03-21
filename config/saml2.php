@@ -197,7 +197,7 @@ return [
         */
 
         'assertionConsumerService' => [
-            'url' => 'https://7077-163-116-223-51.ngrok-free.app/saml2/6e58eb2e-062c-47f1-897c-24c9106bfa6b/acs',
+            'url' => 'https://2f68-163-116-223-40.ngrok-free.app/saml2/ec860c1e-f953-4c88-8db1-88fb41371ecb/acs',
         ],
 
         /*
@@ -214,7 +214,7 @@ return [
         */
 
         'singleLogoutService' => [
-            'url' => 'https://7077-163-116-223-51.ngrok-free.app/saml2/6e58eb2e-062c-47f1-897c-24c9106bfa6b/sls',
+            'url' => 'https://2f68-163-116-223-40.ngrok-free.app/saml2/ec860c1e-f953-4c88-8db1-88fb41371ecb/sls',
         ],
     ],
 
