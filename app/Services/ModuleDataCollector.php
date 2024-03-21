@@ -69,16 +69,18 @@ class ModuleDataCollector
         //
     }
 
-    public function setUser()
+    public function setUser($mandatoryCallAuthenticatedUser = true)
     {
-        if (App::environment('local')) {
+        if (! App::environment('local')) {
             if (Auth::guard('api')->check()) {
                 $this->user = Auth::guard('api')->user();
             } else {
                 $this->user = User::whereEmail('christia.l@escolifesciences.com')->first();
             }
         } else {
-            $this->user = Auth::guard('api')->user();
+            if ($mandatoryCallAuthenticatedUser) {
+                $this->user = Auth::guard('api')->user();
+            }
         }
 
         return $this;

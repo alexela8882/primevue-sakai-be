@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Account;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\UserResource;
-use App\Models\Employee\Employee;
 use App\Models\User;
 use App\Services\ModuleDataCollector;
 use Carbon\Carbon;
@@ -16,7 +15,7 @@ class UserController extends Controller
 
     public function __construct(private ModuleDataCollector $moduleDataCollector)
     {
-        $this->moduleDataCollector = $moduleDataCollector->setUser()->setModule('employees');
+        // $this->moduleDataCollector->setUser()->setModule('users');
 
         $this->user = auth('api')->user();
     }
@@ -33,7 +32,7 @@ class UserController extends Controller
         return $user?->_id;
     }
 
-    public function show(Employee $user, Request $request)
+    public function show(User $user, Request $request)
     {
         return $this->moduleDataCollector->getShow($user, $request);
     }

@@ -4,12 +4,13 @@ namespace App\Services;
 
 use App\Models\Core\Country;
 use App\Models\Model\Base;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class ModelService
 {
-    public function getModelInformation(Request|Base $base, Collection $fields, ?array $pickLists, bool $fromReport = false, bool $displayFieldNameOnly = false)
+    public function getModelInformation(Request|Base|User $base, Collection $fields, ?array $pickLists, bool $fromReport = false, bool $displayFieldNameOnly = false)
     {
         $data = ['_id' => $base->_id];
 

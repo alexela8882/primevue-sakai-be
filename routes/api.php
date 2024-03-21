@@ -6,9 +6,11 @@ use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\UserConfigController;
 use App\Http\Controllers\Company\CampaignController;
 use App\Http\Controllers\Core\FieldController;
+use App\Http\Controllers\Core\LogController;
 use App\Http\Controllers\Core\LookupController;
 use App\Http\Controllers\Core\ModuleController;
 use App\Http\Controllers\Core\PanelController;
+use App\Http\Controllers\Core\PDFController;
 use App\Http\Controllers\Core\PickListController;
 use App\Http\Controllers\Core\QuotationTemplateController;
 use App\Http\Controllers\Core\ViewFilterController;
@@ -74,13 +76,19 @@ Route::middleware('auth:api')->group(function () {
 
     Route::patch('/user/deactivate/{id}', [UserController::class, 'deactivateUser']);
 
+    Route::get('/logs', [LogController::class, 'index']);
+    
     Route::post('/lookup', [LookupController::class, 'getLookup']);
     Route::post('/lookup/item', [LookupController::class, 'getLookupItem']);
 
     Route::patch('/patchInlineUpdates', [ModuleController::class, 'patchInlineUpdates']);
     Route::get('/getShowRelatedList', [ModuleController::class, 'getShowRelatedList']);
 
-    Route::get('/test', [PricebookController::class, 'test']);
+    Route::patch('/modules/pricebooks/{pricebook}/patchAddPricelist', [PricebookController::class, 'patchAddPricelist']);
+    Route::patch('/modules/pricebooks/{pricebook}/patchAddFormula', [PricebookController::class, 'patchAddFormula']);
+    Route::post('/modules/pricebooks/{pricebook}/postComputePrice', [PricebookController::class, 'postComputePrice']);
+    Route::post('/modules/pricebooks/{pricebook}/postApplyComputePrice', [PricebookController::class, 'postApplyComputePrice']);
+    Route::post('/modules/pricebooks/{pricebook}/postCancelComputePrice', [PricebookController::class, 'postCancelComputePrice']);
 
     Route::patch('/modules/salesquotes/upsert/{id}', [SalesQuotationController::class, 'upsert']);
 
@@ -126,12 +134,12 @@ Route::middleware('auth:api')->group(function () {
         'modules/salesopportunities' => SalesOpportunityController::class,
         'modules/salesquotes' => SalesQuotationController::class,
         'modules/reports' => ReportController::class,
+        'modules/users' => UserController::class,
         'modules' => ModuleController::class,
         'campaigns' => CampaignController::class,
         'countries' => CountryController::class,
         'viewFilters' => ViewFilterController::class,
         'quotationtemplates' => QuotationTemplateController::class,
-        'users' => UserController::class,
         'activity-logs' => ActivityLogController::class,
     ]);
 });
