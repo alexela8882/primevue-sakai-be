@@ -77,7 +77,7 @@ Route::middleware('auth:api')->group(function () {
     Route::patch('/user/deactivate/{id}', [UserController::class, 'deactivateUser']);
 
     Route::get('/logs', [LogController::class, 'index']);
-    
+
     Route::post('/lookup', [LookupController::class, 'getLookup']);
     Route::post('/lookup/item', [LookupController::class, 'getLookupItem']);
 

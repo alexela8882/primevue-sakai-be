@@ -17,4 +17,14 @@ class FieldType extends Base
     {
         return $this->belongsToMany('App\Models\Core\FieldType', null, 'return_type_ids', 'formula_type_id');
     }
+
+    public function rules()
+    {
+        return $this->belongsToMany('App\Models\Core\Rule', null, 'field_type_ids', 'rule_ids');
+    }
+
+    public function defaultRules()
+    {
+        return $this->embedsMany('App\Models\Core\DefaultRule', 'defaultRule', '_id');
+    }
 }
