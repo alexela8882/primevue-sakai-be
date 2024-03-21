@@ -37,19 +37,18 @@ class DatabaseSeeder extends Seeder
         $this->changeRelationUserModelClass();
         $this->renameConnectionIdToConnectionIdsInEntityCollections();
         $this->massUpdateAllFiltersOfAViewFiltersAndMakeThemToArrayIfItIsNull();
+        $this->changeUserModuleModelClassOnEntityCollection();
 
         if (App::environment('local')) {
             $this->testingArea();
         }
     }
 
-    public function testingArea()
-    {
-        // dd(collect(['test'])->each(fn ($value) => true)->push(['test']));
-    }
-
     public function changeRelationUserModelClass($isForV2 = true)
     {
+        // Changed the saved class in each Relation document
+        // from V1's App\User to V2's App\Models\User
+
         if ($isForV2) {
             Relation::query()
                 ->where('class', 'App\User')
@@ -67,6 +66,8 @@ class DatabaseSeeder extends Seeder
 
     public function renameConnectionIdToConnectionIdsInEntityCollections()
     {
+        // Renaming the saved connection_id object field name of Entity to connection_ids
+
         Entity::each(function (Entity $entity) {
             $entity->updateQuietly([
                 '$rename' => ['connection_id' => 'connection_ids'],
@@ -78,6 +79,15 @@ class DatabaseSeeder extends Seeder
 
     public function massUpdateAllFiltersOfAViewFiltersAndMakeThemToArrayIfItIsNull()
     {
+        // Change the structure of filters
+        // If value of filters is null, then we just put empty array
+        // so that our ViewFilterResource's customItemCollection function will not have an error
+        // [
+        //      'field_id' => <field_id>,
+        //      'operator_id' => <operator_id>
+        //      'values' => <values>
+        // ]
+
         ViewFilter::query()
             ->each(function (ViewFilter $viewFilter) {
                 if (is_array($viewFilter->filters)) {
@@ -96,5 +106,19 @@ class DatabaseSeeder extends Seeder
             });
 
         dump('Mass updated all filters of each view filters based on discussed object structure.');
+    }
+
+    public function testingArea()
+    {
+        //
+    }
+
+    public function changeUserModuleModelClassOnEntityCollection()
+    {
+        Entity::where('model_class', 'App\User')->update([
+            'model_class' => 'App\Models\User',
+        ]);
+
+        dump("Changed all entity model class of user module from App\User to App\Models\User");
     }
 }

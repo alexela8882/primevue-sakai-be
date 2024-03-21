@@ -20,19 +20,21 @@ class LeadController extends Controller
 {
     use GlobalTrait;
 
+    protected bool $isWebsiteLead = false;
+
     public function __construct(private ModuleDataCollector $moduleDataCollector)
     {
-        $this->moduleDataCollector->setUser()->setModule('leads');
+        $this->moduleDataCollector->setModule('leads');
     }
 
     public function index(Request $request)
     {
-        return $this->moduleDataCollector->getIndex($request);
+        return $this->moduleDataCollector->setUser()->getIndex($request);
     }
 
     public function store(Request $request)
     {
-        $lead = $this->moduleDataCollector->postStore($request);
+        $lead = $this->moduleDataCollector->setUser(mandatoryCallAuthenticatedUser: $this->isWebsiteLead ? false : true)->postStore($request);
 
         if (! $request->exists('owner_id')) {
             $leadAssignmentService = new LeadAssignmentService;
@@ -52,12 +54,12 @@ class LeadController extends Controller
 
     public function show(Lead $lead, Request $request)
     {
-        return $this->moduleDataCollector->getShow($lead, $request);
+        return $this->moduleDataCollector->setUser()->getShow($lead, $request);
     }
 
     public function update(Lead $lead, Request $request)
     {
-        return $this->moduleDataCollector->patchUpdate($lead, $request);
+        return $this->moduleDataCollector->setUser()->patchUpdate($lead, $request);
     }
 
     public function storeLifesciencesRFQ(Request $request)
@@ -117,6 +119,8 @@ class LeadController extends Controller
                     'campaign_id' => $campaign->_id,
                     'from' => 'rfq',
                 ]);
+
+                $this->isWebsiteLead = true;
 
                 $this->store($request);
 
