@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Static;
 
 use App\Http\Controllers\Controller;
 use App\Models\Static\ActivityLog;
+use App\Http\Resources\Static\ActivityLogResource;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -14,7 +15,8 @@ class ActivityLogController extends Controller
      */
     public function index()
     {
-        return ActivityLog::where('created_by', auth()->user()->id)->get();
+        $activity_logs = ActivityLog::where('created_by', auth()->user()->id)->get();
+        return ActivityLogResource::customCollection($activity_logs);
     }
 
     /**
