@@ -92,6 +92,7 @@ class DatabaseSeeder extends Seeder
                 if (is_array($viewFilter->filters)) {
                     $filters = Arr::map($viewFilter->filters, function ($array) {
                         return [
+                            'uuid' => uniqid(),
                             'field_id' => $array['field_id'] ?? $array[0],
                             'operator_id' => $array['field_id'] ?? $array[1],
                             'values' => $array['field_id'] ?? $array[2],
