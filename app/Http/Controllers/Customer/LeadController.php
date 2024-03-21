@@ -9,6 +9,7 @@ use App\Models\Core\Country;
 use App\Models\Core\Entity;
 use App\Models\Core\Picklist;
 use App\Models\Customer\Lead;
+use App\Services\LeadAssignmentService;
 use App\Services\ModuleDataCollector;
 use App\Services\PicklistService;
 use App\Traits\GlobalTrait;
@@ -19,31 +20,46 @@ class LeadController extends Controller
 {
     use GlobalTrait;
 
+    protected bool $isWebsiteLead = false;
+
     public function __construct(private ModuleDataCollector $moduleDataCollector)
     {
-        $this->moduleDataCollector = $moduleDataCollector->setUser()->setModule('leads');
+        $this->moduleDataCollector->setModule('leads');
     }
 
     public function index(Request $request)
     {
-        return $this->moduleDataCollector->getIndex($request);
+        return $this->moduleDataCollector->setUser()->getIndex($request);
     }
 
     public function store(Request $request)
     {
-        $lead = $this->moduleDataCollector->postStore($request);
+        $lead = $this->moduleDataCollector->setUser(mandatoryCallAuthenticatedUser: $this->isWebsiteLead ? false : true)->postStore($request);
+
+        if (! $request->exists('owner_id')) {
+            $leadAssignmentService = new LeadAssignmentService;
+            [$owner, $bdmLists] = $leadAssignmentService->evaluation($lead);
+            //list($source, $productsOfInterest, $inquiryType) = $this->sendOwnerEmail($owner, $lead, 'leads', $bdmLists->pluck('email')->toArray());
+
+            if ($request->exists('from')) {
+                if ($request->from == 'rfq') {
+                    //$this->sendCustomerEmail($lead, 'leads');
+                    $lead->update(['created_by' => '5bb104ed678f71061f645215', 'updated_by' => '5bb104ed678f71061f645215']);
+                }
+            }
+        }
 
         return $lead?->_id;
     }
 
     public function show(Lead $lead, Request $request)
     {
-        return $this->moduleDataCollector->getShow($lead, $request);
+        return $this->moduleDataCollector->setUser()->getShow($lead, $request);
     }
 
     public function update(Lead $lead, Request $request)
     {
-        return $this->moduleDataCollector->patchUpdate($lead, $request);
+        return $this->moduleDataCollector->setUser()->patchUpdate($lead, $request);
     }
 
     public function storeLifesciencesRFQ(Request $request)
@@ -104,6 +120,8 @@ class LeadController extends Controller
                     'from' => 'rfq',
                 ]);
 
+                $this->isWebsiteLead = true;
+
                 $this->store($request);
 
                 return ['message' => 3];
@@ -135,9 +153,9 @@ class LeadController extends Controller
                 $response = $request['g-recaptcha-response'];
                 $ip = $request->ip();
                 $response = $client->post('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$response.'&remoteip='.$ip);
-                $data = json_decode($response->getBody(), true);
+                $captcha_data = json_decode($response->getBody(), true);
 
-                if ($data['success'] === true) {
+                if ($captcha_data['success'] === true) {
 
                     $request = new Request([
                         'firstName' => $data['first_name'],
@@ -186,8 +204,6 @@ class LeadController extends Controller
     public function storeVaccixcellRFQ(Request $request)
     {
 
-        logDrf($request->all(), 'lead-vaccixcell');
-
         $data = $this->stripAllTags($request);
 
         $campaign = Campaign::where('rfqCode', $data['camp_code'])->first();
@@ -195,16 +211,16 @@ class LeadController extends Controller
         if ($campaign) {
 
             if ($request->has('g-recaptcha-response')) {
-                logDrf($request->all(), 'lead-test-esco-medical');
+                logDrf($request->all(), 'lead-vaccixcell');
 
                 $client = new Client();
                 $secret = '6LfU-6cUAAAAAEEvGKwvRhasKaSKRer8FVllpjWJ';
                 $response = $request['g-recaptcha-response'];
                 $ip = $request->ip();
                 $response = $client->post('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$response.'&remoteip='.$ip);
-                $data = json_decode($response->getBody(), true);
+                $captcha_data = json_decode($response->getBody(), true);
 
-                if ($data['success'] === true) {
+                if ($captcha_data['success'] === true) {
 
                     $request = new Request([
                         'firstName' => $data['firstName'],

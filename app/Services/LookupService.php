@@ -89,7 +89,7 @@ class LookupService
 
         $fieldValues = $item->{$field->name};
 
-        $displayFields = $field->relation->getDisplayFields();
+        $displayFields = (new RelationService)->getDisplayFields($field->relation);
         if (count($displayFields)) {
 
             if (! is_array($fieldValues)) {

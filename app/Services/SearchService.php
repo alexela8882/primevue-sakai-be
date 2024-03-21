@@ -40,7 +40,7 @@ class SearchService
 
                 if ($field->fieldType->name == 'lookupModel') {
 
-                    $fieldNames = (array) $field->relation->getDisplayFields(false);
+                    $fieldNames = (array) (new RelationService)->getDisplayFields($field->relation, false);
 
                     $entity = $field->relation->relatedEntity;
                     $whereField = $field->name;
