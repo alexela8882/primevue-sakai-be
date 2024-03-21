@@ -15,7 +15,7 @@ class UserController extends Controller
 
     public function __construct(private ModuleDataCollector $moduleDataCollector)
     {
-        $this->moduleDataCollector->setUser()->setModule('users');
+        // $this->moduleDataCollector->setUser()->setModule('users');
 
         $this->user = auth('api')->user();
     }
