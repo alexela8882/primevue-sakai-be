@@ -34,7 +34,13 @@ class ActivityLog extends Base
      */
     public function createdAtDfh(): Attribute {
       return new Attribute(
-        get: fn (mixed $value, array $attributes) => Carbon::parse(strtotime($attributes['created_at']))->diffForHumans(null, true)
+        get: function ($value, $attributes) {
+          // Convert MongoDB UTCDateTime to Carbon
+          $carbonDate = Carbon::instance($attributes['created_at']->toDateTime());
+          
+          // Use diffForHumans() on the Carbon object
+          return $carbonDate->diffForHumans();
+        }
       );
     }
 
@@ -52,7 +58,13 @@ class ActivityLog extends Base
      */
     public function updatedAtDfh(): Attribute {
       return new Attribute(
-        get: fn (mixed $value, array $attributes) => Carbon::parse(strtotime($attributes['updated_at']))->diffForHumans(null, true)
+        get: function ($value, $attributes) {
+          // Convert MongoDB UTCDateTime to Carbon
+          $carbonDate = Carbon::instance($attributes['updated_at']->toDateTime());
+          
+          // Use diffForHumans() on the Carbon object
+          return $carbonDate->diffForHumans();
+        }
       );
     }
 
@@ -70,7 +82,13 @@ class ActivityLog extends Base
      */
     public function dateDfh(): Attribute {
       return new Attribute(
-        get: fn (mixed $value, array $attributes) => Carbon::parse(strtotime($attributes['date']))->diffForHumans(null, true)
+        get: function ($value, $attributes) {
+          // Convert the raw date to a Carbon instance
+          $carbonDate = Carbon::parse($attributes['date']);
+
+          // Use diffForHumans() on the Carbon object
+          return $carbonDate->diffForHumans();
+        }
       );
     }
 }
