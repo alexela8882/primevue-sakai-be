@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Static;
 
 use App\Http\Controllers\Controller;
 use App\Models\Static\ActivityLog;
+use App\Http\Resources\Static\ActivityLogResource;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -14,7 +15,8 @@ class ActivityLogController extends Controller
      */
     public function index()
     {
-        return ActivityLog::where('created_by', auth()->user()->id)->get();
+        $activity_logs = ActivityLog::where('created_by', auth()->user()->id)->get();
+        return ActivityLogResource::customCollection($activity_logs);
     }
 
     /**
@@ -52,8 +54,10 @@ class ActivityLogController extends Controller
       $log->created_by = auth()->user()->id;
       $log->save();
 
+      $groupedDateLogs = ActivityLogResource::groupedDateCollection(null, $log);
+
       $response = [
-        'data' => $log,
+        'data' => $groupedDateLogs,
         'message' => 'New log was successfully added.',
         'status' => 200
       ];
@@ -74,9 +78,10 @@ class ActivityLogController extends Controller
      */
     public function indexByRecord ($record_id) {
       $logs = ActivityLog::where('record_id', $record_id)->get();
+      $groupedDateLogs = ActivityLogResource::groupedDateCollection($logs);
 
       try {
-        if (count($logs) > 0) {
+        if (count($groupedDateLogs) > 0) {
           $message = 'Activity logs by record successfully fetched.';
           $status = 200;
         } else {
@@ -84,13 +89,13 @@ class ActivityLogController extends Controller
           $status = 200;
         }
       } catch (\Throwable $th) {
-        $logs = [];
+        $groupedDateLogs = [];
         $message = 'Error fetching data';
         $status = 500;
       }
 
       $response = [
-        'data' => $logs,
+        'data' => $groupedDateLogs,
         'message' => $message,
         'status' => $status
       ];
