@@ -29,8 +29,9 @@ class LogController extends Controller
             ->with('createdBy')
             ->orderBy('created_at', 'desc')
             ->where(function ($query) use ($request) {
-                foreach ($request->get('queries', []) as $key => $value)
+                foreach ($request->get('queries', []) as $key => $value) {
                     $query->where($key, $value);
+                }
             });
 
         $total = $query->count();
@@ -62,7 +63,7 @@ class LogController extends Controller
                     $log->created_by = new ModelResource($log->createdBy, $fields, $pickLists);
 
                     return $log;
-                })
+                }),
         ];
     }
 }

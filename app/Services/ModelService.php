@@ -68,7 +68,7 @@ class ModelService
                 }
             } elseif ($field->fieldType->name === 'picklist') {
                 if (is_array($base->{$field->name})) {
-                    $value = array_values(array_intersect_key($pickLists[$field->listName], array_flip($base->{$field->name})));
+                    $value = picklist_value($field->listName, $base->{$field->name});
                 } else {
                     $value = $pickLists[$field->listName][$base->{$field->name}] ?? null;
                 }

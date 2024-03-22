@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
         $this->changeRelationUserModelClass();
         $this->renameConnectionIdToConnectionIdsInEntityCollections();
         $this->massUpdateAllFiltersOfAViewFiltersAndMakeThemToArrayIfItIsNull();
+        $this->changeUserModuleModelClassOnEntityCollection();
 
         if (App::environment('local')) {
             $this->testingArea();
@@ -110,5 +111,14 @@ class DatabaseSeeder extends Seeder
     public function testingArea()
     {
         //
+    }
+
+    public function changeUserModuleModelClassOnEntityCollection()
+    {
+        Entity::where('model_class', 'App\User')->update([
+            'model_class' => 'App\Models\User',
+        ]);
+
+        dump("Changed all entity model class of user module from App\User to App\Models\User");
     }
 }
