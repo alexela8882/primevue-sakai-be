@@ -4,10 +4,12 @@ namespace App\Builders;
 
 use App\Models\Core\Field;
 use App\Services\FieldService;
+use App\Services\PicklistService;
 use App\Traits\QueryTrait;
 use Illuminate\Support\Collection;
 use Moloquent\Eloquent\Builder;
 use Nette\Tokenizer\Tokenizer;
+
 
 class DynamicQueryBuilder
 {
@@ -99,7 +101,7 @@ class DynamicQueryBuilder
                 $field = Field::where('entity_id', $this->mainEntity->_id)->where(function ($q) use ($filter) {
                     $q->where('_id', $filter[static::INDEX_FIELD])->orWhere('name', $filter[static::INDEX_FIELD]);
                 })->first();
-                $operator = $this->pickListRepository->getOperators($filter[static::INDEX_OPERATOR]);
+                $operator = (new PicklistService)->getOperators($filter[static::INDEX_OPERATOR]);
 
                 if (valid_id($filter[static::INDEX_VALUE]) && $field->fieldType->name == 'lookupModel') {
                     $vField = $field->relation->relatedEntity->getModel()->find($filter[static::INDEX_VALUE]);
@@ -110,14 +112,14 @@ class DynamicQueryBuilder
                     }
                 } elseif (is_string($filter[static::INDEX_VALUE]) && $field->fieldType->name == 'picklist') {
                     if (valid_id($filter[static::INDEX_VALUE])) {
-                        $value = $this->pickListRepository->getItemById($field->listName, $filter[static::INDEX_VALUE]);
+                        $value = (new PicklistService)->getItemById($field->listName, $filter[static::INDEX_VALUE]);
                         if (! $value) {
                             $value = $filter[static::INDEX_VALUE];
                         } else {
                             $value = $value->_id;
                         }
                     } else {
-                        $value = $this->pickListRepository->getIDs($field->listName, $filter[static::INDEX_VALUE]);
+                        $value = (new PicklistService)->getIDs($field->listName, $filter[static::INDEX_VALUE]);
                         if (! $value) {
                             $value = $filter[static::INDEX_VALUE];
                         }
@@ -259,7 +261,7 @@ class DynamicQueryBuilder
             $value = '["'.implode('","', $value).'"]';
             $operator = 'in';
         } elseif ($field->fieldType->name == 'picklist' && ! valid_id($value)) {
-            $value = $this->pickListRepository->getIDs($field->listName, $value);
+            $value = (new PicklistService)->getIDs($field->listName, $value);
         } else {
             $value = (is_numeric($value) || in_array($value, ['true', 'false'])) ? $value : '"'.$value.'"';
         }
@@ -336,7 +338,7 @@ class DynamicQueryBuilder
      */
     public function picklist($listName, $values, $key = 'value')
     {
-        return $this->pickListRepository->getList($listName)->listItems()->whereIn($key, (array) $values)->pluck('_id')->toArray();
+        return (new PicklistService)->getList($listName)->listItems()->whereIn($key, (array) $values)->pluck('_id')->toArray();
     }
 
     public function lookup($value, $entity, $fieldName)
