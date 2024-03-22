@@ -66,7 +66,7 @@ class ModelService
                         $value['country_id'] = ['_id' => $value['country_id'], 'name' => Country::find($value['country_id'])->name ?? null];
                     }
                 }
-            } elseif ($field->fieldType->name === 'picklist') {
+            } elseif ($field->fieldType->name === 'picklist' && isset($base->{$field->name})) {
                 if (is_array($base->{$field->name})) {
                     $value = array_values(array_intersect_key($pickLists[$field->listName], array_flip($base->{$field->name})));
                 } else {
