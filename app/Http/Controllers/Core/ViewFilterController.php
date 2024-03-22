@@ -134,7 +134,7 @@ class ViewFilterController extends Controller
                         }
                     }
 
-                    $viewFilter->filters = $filters; // Update filter on the database
+                    $viewFilter->filters = array_values($filters); // Update filter on the database
                     $viewFilter->save();
 
                     return response()->json(['data' => $filtersToBeDeleted, 'message' => 'Filter successfully deleted.'], 200);
