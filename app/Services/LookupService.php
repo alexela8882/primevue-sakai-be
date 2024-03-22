@@ -151,8 +151,7 @@ class LookupService
         $limit = (int) request('limit', 50);
 
         $paginator = Pricebook::whereIn('_id', $pbs)->paginate($limit);
-        $collection = $paginator->getCollection();
-
+       
         if (! $fields) {
             $fields = Field::where('uniqueName', 'pricebook_name');
         }
@@ -160,7 +159,7 @@ class LookupService
             $picklists = (new PicklistService)->getPicklistsFromFields($fields);
         }
 
-        return new ModelCollection($collection, $fields, $picklists);
+        return new ModelCollection($paginator, $fields, $picklists);
 
     }
 }

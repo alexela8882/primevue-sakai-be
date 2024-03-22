@@ -78,8 +78,10 @@ class ViewFilterController extends Controller
         }
         if ($request->updateType === 'filters') {
             // update query type
-            $viewFilter->queryType = $request->queryType;
-            $viewFilter->update();
+            if ($request->mode !== 'delete') {
+                $viewFilter->queryType = $request->queryType;
+                $viewFilter->update();
+            }
 
             if ($request->filters) {
                 if ($request->mode === 'new') {
@@ -119,6 +121,24 @@ class ViewFilterController extends Controller
                     ];
 
                     return response()->json($response, $response['status']);
+
+                } elseif ($request->mode == 'delete') {
+
+                    $filtersToBeDeleted = $request->filters; // UUID Filters to be deleted
+
+                    $filters = $viewFilter->filters; // Existing filters
+
+                    foreach ($filters as $key => $value) {
+                        if (in_array($value['uuid'], $filtersToBeDeleted)) {
+                            unset($filters[$key]); // Unset matched UUIDs
+                        }
+                    }
+
+                    $viewFilter->filters = array_values($filters); // Update filter on the database
+                    $viewFilter->save();
+
+                    return response()->json(['data' => $filtersToBeDeleted, 'message' => 'Filter successfully deleted.'], 200);
+
                 } else {
                     // return $request->filters['uuid'];
                     ViewFilter::where('filters.uuid', $request->filters['uuid'])->update(

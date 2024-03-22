@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Core;
 
 use App\Builders\DynamicQueryBuilder as DQB;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Lookup\PaginateResource;
 use App\Http\Resources\ModelCollection;
-use App\Http\Resources\ProductFamilyResource;
 use App\Models\Core\Field;
 use App\Models\Module\Module;
 use App\Models\User;
@@ -27,7 +27,7 @@ class LookupController extends Controller
 
     protected $queryBuilder;
 
-    protected $user;
+    protected User $user;
 
     protected $request;
 
@@ -160,9 +160,11 @@ class LookupController extends Controller
             }
 
             if ($field->uniqueName == 'salesopptitem_list_price_id') {
-                return $this->respond([
-                    'values' => ProductFamilyResource::collection($collection->get()),
-                ]);
+                $coll = $collection->paginate(20);
+
+                return [
+                    'values' => new PaginateResource($coll),
+                ];
             }
 
             if ($isPopup && ! ($collection instanceof LengthAwarePaginator)) {
