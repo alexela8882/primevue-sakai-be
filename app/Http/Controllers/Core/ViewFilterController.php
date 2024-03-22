@@ -78,8 +78,10 @@ class ViewFilterController extends Controller
         }
         if ($request->updateType === 'filters') {
             // update query type
-            $viewFilter->queryType = $request->queryType;
-            $viewFilter->update();
+            if ($request->mode !== 'delete') {
+                $viewFilter->queryType = $request->queryType;
+                $viewFilter->update();
+            }
 
             if ($request->filters) {
                 if ($request->mode === 'new') {
@@ -135,7 +137,7 @@ class ViewFilterController extends Controller
                     $viewFilter->filters = $filters; // Update filter on the database
                     $viewFilter->save();
 
-                    return true;
+                    return response()->json(['data' => $filtersToBeDeleted, 'message' => 'Filter successfully deleted.'], 200);
 
                 } else {
                     // return $request->filters['uuid'];
