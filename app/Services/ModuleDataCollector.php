@@ -62,7 +62,7 @@ class ModuleDataCollector
 
     private array $revertibleMutableData;
 
-    private array $mutableEntityNames;
+    private array $mutableEntityNames = [];
 
     public function __construct(private DynamicQueryBuilder $dataQueryBuilder, private FieldService $fieldService, private RollUpSummaryResolver $rusResolver, private FormulaParser $formulaParser)
     {
@@ -335,12 +335,11 @@ class ModuleDataCollector
             $model = $this->entity->getModel()->create($data);
 
             foreach ($lookupData as $lookup) {
-                $query = $model->dynamicRelationship($lookup['method'], $lookup['entity'], $lookup['fkey'], $lookup['lkey'], null, true);
-
                 if ($lookup['method'] === 'belongsToMany' && $lookup['data']) {
+                    $query = $model->dynamicRelationship($lookup['method'], $lookup['entity'], $lookup['fkey'], $lookup['lkey'], null, true);
                     $query->sync($lookup['data']);
                 } else {
-                    $query->associate($lookup['data']);
+                    $model->update([$lookup['lkey'] => $lookup['data']]);
                 }
             }
 
@@ -1264,7 +1263,7 @@ class ModuleDataCollector
                                 $query->detach();
                             }
                         } elseif ($lookup['data']) {
-                            $query->associate($lookup['data']);
+                            $item->update([$lookup['lkey'] => $lookup['data']]);
                         } else {
                             $query->dissociate();
                         }
@@ -1275,9 +1274,9 @@ class ModuleDataCollector
                     $item = $repository->create($newData);
                     $item->update(['oid' => $item->_id]);
                     foreach ($ldata as $lookup) {
-                        $query = $item->dynamicRelationship($lookup['method'], $lookup['entity'], $lookup['fkey'], $lookup['lkey'], null, true);
 
                         if ($lookup['method'] == 'belongsToMany') {
+                            $query = $item->dynamicRelationship($lookup['method'], $lookup['entity'], $lookup['fkey'], $lookup['lkey'], null, true);
                             if ($lookup['data']) {
 
                                 if ($item->{$lookup['lkey']}) {
@@ -1292,7 +1291,7 @@ class ModuleDataCollector
                                 $query->detach();
                             }
                         } elseif ($lookup['data']) {
-                            $query->associate($lookup['data']);
+                            $item->update([$lookup['lkey'] => $lookup['data']]);
                         }
                     }
 

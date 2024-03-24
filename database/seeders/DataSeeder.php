@@ -5,12 +5,10 @@ namespace Database\Seeders;
 use App\Builders\FieldBuilder;
 use App\Builders\ModuleBuilder;
 use App\Models\Core\Entity;
+use App\Models\Module\Module;
+use App\Models\User\Role;
 use App\Services\FormulaParser;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
-use App\Models\User;
-use App\Models\User\Role;
-use App\Models\Module\Module;
 
 class DataSeeder extends Seeder
 {
@@ -24,9 +22,17 @@ class DataSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->fieldBuilder->on('SalesOpptItem')->add('lookupModel', idify('units'), 'Units')->relate('many_to_many')->to('Unit', ['serialNo'])->msPopUp()->save();  
-        $this->addEntity();
-        $this->addModule();
+        // $this->fieldBuilder->on('SalesOpptItem')->add('lookupModel', idify('units'), 'Units')->relate('many_to_many')->to('Unit', ['serialNo'])->msPopUp()->save();
+        // $this->addEntity();
+        // $this->addModule();
+
+        (new ModuleBuilder)
+            ->initFolderConfig()
+            ->getFolders()
+            ->define('users', 'User', 'users.index')->decorate('people_alt')
+            ->addMainEntity('User', true)
+            ->addPermissions()
+            ->save();
     }
 
     public function addModule()
@@ -73,7 +79,7 @@ class DataSeeder extends Seeder
             ->required()
             ->ssDropDown()
             ->save();
- 
+
         $this->fieldBuilder->on('Inquiry')->add('date', 'inquiryDate', 'Date Inquired')->required()->save();
         $this->fieldBuilder->on('Inquiry')->add('text', 'subject', 'Subject')->header()->required()->save();
         $this->fieldBuilder->on('Inquiry')->add('text', 'remarks', 'Remarks')->header()->required()->save();
