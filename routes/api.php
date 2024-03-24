@@ -20,6 +20,7 @@ use App\Http\Controllers\Customer\LeadController;
 use App\Http\Controllers\Customer\SalesOpportunityController;
 use App\Http\Controllers\Customer\SalesQuotationController;
 use App\Http\Controllers\Product\PricebookController;
+use App\Http\Controllers\Core\QuickAddController;
 use App\Http\Controllers\Report\ReportController;
 // STATIC
 use App\Http\Controllers\Static\ActivityLogController;
@@ -89,42 +90,29 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/modules/pricebooks/{pricebook}/postComputePrice', [PricebookController::class, 'postComputePrice']);
     Route::post('/modules/pricebooks/{pricebook}/postApplyComputePrice', [PricebookController::class, 'postApplyComputePrice']);
     Route::post('/modules/pricebooks/{pricebook}/postCancelComputePrice', [PricebookController::class, 'postCancelComputePrice']);
-
     Route::patch('/modules/salesquotes/upsert/{id}', [SalesQuotationController::class, 'upsert']);
-
     Route::get('/modules/salesopportunities/getsjinfo/{id}', [SalesOpportunityController::class, 'getItemsWithSJ']);
-
     Route::get('/modules/salesopportunities/getactiveitems/{id}', [SalesOpportunityController::class, 'getActiveItems']);
-
     Route::get('/modules/salesopportunities/getAccountIds/{id}', [SalesOpportunityController::class, 'getAccountIds']);
-
     Route::post('/modules/salesopportunities/convert/{leadid}', [SalesOpportunityController::class, 'convert']);
-
     Route::post('/modules/salesopportunities/checkoppdetails/{id}', [SalesOpportunityController::class, 'checkDetails']);
-
     Route::post('/modules/salesopportunities/transfer/{id}', [SalesOpportunityController::class, 'transferOpportunity']);
-
     Route::patch('/modules/salesopportunities/upsert/{id}', [SalesOpportunityController::class, 'upsert']);
-
     Route::get('/modules/reports/gettypes', [ReportController::class, 'getTypes']);
-
     Route::get('/modules/folders/showreports/{id}', [ReportController::class, 'showReports']);
 
     Route::get('/quotationtemplates/getInfo/{id}', [QuotationTemplateController::class, 'getInfo']);
-
     Route::get('/download-pdf/{filename}', [PDFController::class, 'download']);
-
     Route::get('/downloadpdf/{filename}', [PDFController::class, 'generalDownload']);
-
     Route::get('/downloadfile/{id}', [PDFController::class, 'redownload']);
-
     Route::post('/generatepdf', [PDFController::class, 'pdfviewgeneral']);
-
     Route::post('/generate-pdf', [PDFController::class, 'PDFView']);
-
     Route::post('/deleteQuotePDF/{id}', [PDFController::class, 'deleteQuotePDF']);
 
     Route::get('/activity-logs/by-record/{record_id}', [ActivityLogController::class, 'indexByRecord']);
+
+    Route::get('/quickadd/getpanels/{entityID}', [QuickAddController::class,'getAllPanelByEntity']);
+    Route::post('/quickadd/{entityID}', [QuickAddController::class,'store']);
 
     Route::apiResources([
         'modules/accounts' => AccountController::class,

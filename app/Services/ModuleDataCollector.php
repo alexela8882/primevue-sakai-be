@@ -1352,4 +1352,69 @@ class ModuleDataCollector
 
         return [$this->dataQueryBuilder->selectFrom($fieldNames, $connectedEntity, true)->filterGet($query), $query];
     }
+
+    //old name quickAdd
+    public function postQuickAdd(Request $request, $mainOnly = false)
+    {
+        $model = null;
+
+        if ($request->exists('uid')) {
+            $uniqueIdForFE = $this->entity->getModel()->where('uid', $request->input('uid'))->first();
+            if ($uniqueIdForFE) {
+                return $uniqueIdForFE;
+            }
+        }
+
+        [$data, $lookupData, $formulaFields] = $this->getDataForSaving($request, null, false, true);
+
+        if ($request->exists('uid')) {
+            $data['uid'] = $request->get('uid');
+        }
+
+        $model = $this->entity->getModel()->create($data);
+        $model->update(['oid' => $model->_id]);
+
+        foreach ($lookupData as $lookup) {
+            if ($lookup['method'] == 'belongsToMany' && $lookup['data']) {
+                $query = $model->dynamicRelationship($lookup['method'], $lookup['entity'], $lookup['fkey'], $lookup['lkey'], null, true);
+                $query->attach($lookup['data']);
+            } elseif ($lookup['data']) {
+                $model->update([$lookup['lkey'] => $lookup['data']]);
+            }
+        }
+        $model->save();
+
+        if (in_array($this->module->main->name, ['Contact', 'Employee', 'User', 'EscoVenturesContact'])) {
+            $fullName = trim(trim($model->firstName).' '.trim($model->lastName));
+            $model->update(['fullName' => $fullName]);
+        }
+
+        if ($this->module) {
+            if (in_array($this->module->main->name, ['SalesOpportunity'])) {
+                $quotations = $model->quotations;
+
+                if ($quotations->isNotempty()) {
+                    foreach ($quotations as $quotation) {
+                        $quotation->update(['sales_type_id' => $model->sales_type_id]);
+                    }
+                }
+            }
+        }
+
+        if (! $mainOnly && $this->module && $this->module->hasMutable() && $request->get('mutables')) {
+            $this->executeMutableDataFromRequest($request, $model, false, true);
+        }
+
+        if (count($formulaFields)) {
+            $this->formulaParser->setEntity($this->entity->name);
+
+            foreach ($formulaFields as $formulaField) {
+                $value = $this->formulaParser->parseField($formulaField, $model, true);
+                $update[$formulaField->name] = $value;
+            }
+            $model->update($update);
+        }
+
+        return $model;
+    }
 }
