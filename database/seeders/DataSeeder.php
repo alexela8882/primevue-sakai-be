@@ -10,7 +10,6 @@ use App\Models\User\Role;
 use App\Services\FormulaParser;
 use Illuminate\Database\Seeder;
 
-
 class DataSeeder extends Seeder
 {
     public function __construct(private FormulaParser $parser, private FieldBuilder $fieldBuilder)
@@ -87,11 +86,9 @@ class DataSeeder extends Seeder
 
         $filter = 'where("Employee::_id", "=", "Role::user_id")->where("Employee::_id", "in", "currentUser::people")';
         $this->fieldBuilder->on('Inquiry')->add('lookupModel', idify('owner'), 'Opportunity Owner')->relate('one_from_many')->to('Employee', [['firstName', 'lastName'], ['firstName', 'lastName', 'email']])->filterQuery($filter)->ssPopUp()->save();
-     
-
 
         // $this->fieldBuilder->on('Inquiry')->add('lookupModel', idify('account'), 'Account Name')->relate('one_from_many')->to('Account', [['name'],['name','owner_id']])->includeFields(['isEscoBranch'])->ssPopUp()->save();
-         
+
         $this->fieldBuilder->on('Inquiry')->addUserStamps();
     }
 

@@ -12,16 +12,16 @@ use App\Http\Controllers\Core\ModuleController;
 use App\Http\Controllers\Core\PanelController;
 use App\Http\Controllers\Core\PDFController;
 use App\Http\Controllers\Core\PickListController;
+use App\Http\Controllers\Core\QuickAddController;
 use App\Http\Controllers\Core\QuotationTemplateController;
 use App\Http\Controllers\Core\ViewFilterController;
 use App\Http\Controllers\Customer\AccountController;
 use App\Http\Controllers\Customer\ContactController;
+use App\Http\Controllers\Customer\InquiryController;
 use App\Http\Controllers\Customer\LeadController;
 use App\Http\Controllers\Customer\SalesOpportunityController;
 use App\Http\Controllers\Customer\SalesQuotationController;
 use App\Http\Controllers\Product\PricebookController;
-use App\Http\Controllers\Core\QuickAddController;
-use App\Http\Controllers\Customer\InquiryController;
 use App\Http\Controllers\Report\ReportController;
 // STATIC
 use App\Http\Controllers\Static\ActivityLogController;
@@ -112,8 +112,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/activity-logs/by-record/{record_id}', [ActivityLogController::class, 'indexByRecord']);
 
-    Route::get('/quickadd/getpanels/{entityID}', [QuickAddController::class,'getAllPanelByEntity']);
-    Route::post('/quickadd/{entityID}', [QuickAddController::class,'store']);
+    Route::get('/quickadd/getpanels/{entityID}', [QuickAddController::class, 'getAllPanelByEntity']);
+    Route::post('/quickadd/{entityID}', [QuickAddController::class, 'store']);
 
     Route::apiResources([
         'modules/accounts' => AccountController::class,

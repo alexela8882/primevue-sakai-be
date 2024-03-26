@@ -4,13 +4,12 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer\Inquiry;
-use Illuminate\Http\Request;
-use App\Traits\ApiResponseTrait;
 use App\Services\ModuleDataCollector;
+use App\Traits\ApiResponseTrait;
+use Illuminate\Http\Request;
 
 class InquiryController extends Controller
 {
-
     use ApiResponseTrait;
 
     public function __construct(private ModuleDataCollector $mdc)
@@ -32,6 +31,7 @@ class InquiryController extends Controller
     public function store(Request $request)
     {
         $inquiry = $this->mdc->postStore($request);
+
         return $this->respondSuccessful('Inquiry successfully saved', ['_id' => $inquiry->_id]);
     }
 
