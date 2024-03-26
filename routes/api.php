@@ -21,6 +21,7 @@ use App\Http\Controllers\Customer\SalesOpportunityController;
 use App\Http\Controllers\Customer\SalesQuotationController;
 use App\Http\Controllers\Product\PricebookController;
 use App\Http\Controllers\Core\QuickAddController;
+use App\Http\Controllers\Customer\InquiryController;
 use App\Http\Controllers\Report\ReportController;
 // STATIC
 use App\Http\Controllers\Static\ActivityLogController;
@@ -119,6 +120,7 @@ Route::middleware('auth:api')->group(function () {
         'modules/contacts' => ContactController::class,
         'modules/leads' => LeadController::class,
         'modules/pricebooks' => PricebookController::class,
+        'modules/inquiries' => InquiryController::class,
         'modules/salesopportunities' => SalesOpportunityController::class,
         'modules/salesquotes' => SalesQuotationController::class,
         'modules/reports' => ReportController::class,
