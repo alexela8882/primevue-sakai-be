@@ -28,26 +28,26 @@ class DataSeeder extends Seeder
     public function run(): void
     {
 
-        $employees = User::where('email', 'alexela8882@gmail.com')->get();
+        User::where('email', 'alexela8882@gmail.com')->update(['branch_id' => '5b344ae1678f711dfc04ec3a']);
 
-        $handledRoles = Role::query()
-            ->whereIn('name', [
-                'crm_service_coordinator',
-                'crm_admin',
-            ])
-            ->get()
-            ->pluck('_id')
-            ->toArray();
+        // $handledRoles = Role::query()
+        //     ->whereIn('name', [
+        //         'crm_service_coordinator',
+        //         'crm_admin',
+        //     ])
+        //     ->get()
+        //     ->pluck('_id')
+        //     ->toArray();
 
-        $handledBranches = Branch::query()
-            ->get()
-            ->pluck('_id')
-            ->toArray();
+        // $handledBranches = Branch::query()
+        //     ->get()
+        //     ->pluck('_id')
+        //     ->toArray();
 
-        foreach ($employees as $employee) {
-            $employee->handledBranches()->attach($handledBranches);
-            $employee->roles()->attach($handledRoles);
-        }
+        // foreach ($employees as $employee) {
+        //     $employee->handledBranches()->attach($handledBranches);
+        //     $employee->roles()->attach($handledRoles);
+        // }
 
         //$this->fieldBuilder->on('SalesOpptItem')->add('lookupModel', idify('units'), 'Units')->relate('many_to_many')->to('Unit', ['serialNo'])->msPopUp()->save();
         // $this->addEntity();
