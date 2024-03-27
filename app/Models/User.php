@@ -118,6 +118,10 @@ class User extends Authenticatable
     public function canView($moduleName)
     {
 
+        if (! $this->role_id) {
+            return false;
+        }
+
         $has = Permission::query()
             ->whereIn('role_id', $this->role_id)
             ->where('name', $moduleName.'.index')->first();
