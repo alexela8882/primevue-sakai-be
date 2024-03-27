@@ -28,7 +28,7 @@ class DataSeeder extends Seeder
     public function run(): void
     {
 
-        $employees = User::where('email', 'alexander.flores@escolifesciences.com')->get();
+        $employees = User::where('email', 'alexela8882@gmail.com')->get();
 
         $handledRoles = Role::query()
             ->whereIn('name', [
@@ -55,10 +55,10 @@ class DataSeeder extends Seeder
         // $this->createViewFilters();
         // $this->createPanels();
 
-        $roles = Role::all();
-        foreach ($roles as $role) {
-            $this->addPermission($role, 'inquiries');
-        }
+        // $roles = Role::all();
+        // foreach ($roles as $role) {
+        //     $this->addPermission($role, 'inquiries');
+        // }
 
     }
 
