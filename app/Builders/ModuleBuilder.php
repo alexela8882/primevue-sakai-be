@@ -534,7 +534,7 @@ class ModuleBuilder
             throw new \Exception('Error. Unnamed query: '.$query);
         }
 
-        $this->queryBuilder->setUser($this->user)->selectFrom('*', $entity)->filterGet($query);
+        // $this->queryBuilder->setUser($this->user)->selectFrom('*', $entity)->filterGet($query);
 
         return [
             $label,

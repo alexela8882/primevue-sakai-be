@@ -2,8 +2,8 @@
 
 namespace App\Builders;
 
-use App\Facades\DQBuilder;
-use App\Facades\EntityField;
+use App\Models\Core\Picklist;
+use App\Services\PicklistService;
 
 class FieldBuilder extends BaseFieldBuilder
 {
@@ -73,7 +73,7 @@ class FieldBuilder extends BaseFieldBuilder
 
         $this->glue($glue);
 
-        if ($this->fieldRepository->where(['groupLabel' => $groupLabel, 'entity_id' => $this->entity->_id])) {
+        if (Field::where('groupLabel', $groupLabel)->where('entity_id', $this->entity->_id)->count()) {
             throw new \Exception('Error. Cannot add field group label "'.$groupLabel.'" on entity "'.$this->entity->name.'". Group label already exists.');
         }
 
@@ -266,7 +266,7 @@ class FieldBuilder extends BaseFieldBuilder
 
         if ($this->type->name == 'lookupModel') {
             $entity = $this->relation->relatedEntity;
-            $viewAttribField = EntityField::checkEntityFields($entity, $attrib);
+            $viewAttribField = (new EntityField)->checkEntityFields($entity, $attrib);
             if (! $viewAttribField || $attrib != '_id' && in_array($viewAttribField->fieldType->name, ['lookupModel', 'picklist'])) {
                 throw new \Exception('Error. Invalid viewType field attribute "'.$attrib.'". This must exist as a field of '.$entity->name.' and must neither be a lookup or a picklist');
             }
@@ -280,7 +280,7 @@ class FieldBuilder extends BaseFieldBuilder
                 }
             }
         } elseif ($this->type->name == 'picklist') {
-            $item = $this->pickListRepository->getModel()->where('name', $this->field->listName);
+            $item = Picklist::where('name', $this->field->listName);
 
             if ($mode == '1-1') {
                 $this->required(true);
@@ -291,7 +291,7 @@ class FieldBuilder extends BaseFieldBuilder
             }
 
             if ($default) {
-                $defaultItem = $this->pickListRepository->getIDs($this->field->listName, $default, null, $attrib);
+                $defaultItem = picklist_id($this->field->listName, $default, null, $attrib);
                 if (! $defaultItem) {
                     throw new \Exception("Error. Unknown item {$default} in picklist {$this->field->listName}");
                 } else {
@@ -896,7 +896,7 @@ class FieldBuilder extends BaseFieldBuilder
      *
      * @throws \Exception
      */
-    public function hasSeconds($value = true)
+    public function hasSeconds($value = true, $fieldName = null)
     {
         $this->rules('has_seconds', $value);
         if ($this->inRange) {
@@ -1660,7 +1660,7 @@ class FieldBuilder extends BaseFieldBuilder
         if ($this->type->name == 'picklist') {
             if ($this->field->listName) {
                 if (is_string($this->pickList)) {
-                    $currentList = $this->pickListRepository->getList($this->field->listName, false);
+                    $currentList = (new PicklistService)->getList($this->field->listName, false);
                 } else {
                     $currentList = $this->pickList;
                 }
@@ -1712,7 +1712,7 @@ class FieldBuilder extends BaseFieldBuilder
     {
         // operators: <, >, <=, >=, =, !=, in
         if (is_string($field)) {
-            $referenceField = $this->fieldRepository->where(['name' => $field, 'module_id' => $this->module->_id]);
+            $referenceField = Field::where('name', $field)->where('module_id', $this->module->_id)->first();
             if (! $referenceField) {
                 throw new \Exception('Error. Field "'.$field."' does not yet exist in this module.");
             }
@@ -1879,7 +1879,7 @@ class FieldBuilder extends BaseFieldBuilder
     public function filterQuery($query)
     {
         if (! starts_with($query, '>>')) {
-            $queryOrFields = DQBuilder::replaceQueryPatterns($query, $this->entity, false);
+            $queryOrFields = (new DynamicQueryBuilder)->replaceQueryPatterns($query, $this->entity, false);
             if (is_array($queryOrFields)) {
                 $this->setFieldAttribute('filterQueryParams', $queryOrFields);
             }
