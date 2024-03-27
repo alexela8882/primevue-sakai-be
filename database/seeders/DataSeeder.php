@@ -28,7 +28,7 @@ class DataSeeder extends Seeder
     public function run(): void
     {
 
-        $employees = User::where('email', 'alexela8882@gmail.com')->get();
+        $employees = User::where('email', 'alexander.flores@escolifesciences.com')->get();
 
         $handledRoles = Role::query()
             ->whereIn('name', [
