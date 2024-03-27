@@ -28,25 +28,26 @@ class DataSeeder extends Seeder
     public function run(): void
     {
 
-        $employee = User::where('email', 'alexander.flores@escolifesciences.com')->first();
+        $employees = User::where('email', 'alexander.flores@escolifesciences.com')->get();
 
         $handledRoles = Role::query()
-        ->whereIn('name', [
-            'crm_service_coordinator',
-            'crm_admin'
-        ])
-        ->get()
-        ->pluck('_id')
-        ->toArray();
+            ->whereIn('name', [
+                'crm_service_coordinator',
+                'crm_admin',
+            ])
+            ->get()
+            ->pluck('_id')
+            ->toArray();
 
         $handledBranches = Branch::query()
             ->get()
             ->pluck('_id')
             ->toArray();
 
-        $employee->handledBranches()->attach($handledBranches);
-        $employee->roles()->attach($handledRoles);
-        
+        foreach ($employees as $employee) {
+            $employee->handledBranches()->attach($handledBranches);
+            $employee->roles()->attach($handledRoles);
+        }
 
         //$this->fieldBuilder->on('SalesOpptItem')->add('lookupModel', idify('units'), 'Units')->relate('many_to_many')->to('Unit', ['serialNo'])->msPopUp()->save();
         // $this->addEntity();
@@ -55,10 +56,9 @@ class DataSeeder extends Seeder
         // $this->createPanels();
 
         $roles = Role::all();
-        foreach($roles as $role){
+        foreach ($roles as $role) {
             $this->addPermission($role, 'inquiries');
         }
-
 
     }
 
@@ -131,7 +131,7 @@ class DataSeeder extends Seeder
         //$admin = Role::where('name', $role)->first();
         Module::where('name', $moduleName)
             ->first()->permissions()->each(function ($permission) use ($role) {
-                $permission->roles()->attach([$role->_id]);
+                $permission->roles()->attach($role->_id);
             });
     }
 
@@ -196,6 +196,5 @@ class DataSeeder extends Seeder
             ->add('My Inquiries', $fields, true)
             ->query('Inquiry:owned')
             ->save();
-
     }
 }
