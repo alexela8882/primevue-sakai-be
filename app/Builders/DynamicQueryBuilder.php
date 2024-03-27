@@ -10,7 +10,6 @@ use Illuminate\Support\Collection;
 use Moloquent\Eloquent\Builder;
 use Nette\Tokenizer\Tokenizer;
 
-
 class DynamicQueryBuilder
 {
     use QueryTrait;

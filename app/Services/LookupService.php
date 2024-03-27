@@ -151,7 +151,7 @@ class LookupService
         $limit = (int) request('limit', 50);
 
         $paginator = Pricebook::whereIn('_id', $pbs)->paginate($limit);
-       
+
         if (! $fields) {
             $fields = Field::where('uniqueName', 'pricebook_name');
         }

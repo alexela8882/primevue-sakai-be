@@ -72,7 +72,7 @@ class PanelService
         $pre = strtolower($entityName).'-panel-';
         do {
             $genName = $pre.++$cnt;
-            $check = Panel::where(['name' => $genName]);
+            $check = Panel::where('name', $genName)->count();
         } while ($check);
 
         return $genName;
