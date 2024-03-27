@@ -6,8 +6,10 @@ use App\Builders\FieldBuilder;
 use App\Builders\ModuleBuilder;
 use App\Builders\PanelBuilder;
 use App\Builders\ViewFilterBuilder;
+use App\Models\Company\Branch;
 use App\Models\Core\Entity;
 use App\Models\Module\Module;
+use App\Models\User;
 use App\Models\User\Role;
 use App\Services\FormulaParser;
 use App\Services\PanelService;
@@ -26,11 +28,37 @@ class DataSeeder extends Seeder
     public function run(): void
     {
 
+        $employee = User::where('email', 'alexander.flores@escolifesciences.com')->first();
+
+        $handledRoles = Role::query()
+        ->whereIn('name', [
+            'crm_service_coordinator',
+            'crm_admin'
+        ])
+        ->get()
+        ->pluck('_id')
+        ->toArray();
+
+        $handledBranches = Branch::query()
+            ->get()
+            ->pluck('_id')
+            ->toArray();
+
+        $employee->handledBranches()->attach($handledBranches);
+        $employee->roles()->attach($handledRoles);
+        
+
         //$this->fieldBuilder->on('SalesOpptItem')->add('lookupModel', idify('units'), 'Units')->relate('many_to_many')->to('Unit', ['serialNo'])->msPopUp()->save();
-        $this->addEntity();
-        $this->addModule();
-        $this->createViewFilters();
-        $this->createPanels();
+        // $this->addEntity();
+        // $this->addModule();
+        // $this->createViewFilters();
+        // $this->createPanels();
+
+        $roles = Role::all();
+        foreach($roles as $role){
+            $this->addPermission($role, 'inquiries');
+        }
+
 
     }
 
@@ -100,10 +128,10 @@ class DataSeeder extends Seeder
 
     public function addPermission($role, $moduleName)
     {
-        $admin = Role::where('name', $role)->first();
+        //$admin = Role::where('name', $role)->first();
         Module::where('name', $moduleName)
-            ->first()->permissions()->each(function ($permission) use ($admin) {
-                $permission->roles()->attach([$admin->_id]);
+            ->first()->permissions()->each(function ($permission) use ($role) {
+                $permission->roles()->attach([$role->_id]);
             });
     }
 
