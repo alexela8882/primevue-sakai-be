@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Model\Base;
+use App\Models\User;
 use App\Services\ModelService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -31,9 +32,9 @@ class ModelCollection extends ResourceCollection
         $paginated = $this->resource->toArray();
 
         return $this->withoutPagination
-            ? $this->collection->transform(fn (Base $base) => $this->modelService->getModelInformation($base, $this->fields, $this->pickLists, $this->fromReport, $this->displayFieldNameOnly))
+            ? $this->collection->transform(fn (Base|User $base) => $this->modelService->getModelInformation($base, $this->fields, $this->pickLists, $this->fromReport, $this->displayFieldNameOnly))
             : [
-                'data' => $this->collection->transform(fn (Base $base) => $this->modelService->getModelInformation($base, $this->fields, $this->pickLists, $this->fromReport, $this->displayFieldNameOnly)),
+                'data' => $this->collection->transform(fn (Base|User $base) => $this->modelService->getModelInformation($base, $this->fields, $this->pickLists, $this->fromReport, $this->displayFieldNameOnly)),
                 'meta' => [
                     'pagination' => [
                         'total' => $paginated['total'] ?? null,

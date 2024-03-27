@@ -12,4 +12,14 @@ class Section extends Base
     {
         return $this->belongsTo(Panel::class);
     }
+
+    public function firstColumn()
+    {
+        return $this->belongsToMany('App\Models\Core\Field', null, 'section1_ids', 'first_ids');
+    }
+
+    public function secondColumn()
+    {
+        return $this->belongsToMany('App\Models\Core\Field', null, 'section2_ids', 'second_ids');
+    }
 }

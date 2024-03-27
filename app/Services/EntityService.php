@@ -25,4 +25,13 @@ class EntityService
     {
         return $this->getEntityMutables($entity)->isNotEmpty();
     }
+
+    public function getLookUpFields($main, $otherEntity)
+    {
+        $mainID = Entity::where('name', $main)->first()->_id;
+
+        return Entity::where('name', $otherEntity)->first()->fields
+            ->load('fieldType')->where('fieldType.name', 'lookupModel')
+            ->load('relation')->where('relation.entity_id', $mainID);
+    }
 }
